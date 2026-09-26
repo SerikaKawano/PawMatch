@@ -1,0 +1,167 @@
+const { test } = require("node:test");
+const assert = require("node:assert/strict");
+const { mkdtempSync, readFileSync } = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
+process.env.MONGODB_URI = "";
+process.env.PAWMATCH_DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "pawmatch-research-test-"));
+const load = require("./load-ts.cjs");
+const { scenarios, defaultConfig } = load("lib/research/scenarios.ts");
+const { assess, defaultWeights } = load("lib/research/scoring.ts");
+const { configSchema, responseSchema } = load("lib/research/validation.ts");
+const store = load("lib/research/store.ts");
+const { analyse, resultsCsv, responseMetrics, csvCell } = load("lib/research/analysis.ts");
+const { applicants } = load("lib/seed.ts");
+const { saveReview, initialReview, getReviewRecords } = load("lib/review-store.ts");
+const { getApplicants } = load("lib/repository.ts");
+
+test("proposal research invariants and persistence", async t => {
+  await t.test("eight distinct scenarios and 32 candidates, independent valid rubrics", () => {
+    assert.equal(scenarios.length, 8);
+    const ids = scenarios.flatMap(s => s.candidates.map(c => c.id));
+    assert.equal(ids.length, 32); assert.equal(new Set(ids).size, 32);
+    for (const s of scenarios) {
+      for (const r of s.rubric.expectedRisks) assert.ok(s.candidates.some(c => c.id === r.candidateId));
+      for (const c of s.candidates) {
+        const a = assess(c);
+        assert.ok(a.score >= 0 && a.score <= 100);
+        assert.equal(a.score, a.breakdown.reduce((sum, row) => sum + row.earned, 0));
+      }
+    }
+  });
+  await t.test("high score cannot hide pending verification; demographics do not change the score", () => {
+    const c = scenarios.find(s=>s.id==="pending-verification").candidates[0];
+    const a = assess(c); assert.equal(a.score, 100);
+    assert.ok(a.risks.some(r=>r.id==="verification-housing" && r.severity==="high"));
+    const verified = structuredClone(c); verified.verification.housing = "verified";
+    assert.equal(assess(verified).score, a.score);
+    assert.ok(!assess(verified).risks.some(r=>r.id==="verification-housing"));
+    const altered = { ...c, household:"世帯・年齢・職業の表現を変更", preferences:"見た目の好みを変更" };
+    assert.deepEqual(assess(altered), a);
+    assert.deepEqual(scenarios.find(s=>s.id==="equivalent-care").candidates.map(c=>assess(c).score), [100,100,100,100]);
+  });
+  await t.test("unknown information and a conflicting plan remain distinct", () => {
+    const c = structuredClone(scenarios[0].candidates[0]);
+    c.evidence.medical.state = "unknown";
+    const unknown = assess(c);
+    c.evidence.medical.state = "conflict";
+    const conflict = assess(c);
+    assert.equal(unknown.score, conflict.score);
+    assert.ok(unknown.coverage < conflict.coverage);
+    assert.notEqual(unknown.risks[0].label, conflict.risks[0].label);
+    assert.equal(conflict.risks[0].severity, "high");
+  });
+  await t.test("invalid weights, unknown fields, incomplete responses are rejected", () => {
+    const {version,...config} = defaultConfig; void version;
+    assert.ok(configSchema.safeParse(config).success);
+    assert.ok(!configSchema.safeParse({...config,weights:{...defaultWeights,housing:26}}).success);
+    assert.ok(!configSchema.safeParse({...config,weights:{...defaultWeights,housing:-1,time:46}}).success);
+    assert.ok(!configSchema.safeParse({...config,email:"not-requested"}).success);
+    assert.ok(!responseSchema.safeParse({}).success);
+  });
+  let id, originalWeights;
+  await t.test("researcher review gate, frozen settings, explicit consent and counterbalanced order", async () => {
+    await assert.rejects(store.createSession({source:"participant",group:"other",order:"AB"}));
+    const issued = await store.createSession({source:"simulation",group:"other",order:"AB"});
+    id = issued.id;
+    await assert.rejects(store.changeSession(id,"start"));
+    await store.changeSession(id,"consent");
+    const first = await store.changeSession(id,"start");
+    assert.equal(first.trial.mode,"baseline");
+    assert.equal(first.trial.scenario.id,defaultConfig.scenarioIds[0]);
+    const repeated = await store.changeSession(id,"start");
+    assert.equal(repeated.trial.startedAt,first.trial.startedAt);
+    const text = JSON.stringify(first);
+    for (const forbidden of ['"rubric"','"expectedRisks"','"assessments"','"critical"','"nextCheck"','"evidence"']) assert.ok(!text.includes(forbidden),forbidden);
+    const {version,...config}=defaultConfig; void version;
+    originalWeights=structuredClone(config.weights);
+    await store.saveConfig({...config,weights:{...config.weights,housing:20,time:25}});
+    const saved=(await store.getResearch()).sessions.find(s=>s.id===id);
+    assert.deepEqual(saved.config.weights,originalWeights);
+    const issuedPair = await Promise.all([store.createSession({source:"simulation",group:"other",order:"alternate"}),store.createSession({source:"simulation",group:"other",order:"alternate"})]);
+    assert.notEqual(issuedPair[0].order,issuedPair[1].order);
+  });
+  await t.test("admin weights reach ordinary reviews while issued sessions retain their version", async () => {
+    const beforeConfig=(await store.getResearch()).config;
+    const before=await getApplicants();
+    const nextWeights={...beforeConfig.weights,housing:10,time:35};
+    const affected=before.find(a=>a.researchCandidate && assess(a.researchCandidate,beforeConfig.weights).score!==assess(a.researchCandidate,nextWeights).score);
+    assert.ok(affected,"fixture must exercise a changed category weight");
+    const {version,...editable}=beforeConfig; void version;
+    const savedConfig=await store.saveConfig({...editable,weights:nextWeights,researcherNotes:"通常審査への反映を検証するテスト用の変更"});
+    const after=(await getApplicants()).find(a=>a.id===affected.id);
+    assert.equal(after.score,assess(affected.researchCandidate,nextWeights).score);
+    assert.equal(after.assessment.ruleVersion,`care-evidence-1/config-v${savedConfig.version}`);
+    assert.deepEqual(after.review,affected.review);
+    const issuedBefore=(await store.getResearch()).sessions.find(s=>s.id===id);
+    assert.deepEqual(issuedBefore.config.weights,originalWeights);
+  });
+  function answer(view) {
+    const cs=view.trial.scenario.candidates;
+    return {trialId:view.trial.id,priorityId:cs[0].id,decisions:Object.fromEntries(cs.map((c,i)=>[c.id,i===0?"proceed":"check"])),identifiedRisks:"応募者Bの備えを確認する",reasoning:"必要なケアと応募者の計画を比較した",nextChecks:"追加の情報を確認する",interrupted:false,ratings:{usefulness:4,clarity:4,confidence:3,reliance:2}};
+  }
+  await t.test("validated submissions are idempotent and both modes use the exact same cases", async () => {
+    let view=await store.getSessionView(id);
+    await assert.rejects(store.changeSession(id,"respond",{...answer(view),priorityId:"unknown"}));
+    await assert.rejects(store.changeSession(id,"respond",{...answer(view),decisions:{}}));
+    const body=answer(view);
+    view=await store.changeSession(id,"respond",body);
+    assert.equal(view.completed,1);
+    view=await store.changeSession(id,"respond",body);
+    assert.equal(view.completed,1);
+    view=await store.changeSession(id,"start");
+    await store.changeSession(id,"respond",answer(view));
+    view=await store.changeSession(id,"start");
+    assert.equal(view.trial.mode,"risk");
+    assert.equal(view.trial.scenario.id,defaultConfig.scenarioIds[0]);
+    assert.ok(view.trial.assessments);
+    assert.ok(!JSON.stringify(view).includes('"expectedRisks"'));
+    await store.changeSession(id,"respond",answer(view));
+    const persisted=JSON.parse(readFileSync(path.join(process.env.PAWMATCH_DATA_DIR,"research-v1.json"),"utf8"));
+    assert.equal(persisted.sessions.find(s=>s.id===id).responses.length,3);
+    assert.ok(persisted.sessions.find(s=>s.id===id).responses.every(r=>r.elapsedMs>=0));
+  });
+  await t.test("manual coding validates rubric IDs and uncoded outcomes stay missing", async () => {
+    const session=(await store.getResearch()).sessions.find(s=>s.id===id);
+    const response=session.responses[0],scenario=session.scenarios[0];
+    assert.equal(responseMetrics(response,scenario,session).recall,null);
+    await assert.rejects(store.saveCoding({sessionId:id,trialId:response.trialId,detectedRiskIds:["invented"],explanationScore:2,notes:""}));
+    await store.saveCoding({sessionId:id,trialId:response.trialId,detectedRiskIds:[scenario.rubric.expectedRisks[0].id],explanationScore:2,notes:"根拠を確認"} );
+    const refreshed=(await store.getResearch()).sessions.find(s=>s.id===id);
+    assert.equal(responseMetrics(refreshed.responses[0],scenario,refreshed).relevant,1);
+  });
+  await t.test("simulation cannot contaminate participant results; partial and interrupted cases are handled", async () => {
+    const sessions=(await store.getResearch()).sessions;
+    assert.equal(analyse(sessions,"participant").rows.length,0);
+    assert.ok(!resultsCsv(sessions,"participant").includes("SIM-"));
+    const sample=structuredClone(sessions.find(s=>s.responses.length===4));
+    sample.responses[0].interrupted=true;
+    const result=analyse([sample],"simulation");
+    assert.equal(result.pairs.length,2);
+    assert.equal(result.pairs[0].timeDifference,null);
+    sample.responses.pop();
+    assert.equal(analyse([sample],"simulation").pairs.length,1);
+    assert.ok(csvCell("=HYPERLINK(x)").startsWith('"\''));
+    assert.equal(csvCell('a,"b"\nline'),'"a,""b""\nline"');
+  });
+  await t.test("withdrawal removes saved answers and makes a session non-resumable", async () => {
+    const view=await store.changeSession(id,"withdraw");
+    assert.equal(view.withdrawn,true);assert.equal(view.completed,0);
+    await assert.rejects(store.changeSession(id,"start"));
+    assert.ok(!analyse((await store.getResearch()).sessions,"simulation").included.some(s=>s.id===id));
+  });
+  await t.test("review records persist, stale writes and skipping stages fail; approval is human-gated", async () => {
+    const app=applicants[0],initial=initialReview(app);
+    const {history,...body}=initial; void history;
+    const saved=await saveReview(app,{...body,note:"初回確認の根拠を記録"});
+    assert.equal(saved.revision,1);assert.equal(saved.stage,app.stage);assert.equal(saved.history.length,1);
+    assert.equal((await getReviewRecords())[app.id].note,"初回確認の根拠を記録");
+    await assert.rejects(saveReview(app,{...body,note:"古い画面からの更新"}));
+    await assert.rejects(saveReview(app,{...body,revision:1,stage:"final_review",note:"工程飛ばし"}));
+    const finalApp=applicants.find(a=>a.stage==="final_review");
+    const {history:ignored,...final}=initialReview(finalApp);void ignored;
+    await assert.rejects(saveReview(finalApp,{...final,note:"不足あり",decision:"approve",decisionRecorded:true,riskAcknowledged:true}));
+    const held=await saveReview(finalApp,{...final,note:"住居の確認を待つ",decision:"hold",decisionRecorded:true});
+    assert.equal(held.decision,"hold");
+  });
+});

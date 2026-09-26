@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.env
+.env.local
+.pawmatch-data/
+research-qa/
+.tmp-*/
+*.tsbuildinfo
+*.log
+.DS_Store

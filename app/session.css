@@ -1,0 +1,58 @@
+.public-header-inner { gap: 22px; }
+.public-nav { gap: 20px; }
+.session-account { position: relative; }
+.session-account-toggle { display: flex; align-items: center; gap: 10px; min-height: 60px; padding: 8px 14px; border: 1px solid #d6c3af; border-radius: 12px; background: #faf3e8; color: #563d2f; text-align: left; cursor: pointer; white-space: nowrap; }
+.session-account-toggle span { display: grid; gap: 2px; }
+.session-account-toggle small { font-size: 16px; line-height: 1.4; }
+.session-account-toggle strong { font-size: 18px; line-height: 1.5; }
+.session-account-menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 70; width: min(320px, calc(100vw - 32px)); padding: 10px; border: 1px solid #d6c3af; border-radius: 12px; background: #fff; box-shadow: 0 10px 30px #513a2420; }
+.session-account-menu a, .session-account-menu button { display: flex; align-items: center; width: 100%; min-height: 48px; padding: 10px; border: 0; border-radius: 6px; background: transparent; color: #563d2f; font-size: 17px; text-align: left; cursor: pointer; }
+.session-account-menu a:hover, .session-account-menu button:hover { background: #faf3e8; }
+.session-account-menu p { font-size: 16px; padding: 8px; color: #962f43; }
+.session-login-note { grid-column: 1 / -1; padding: 18px 24px; border: 1px solid #ddc8b3; border-radius: 12px; background: #fff8e8; font-size: 18px; line-height: 1.8; }
+.session-login-note a, .consultation-page a:not(.back-link), .consultation-history a { text-decoration: underline; text-underline-offset: 4px; color: #714535; }
+.consultation-page { max-width: 960px; margin: 0 auto; padding: 36px 24px 64px; }
+.consultation-page > .section-kicker { display: block; margin-top: 28px; }
+.consultation-page h1 { font-size: clamp(26px, 4vw, 36px); margin: 12px 0; }
+.consultation-page p { font-size: 18px; line-height: 1.9; }
+.consultation-form, .consultation-history { margin: 28px 0; padding: 28px; background: white; border: 1px solid #dfcebc; border-radius: 16px; }
+.consultation-form h2, .consultation-history h2 { font-size: 24px; }
+.consultation-form { display: grid; gap: 16px; }
+.consultation-form p { margin: 0; }
+.consultation-form label { font-size: 18px; font-weight: 700; }
+.consultation-form select, .consultation-form textarea { width: 100%; padding: 14px; border: 1px solid #a98b70; border-radius: 8px; background: #fffdf9; color: #3f3329; font: inherit; font-size: 18px; line-height: 1.7; }
+.consultation-form textarea { resize: vertical; min-height: 160px; }
+.session-primary { min-height: 54px; padding: 14px 22px; border: 0; border-radius: 10px; background: #80513d; color: white; font-size: 18px; font-weight: 700; cursor: pointer; }
+.session-primary:disabled { opacity: .6; cursor: default; }
+.consultation-history { scroll-margin-top: 160px; }
+.consultation-history > p, .consultation-history li p { font-size: 17px; line-height: 1.8; }
+.consultation-history ul { list-style: none; padding: 0; }
+.consultation-history li { padding: 22px 0; border-top: 1px solid #e5d8cc; }
+.consultation-history li > div { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 19px; font-weight: 700; }
+.consultation-history li span { padding: 4px 10px; border-radius: 5px; background: #faf0d3; color: #624b25; font-size: 16px; }
+.consultation-message { white-space: pre-wrap; overflow-wrap: anywhere; }
+.consultation-empty { padding: 20px; background: #faf6ef; border-radius: 8px; }
+.session-account :focus-visible, .consultation-page :focus-visible { outline: 3px solid #85583e; outline-offset: 3px; }
+@media (max-width: 1250px) and (min-width: 761px) {
+  .public-header-inner { height: auto; min-height: 84px; flex-wrap: wrap; padding: 12px 24px; gap: 12px; }
+  .public-actions { margin-left: auto; }
+  .public-nav { order: 3; flex-basis: 100%; justify-content: center; gap: 24px; padding: 6px 0; }
+}
+@media (max-width: 760px) {
+  .public-header-inner { height: auto; min-height: 72px; flex-wrap: wrap; padding: 12px 16px; gap: 10px; }
+  .public-actions { margin-left: auto; }
+  .public-actions .login-button { display: flex; min-height: 48px; padding: 8px 12px; }
+  .public-nav { top: 100%; }
+  .session-account-toggle { min-height: 52px; padding: 6px 10px; }
+  .session-account-toggle > svg:first-child { display: none; }
+  .session-account-toggle small { font-size: 16px; }
+  .session-account-toggle strong { font-size: 17px; }
+  .consultation-form, .consultation-history { padding: 20px 16px; }
+  .consultation-page { padding: 24px 16px 48px; }
+}
+@media (max-width: 540px) {
+  .public-header-inner:has(.session-account) .public-actions { width: 100%; justify-content: space-between; }
+  .public-header-inner:has(.session-account) .session-account { flex: 1; }
+  .session-account-toggle { width: 100%; }
+  .session-account-menu { left: 0; right: auto; }
+}
