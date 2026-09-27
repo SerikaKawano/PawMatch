@@ -19,6 +19,7 @@ import { criteria } from "@/lib/research/types";
 import { criterionLabels } from "@/lib/research/scoring";
 import { demoUsers } from "@/lib/demoUsers";
 import { mayReviewPet } from "@/lib/ownership";
+import { uiCopy } from "@/lib/ui-copy";
 
 export default async function PetDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -59,7 +60,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
               <div className="detail-title"><h1>{pet.name}</h1></div>
               <p className="detail-meta">{pet.breed} ・ {ageLabel} ・ {sex}</p>
               <p className="location"><MapPin size={20} />{pet.location}</p>
-              <div className="pet-primary-actions">{canConsult && <Link href={`/pets/${pet.id}/consult`} className="task-primary">{pet.name}について相談する <MessageCircle size={22} /></Link>}{canReview && <Link href={`/reviews?pet=${pet.id}`} className="task-secondary">担当者向け：この子への申込みを確認</Link>}{!canConsult && !canReview && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
+              <div className="pet-primary-actions">{canConsult && <Link href={`/pets/${pet.id}/consult`} className="task-primary">{uiCopy.contactPet(pet.name)} <MessageCircle size={22} /></Link>}{canReview && <Link href={`/reviews?pet=${pet.id}`} className="task-secondary">担当者向け：この子への申込みを確認</Link>}{!canConsult && !canReview && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
               <div className="tag-row">{pet.temperament.map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div>
               <div className="profile-facts">
                 <div><PawPrint /><span>種類</span><strong>{species}</strong></div>

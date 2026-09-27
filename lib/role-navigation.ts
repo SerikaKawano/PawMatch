@@ -1,10 +1,11 @@
 import type { DemoRole } from "./demoUsers";
+import { uiCopy } from "./ui-copy";
 export type RoleTask = { label: string; href: string; description: string };
 export const roleNavigation: Record<DemoRole, { title: string; purpose: string; tasks: RoleTask[] }> = {
   adopter: { title: "マイページ", purpose: "気になる子を探し、お世話の条件を読んでから相談しましょう。", tasks: [
-    { label: "家族になる子を探す", href: "/pets", description: "写真と地域で探す → 詳細を読む → その子について相談する" },
+    { label: uiCopy.findPets, href: "/pets", description: "写真と地域で探す → 詳細を見る → その子について問い合わせる" },
     { label: "保存した相談を確認する", href: "/dashboard#consultations", description: "相談したペットと内容を振り返ります。譲渡者への送信・返信はありません。" },
-    { label: "お迎えまでの流れを読む", href: "/guide", description: "条件確認・面談・トライアル・正式譲渡の順番を確認します。" },
+    { label: uiCopy.adoptionFlow, href: "/guide", description: "条件確認・面談・トライアル・正式譲渡の順番を確認します。" },
   ] },
   rehomer: { title: "譲渡者のホーム", purpose: "自分が掲載するペットを選び、届いた里親申込みを確認しましょう。", tasks: [
     { label: "掲載中のペットと届いた里親申込みを確認", href: "/rehoming", description: "掲載中のペットを選ぶ → その子に届いた里親申込みを確認する" },
@@ -26,11 +27,11 @@ export const roleNavigation: Record<DemoRole, { title: string; purpose: string; 
 };
 export function navigationLabel(path: string) {
   if (path === "/") return "サイトトップ";
-  if (path === "/dashboard") return "ホーム";
-  if (path === "/pets") return "ペットを探す";
+  if (path === "/dashboard") return "マイページ";
+  if (path === "/pets") return uiCopy.findPets;
   if (/^\/pets\/[^/]+\/consult$/.test(path)) return "相談内容を入力";
   if (path.startsWith("/pets/")) return "ペットの詳細";
-  if (path === "/rehoming") return "掲載中のペットと里親申込み";
+  if (path === "/rehoming") return uiCopy.manageListings;
   if (path === "/reviews/progress") return "審査の進捗一覧";
   if (path === "/reviews/consultations") return "届いた相談";
   if (path === "/reviews/records") return "審査対象の内訳";
@@ -38,7 +39,7 @@ export function navigationLabel(path: string) {
   if (path.startsWith("/reviews/")) return "確認・審査の記録";
   if (path === "/admin/analytics") return "運営状況・履歴";
   if (path === "/admin/records") return "記録の内訳";
-  if (path === "/guide") return "お迎えまでの流れ";
+  if (path === "/guide") return uiCopy.adoptionFlow;
   if (path.startsWith("/research")) return "研究と評価";
   if (path === "/docs") return "開発者向けAPI";
   return "ご案内";

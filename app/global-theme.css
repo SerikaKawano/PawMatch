@@ -326,3 +326,16 @@ small { font-size: 17px; }
 .public-pet-detail .pet-data-grid .pet-data-wide { grid-column: 1 / -1; }
 .rehomer-message { margin: 0 0 18px; padding: 20px 22px; border-left: 5px solid #dfbac5; border-radius: 8px; background: #fff8f4; font-size: 18px; line-height: 1.8; }
 @media (max-width: 760px) { .public-hero-photo { background-position: 65% center; } }
+
+.public-brand strong { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.brand-demo { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 5px; background: #a82e4d; color: #fff; font: 850 17px/1.2 Arial, sans-serif; letter-spacing: .04em; }
+.quick-search { width: calc(100% - 120px); max-width: 1320px; margin: -18px auto 0; }
+.flow-step-heading { margin-bottom: 8px; }
+.flow-step-icon { display: block; margin: 8px 0 16px; color: #a82e4d; }
+.flow-section .public-flow article h3 { margin: 0; }
+.language-switch { display: inline-flex; flex: none; gap: 2px; padding: 3px; border: 1px solid #b59b8f; border-radius: 9px; background: #fff; }
+.language-switch button { min-width: 64px; min-height: 39px; border: 0; border-radius: 6px; background: transparent; color: #4e403a; font-size: 17px; font-weight: 800; cursor: pointer; }
+.language-switch button[aria-pressed="true"] { background: #66483e; color: #fff; }
+.language-switch button:focus-visible { outline: 3px solid #a82e4d; outline-offset: 2px; }
+@media (max-width: 1000px) { .quick-search { margin-left: 60px; margin-right: 60px; grid-template-columns: repeat(2, minmax(0, 1fr)); } .public-header-inner { gap: 14px; } }
+@media (max-width: 760px) { .quick-search { width: auto; margin: 22px 23px 0; grid-template-columns: 1fr; } .brand-demo { font-size: 17px; } .language-switch button { min-width: 43px; } .public-brand small, .public-brand .brand-mark { display: none; } .public-header-inner { gap: 8px; } }

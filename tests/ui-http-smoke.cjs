@@ -11,6 +11,11 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   assert.ok(!home.includes("探す、確認する、迎える。"));
   assert.ok(!home.includes("研究用の募集例"));
   assert.ok(home.includes('class="flow-step-heading"'));
+  assert.ok(home.includes('class="brand-demo"'));
+  assert.ok(home.includes('class="language-switch"'));
+  assert.ok(home.includes("流れを見る"));
+  assert.ok(!home.includes("手順を見る"));
+  assert.ok(!home.includes("掲載番号 Q8N4V2K7"));
   const guide = await (await fetch(base + "/guide")).text();
   for (const text of [
     "相談から正式譲渡まで", "確認事項の例", "細かな質問には理由があります",

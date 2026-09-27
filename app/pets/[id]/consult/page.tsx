@@ -5,6 +5,7 @@ import { getPets } from "@/lib/repository";
 import { getConsultations } from "@/lib/consultations";
 import { ConsultationForm } from "@/components/ConsultationForm";
 import { ConsultationHistory } from "@/components/ConsultationHistory";
+import { uiCopy } from "@/lib/ui-copy";
 
 export default async function ConsultationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,7 +17,7 @@ export default async function ConsultationPage({ params }: { params: Promise<{ i
   return <div className="consultation-page">
     <Link className="back-link" href={`/pets/${id}`}>← {pet.name}の詳細へ戻る</Link>
     <span className="section-kicker">譲渡についてのご相談</span>
-    <h1>{pet.name}について問い合わせる</h1>
+    <h1>{uiCopy.contactPet(pet.name)}</h1>
     <p>{pet.breed} · {pet.age} · {pet.location}</p>
     <ConsultationForm petId={id} userEmail={user.email} />
     <ConsultationHistory records={records} names={{ [id]: pet.name }} />

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AlertTriangle, ArrowRight, CheckCircle2, PawPrint, ShieldCheck } from "lucide-react";
 import { adoptionSteps } from "@/lib/adoption-flow";
+import { uiCopy } from "@/lib/ui-copy";
 
 export default function GuidePage() {
   return <div className="guide-page">
@@ -12,7 +13,7 @@ export default function GuidePage() {
 
 
       <section className="safety-guide"><AlertTriangle size={34} /><div><h2>トラブルを防ぐために</h2><ul><li>・個人情報やメッセージの内容を送信前に確認する</li><li>・事前に本人確認を完了する。</li><li>・譲渡成立後、譲渡契約書はきちんと保管する。</li><li>・ペットの受け渡しは対面で。輸送業者に任せない。</li><li>・高額な費用請求やサイト外での有償譲渡を持ちかけられた場合、取引を即時中止する。</li></ul></div></section>
-      <div className="guide-cta"><h2>準備ができたら、家族を探しに行きましょう。</h2><Link href="/pets" className="public-primary">里親募集中の子を見る <ArrowRight /></Link></div>
+      <div className="guide-cta"><h2>準備ができたら、家族を探しに行きましょう。</h2><Link href="/pets" className="public-primary">{uiCopy.findPets} <ArrowRight /></Link></div>
     </main>
   </div>;
 }

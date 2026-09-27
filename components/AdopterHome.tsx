@@ -7,6 +7,7 @@ import type { AdopterProfile, AdopterProfileFields } from "@/lib/adopter-profile
 import type { AdopterDocumentSummary } from "@/lib/adopter-documents";
 import type { Consultation } from "@/lib/consultations";
 import { ConsultationHistory } from "./ConsultationHistory";
+import { uiCopy } from "@/lib/ui-copy";
 
 const profileFields: { key: keyof AdopterProfileFields; label: string; multiline?: boolean }[] = [
   { key: "fullName", label: "氏名" }, { key: "region", label: "お住まいの地域" },
@@ -73,7 +74,7 @@ export function AdopterHome({ initialProfile, initialDocuments, consultations, p
     finally { setBusy(false); }
   }
   return <div className="dashboard-page adopter-home">
-    <header className="adopter-home-header"><div><span className="section-kicker">マイページ</span><h1>{profile.fullName}</h1></div><Link href="/pets" className="task-primary"><Search size={22} />里親募集中の子を探す <ArrowRight size={20} /></Link></header>
+    <header className="adopter-home-header"><div><span className="section-kicker">マイページ</span><h1>{profile.fullName}</h1></div><Link href="/pets" className="task-primary"><Search size={22} />{uiCopy.findPets} <ArrowRight size={20} /></Link></header>
     <p className="adopter-home-status" role="status" aria-live="polite">{notice}</p>
     <div className="adopter-home-grid">
       <section className="adopter-profile-card"><div className="adopter-card-heading"><h2>自分のプロフィール</h2><button type="button" className="task-secondary" onClick={() => { setEditing(value => !value); setNotice(""); }}>{editing ? "表示に戻る" : "編集する"}</button></div>

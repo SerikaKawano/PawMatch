@@ -4,6 +4,7 @@ import type { ParticipantView, ResponseRecord } from "@/lib/research/types";
 import { criteria } from "@/lib/research/types";
 import { criterionLabels, verificationLabels, verificationStateLabels } from "@/lib/research/scoring";
 import { AssessmentPanel } from "./AssessmentPanel";
+import { translateText } from "@/lib/i18n";
 
 const decisionLabels = { proceed:"次の面談へ", check:"追加確認", hold:"保留", decline:"今回は見送り" };
 type Answer = Pick<ResponseRecord,"priorityId"|"decisions"|"identifiedRisks"|"reasoning"|"nextChecks"|"interrupted"|"ratings">;
@@ -15,7 +16,7 @@ export function ResearchSession({ initial }: { initial: ParticipantView }) {
   const [busy,setBusy] = useState(false);
   const [error,setError] = useState("");
   async function act(action:string) {
-    if(action==="withdraw" && !window.confirm("このセッションの回答を削除して参加を中止しますか？")) return;
+    if(action==="withdraw" && !window.confirm(document.documentElement.lang === "en" ? translateText("このセッションの回答を削除して参加を中止しますか？") : "このセッションの回答を削除して参加を中止しますか？")) return;
     setBusy(true);setError("");
     try {
       const response = await fetch("/api/research/sessions/"+view.id,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...(action==="respond"?{response:{...answer,trialId:view.trial?.id}}:{})})});
