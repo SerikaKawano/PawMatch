@@ -20,14 +20,19 @@ export const reviewInput = z.object({
   action:z.enum(["save","advance","confirm","decline","decide"]).optional(),
 }).strict();
 type ReviewStore = Record<string,ReviewRecord>;
-export const getReviewRecords=()=>readStore<ReviewStore>("review-v1",()=>({}));
+const activeStage = (stage:ReviewStage):ReviewStage => stage==="screening"?"risk_review":stage;
+const normalizeIntake = (record:ReviewRecord):ReviewRecord => record.stage==="screening"?{...record,stage:"risk_review"}:record;
+export async function getReviewRecords():Promise<ReviewStore> {
+  const records=await readStore<ReviewStore>("review-v1",()=>({}));
+  return Object.fromEntries(Object.entries(records).map(([id,record])=>[id,normalizeIntake(record)]));
+}
 export function initialReview(app:Applicant):ReviewRecord {
-  return {revision:0,stage:app.stage,verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",memo:""},note:"",decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
+  return {revision:0,stage:activeStage(app.stage),verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",memo:""},note:"",decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
 }
 export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {
   const data=reviewInput.parse(input);
   return mutateStore<ReviewStore,ReviewRecord>("review-v1",()=>({}),store=>{
-    const previous=store[app.id]??initialReview(app);
+    const previous=normalizeIntake(store[app.id]??initialReview(app));
     if(data.revision!==previous.revision)throw new Error("別の画面で更新されています。再読み込みして内容を確認してください。");
     if(previous.decisionRecorded)throw new Error("判断が記録済みのため、この審査は更新できません。");
     if(!["reviewer","rehomer","admin"].includes(actor.role))throw new Error("このロールでは審査を更新できません。");

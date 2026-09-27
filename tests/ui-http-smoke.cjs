@@ -124,8 +124,8 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     const screenHtml = await screen.text();
     assert.ok(!screenHtml.includes('class="role-navigation"'));
     if (role === "rehomer") {
-      assert.ok(screenHtml.includes("/reviews?pet=momo"));
-      assert.ok(screenHtml.includes("届いた里親申込みを見る →"));
+      assert.ok(screenHtml.includes("/reviews/progress?pet=momo"));
+      assert.ok(!screenHtml.includes("/reviews?pet=momo"));
     }
     if (role === "admin") for (const path of Object.values(primary)) assert.ok(html.includes('href="' + path + '"'));
   }
@@ -133,9 +133,9 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   assert.equal((progress.match(/class="pipeline-open"/g) || []).length, 4);
   assert.ok(progress.includes("審査進捗ボード") && progress.includes("各工程で確認すること"));
   assert.ok(!progress.includes("ここから審査を進めます"));
-  const comparisons = await (await fetch(base + "/reviews?pet=momo", {headers:{Cookie:reviewCookie}})).text();
-  assert.ok(comparisons.includes("この申込みの確認・記録へ"));
-  assert.ok(!comparisons.includes("基本表示"));
+  const removedComparison = await fetch(base + "/reviews?pet=momo", {headers:{Cookie:reviewCookie},redirect:"manual"});
+  assert.equal(removedComparison.status,307);
+  assert.equal(removedComparison.headers.get("location"),"/reviews/progress?pet=momo");
   const workflow = await (await fetch(base + "/reviews/app-aiko", {headers:{Cookie:reviewCookie}})).text();
   assert.ok(workflow.includes("内容を保存（工程は進めない）"));
   assert.ok(workflow.includes("review-state-banner"));

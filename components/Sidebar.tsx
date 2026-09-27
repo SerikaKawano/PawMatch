@@ -7,7 +7,7 @@ import { BookOpenText, HeartHandshake, LayoutDashboard, PawPrint, ShieldCheck } 
 const links = [
   { href: "/", label: "ホーム", icon: LayoutDashboard },
   { href: "/pets", label: "里親募集中", icon: PawPrint },
-  { href: "/reviews", label: "申込み審査", icon: ShieldCheck },
+  { href: "/reviews/progress", label: "審査進捗", icon: ShieldCheck },
   { href: "/docs", label: "API案内", icon: BookOpenText },
 ];
 

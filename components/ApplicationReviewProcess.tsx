@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { AlertCircle, ArrowLeft, ArrowRight, CheckCircle2, PauseCircle } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, PauseCircle } from "lucide-react";
 import type { Applicant, Pet, ReviewRecord, ReviewStage } from "@/lib/types";
 import type { DemoRole } from "@/lib/demoUsers";
 import type { AdopterDocumentSummary } from "@/lib/adopter-documents";
 import type { DocumentRequest } from "@/lib/document-requests";
-import { evidenceLabels, verificationLabels, verificationStateLabels } from "@/lib/research/scoring";
+import { verificationLabels, verificationStateLabels } from "@/lib/research/scoring";
 import { AssessmentPanel } from "./research/AssessmentPanel";
 import { translateText } from "@/lib/i18n";
 const stages: {id:ReviewStage;label:string}[] = [
@@ -14,7 +14,7 @@ const stages: {id:ReviewStage;label:string}[] = [
   {id:"meeting",label:"面談・住環境"},{id:"trial",label:"トライアル"},{id:"final_review",label:"最終判断"},
 ];
 const stageTasks: Record<ReviewStage,string> = {
-  screening:"応募者の生活計画を読み、不足する回答を記録する",
+  screening:"",
   risk_review:"ペットの条件と応募者の計画を照らし、要確認事項を整理する",
   verification:"書類のアップロード状況を確認します。追加の書類や同意が必要な場合はこの画面から書類をやり取りすることができます。",
   meeting:"",
@@ -44,7 +44,7 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
   const ownConfirmed=Boolean(confirmations?.[actorRole]);
   const anyConfirmed=Boolean(confirmations?.reviewer||confirmations?.rehomer);
   const reviewerName=record.review?.history.filter(item=>item.actorRole==="reviewer").at(-1)?.actorName??"未操作";
-  const canOperate=role!=="rehomer"||jointStage;
+  const canOperate=record.stage!=="screening"&&(role!=="rehomer"||jointStage);
   const canEdit=canOperate&&!finalState&&view===record.stage&&!anyConfirmed&&!(role==="rehomer"&&record.stage==="final_review");
   const stateTone=finalState==="approve"?"positive":finalState==="decline"?"negative":finalState==="hold"?"caution":highRisks.length?"negative":pending?"caution":"positive";
   const stateLabel=finalState==="approve"?"次の譲渡手続きへ":finalState==="decline"?"今回は見送り":finalState==="hold"?"追加確認のため保留":highRisks.length?"重要な懸念あり":pending?"確認待ちあり":"この工程を進行中";
@@ -78,17 +78,16 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
   const trial=draft.trial??emptyTrial;
   function updateTrial(patch:Partial<typeof trial>){update({trial:{...trial,...patch}});}
   return <div className="research-page">
-    <Link href={"/reviews?pet="+pet.id} className="back-link"><ArrowLeft />申込み比較へ戻る</Link>
     <header className="research-heading review-case-heading"><p>{pet.summary}</p></header>
     <div className="review-case-participants"><span><strong>ペット：</strong><Link href={`/pets/${pet.id}`}>{pet.name}</Link></span><span><strong>譲渡者：</strong>{ownerName}</span><span><strong>申込者：</strong><Link href={adopterHref}>{record.name}</Link></span><span><strong>審査担当者：</strong>{reviewerName}</span></div>
     <div className="review-actor-status" aria-label="担当者の確認状況"><span><strong>審査担当者</strong>{jointStage?confirmations?.reviewer?`確認済み · ${confirmations.reviewer.name}`:"確認待ち":reviewerName==="未操作"?"未操作":"確認中"}</span><span><strong>譲渡者</strong>{jointStage?confirmations?.rehomer?`確認済み · ${confirmations.rehomer.name}`:"確認待ち":"この工程の操作は不要"}</span></div>
     <nav className="review-stepper" aria-label="審査工程">{stages.map((s,i)=><button type="button" key={s.id} disabled={i>current} className={(i===current?"active ":"")+(i<current?"done ":"")+(i>current?"upcoming ":"")} onClick={()=>{if(i<=current)setView(s.id);}} aria-current={view===s.id?"step":undefined}><span>{i<current?<CheckCircle2 size={20}/>:i+1}</span><strong>{s.label}</strong><small>{i<current?"完了":i===current&&finalState?"判断済み":i===current?"進行中":"未着手"}</small></button>)}</nav>
-    <div className={`review-state-banner ${stateTone}`} role="status"><div>{stateTone==="positive"?<CheckCircle2 />:stateTone==="negative"?<AlertCircle />:<PauseCircle />}<span><small>現在の状態 · {stages[current].label}</small><strong>{stateLabel}</strong></span></div><p>{finalState?"担当者の判断と理由が記録されています。":highRisks.length>0?`重要な確認 ${highRisks.length}件。詳細を確認の上、進行可否を判断してください。`:pending>0?`確認待ち ${pending}件。未確認を「適合」と扱わず、次の対応を記録してください。`:"確認した内容と判断理由を記録してから次へ進みます。"}</p></div>
+    {view!=="screening"&&<div className={`review-state-banner ${stateTone}`} role="status"><div>{stateTone==="positive"?<CheckCircle2 />:stateTone==="negative"?<AlertCircle />:<PauseCircle />}<span><small>現在の状態 · {stages[current].label}</small><strong>{stateLabel}</strong></span></div><p>{finalState?"担当者の判断と理由が記録されています。":highRisks.length>0?`重要な確認 ${highRisks.length}件。詳細を確認の上、進行可否を判断してください。`:pending>0?`確認待ち ${pending}件。未確認を「適合」と扱わず、次の対応を記録してください。`:"確認した内容と判断理由を記録してから次へ進みます。"}</p></div>}
     <div className="review-process-layout"><section className="research-card">
-      <div className="review-stage-heading"><div><span>現在のフェーズ</span><h2>{stages.find(s=>s.id===view)?.label}</h2>{stageTasks[view]&&<p>{stageTasks[view]}</p>}</div>{view!==record.stage&&<button type="button" className="task-secondary" onClick={()=>setView(record.stage)}>進行中の工程へ戻る</button>}</div>
-      {role==="rehomer"&&!jointStage&&<p className="review-readonly-note">この工程は審査担当者が確認します。譲渡者の操作は必要ありません。</p>}
+      <div className="review-stage-heading"><div><span>現在のフェーズ</span><h2>{stages.find(s=>s.id===view)?.label}</h2>{stageTasks[view]&&<p>{stageTasks[view]}</p>}</div>{view!==record.stage&&view!=="screening"&&<button type="button" className="task-secondary" onClick={()=>setView(record.stage)}>進行中の工程へ戻る</button>}</div>
+      {role==="rehomer"&&!jointStage&&view!=="screening"&&<p className="review-readonly-note">この工程は審査担当者が確認します。譲渡者の操作は必要ありません。</p>}
       {jointStage&&anyConfirmed&&<p className="review-readonly-note">確認済みの内容は変更できません。{ownConfirmed?"相手の確認を待っています。":"内容を確認して、確認済みとして登録してください。"}</p>}
-      {view==="screening"&&<><div className="applicant-context"><div><strong>世帯・支援</strong><p>{record.household}</p></div><div><strong>希望</strong><p>{record.researchCandidate?.preferences??"未回答"}</p></div></div><h3>暮らしの計画</h3><div className="review-evidence-list">{[...(record.assessment?.breakdown??[])].sort((a,b)=>b.weight-a.weight).map(row=><div key={row.criterion} className={`review-evidence-row ${row.state}`}><div><strong>{row.label}</strong></div><span className="evidence-state">{evidenceLabels[row.state]}</span><p>{row.detail}</p></div>)}</div></>}
+      {view==="screening"&&<><p>申込者のプロフィールを表示します。この工程での操作はありません。</p><dl className="applicant-intake-profile"><div><dt>氏名</dt><dd>{record.name}</dd></div><div><dt>申込日</dt><dd>{record.submittedAt}</dd></div><div><dt>世帯・支援</dt><dd>{record.household}</dd></div><div><dt>住環境</dt><dd>{record.housing}</dd></div><div><dt>お世話に使える時間</dt><dd>{record.availability}</dd></div><div><dt>飼育経験</dt><dd>{record.experience}</dd></div><div><dt>先住動物</dt><dd>{record.existingPets}</dd></div><div><dt>通院への備え</dt><dd>{record.veterinaryAccess}</dd></div><div><dt>費用への備え</dt><dd>{record.financialReadiness}</dd></div></dl></>}
       {view==="risk_review"&&(record.assessment?<AssessmentPanel assessment={record.assessment}/>:<p>この旧形式の点数は参考値です。判断理由と確認状態を別に確認してください。</p>)}
       {view==="verification"&&<>
         <h3>アップロード済みの書類</h3><ul className="review-document-list">{documents.length?documents.map(item=><li key={item.id}><strong>{item.label}</strong><a href={`/api/adopter-documents/${item.id}`}>{item.filename}</a><small>{new Date(item.uploadedAt).toLocaleDateString("ja-JP")}</small></li>):<li>提出済みの書類はありません。</li>}</ul>
@@ -101,7 +100,7 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
       {view==="final_review"&&<><p>最終判断は審査担当者が記録し、譲渡者も内容を確認します。未確認事項と支援で解消できる点を検討してください。</p><label className="research-field">最終判断<select disabled={!canEdit||role==="rehomer"} value={draft.decision} onChange={e=>update({decision:e.target.value as ReviewRecord["decision"]})}><option value="hold">追加確認・保留</option><option value="approve">正式譲渡へ進める</option><option value="decline">今回は見送る</option></select></label><label className="research-check"><input disabled={!canEdit||role==="rehomer"} type="checkbox" checked={draft.riskAcknowledged} onChange={e=>update({riskAcknowledged:e.target.checked})}/>プロフィールの根拠・重要リスク・未確認事項を確認し、判断理由を記録した</label><p>「正式譲渡へ進める」には書類・面談・トライアルの確認が必要です。</p></>}
       {canOperate&&view===record.stage&&<label className="research-field">確認した根拠・未解決事項・判断理由（必須）<textarea disabled={!canEdit} maxLength={5000} value={draft.note} onChange={e=>update({note:e.target.value})} placeholder="確認内容を記録してください。個人情報は入力しないでください。" /></label>}
       {jointStage&&canOperate&&view===record.stage&&!finalState&&<label className="research-field">見送る場合の理由<textarea maxLength={5000} value={declineReason} onChange={event=>setDeclineReason(event.target.value)} placeholder="見送りの理由を記録してください" /></label>}
-      <div className="research-actions review-save-actions" id="review-actions">{finalState?<p>この審査の判断は記録済みです。</p>:view===record.stage&&canOperate?<>{canEdit&&<button className="secondary-button" disabled={busy||!draft.note.trim()} onClick={()=>save("save")}>{busy ? "保存中…" : "内容を保存（工程は進めない）"}</button>}{jointStage?!ownConfirmed&&!(record.stage==="final_review"&&role==="rehomer"&&!confirmations?.reviewer)&&<button className="primary-button review-advance" disabled={busy||!draft.note.trim()} onClick={()=>save("confirm")}>{busy ? "保存中…" : "確認済みとして登録"}</button>:current<5&&<button className="primary-button review-advance" disabled={busy||!draft.note.trim()} onClick={()=>save("advance")}>{busy ? "保存中…" : "次の工程へ進める"} <ArrowRight/></button>}<button className="decision-button review-decline" disabled={busy||!(jointStage?declineReason.trim():draft.note.trim())} onClick={()=>save("decline")}>今回は見送る</button></>:null}</div><p role="status" aria-live="polite">{message}</p>
+      {view!=="screening"&&<div className="research-actions review-save-actions" id="review-actions">{finalState?<p>この審査の判断は記録済みです。</p>:view===record.stage&&canOperate?<>{canEdit&&<button className="secondary-button" disabled={busy||!draft.note.trim()} onClick={()=>save("save")}>{busy ? "保存中…" : "内容を保存（工程は進めない）"}</button>}{jointStage?!ownConfirmed&&!(record.stage==="final_review"&&role==="rehomer"&&!confirmations?.reviewer)&&<button className="primary-button review-advance" disabled={busy||!draft.note.trim()} onClick={()=>save("confirm")}>{busy ? "保存中…" : "確認済みとして登録"}</button>:current<5&&<button className="primary-button review-advance" disabled={busy||!draft.note.trim()} onClick={()=>save("advance")}>{busy ? "保存中…" : "次の工程へ進める"} <ArrowRight/></button>}<button className="decision-button review-decline" disabled={busy||!(jointStage?declineReason.trim():draft.note.trim())} onClick={()=>save("decline")}>今回は見送る</button></>:null}</div>}<p role="status" aria-live="polite">{message}</p>
     </section></div>
   </div>;
 }

@@ -26,7 +26,7 @@ export default async function DashboardPage() {
   if (user.role === "rehomer") return <div className="rehomer-home page-wrap">
     <RoleHomeHero name={user.name} description="掲載、審査、相談を確認できます。" />
     <nav className="rehomer-home-menu" aria-label="譲渡者のメニュー">
-      <Link href="/rehoming" className="listing"><span className="rehomer-menu-icon"><PawPrint /></span><span><strong>掲載中のペット一覧</strong><small>自分が掲載しているペットと届いた申込みを見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
+      <Link href="/rehoming" className="listing"><span className="rehomer-menu-icon"><PawPrint /></span><span><strong>掲載中のペット一覧</strong><small>自分が掲載しているペットと掲載内容を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
       <Link href="/reviews/progress" className="progress"><span className="rehomer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>受付から最終判断までの現在地を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
       <Link href="/rehoming/consultations" className="enquiries"><span className="rehomer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>掲載ペットについて届いた相談と対応状況を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
     </nav>
@@ -49,7 +49,7 @@ export default async function DashboardPage() {
   const stats = {
     admin: [{ label: "全申込み", value: applications.length, href: "/reviews/progress" }, { label: "要確認", value: count("attention"), href: "/admin/records?view=attention" }, { label: "譲渡へ進める判断", value: count("adoptions"), href: "/admin/records?view=adoptions" }],
     reviewer: [{ label: "要確認の申込み", value: count("attention"), href: "/reviews/records?view=attention" }, { label: "書類・項目の確認待ち", value: count("pending"), href: "/reviews/records?view=pending" }, { label: "面談の工程にある申込み", value: count("meetings"), href: "/reviews/records?view=meetings" }],
-    rehomer: [{ label: "掲載中のペット", value: pets.length, href: "/rehoming" }, { label: "届いた里親申込み", value: applications.length, href: "/reviews" }, { label: "トライアル中", value: count("trials"), href: "/reviews/records?view=trials" }],
+    rehomer: [{ label: "掲載中のペット", value: pets.length, href: "/rehoming" }, { label: "審査中の申込み", value: applications.length, href: "/reviews/progress" }, { label: "トライアル中", value: count("trials"), href: "/reviews/records?view=trials" }],
   }[user.role];
 
   return <div className="dashboard-page role-dashboard">

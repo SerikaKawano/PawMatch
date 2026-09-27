@@ -1,6 +1,6 @@
 import { requirePageAccess } from "@/lib/access-control";
 import Link from "next/link";
-import { AlertTriangle, ArrowLeft, ArrowRight, CheckCircle2, ClipboardList, FileWarning } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardList, FileWarning } from "lucide-react";
 import { getApplicants, getPets } from "@/lib/repository";
 import { visibleApplications, visiblePets } from "@/lib/ownership";
 import type { ReviewStage } from "@/lib/types";
@@ -20,12 +20,11 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
   const selectedPet = pets.find(pet => pet.id === filters.pet);
   const applications = selectedPet ? allApplications.filter(application => application.petId === selectedPet.id) : allApplications;
   return <div className="progress-board-page">
-    <Link href="/reviews" className="back-link"><ArrowLeft /> 審査一覧へ戻る</Link>
     <header className="progress-board-header"><div><span className="section-kicker">REVIEW PIPELINE</span><p>受付から最終判断までの進捗を一目で確認できます。</p></div><span><ClipboardList />全 {applications.length}件</span></header>
     <form className="pipeline-filter" action="/reviews/progress"><label htmlFor="progress-pet">対象のペット</label><select id="progress-pet" name="pet" defaultValue={selectedPet?.id ?? ""}><option value="">すべてのペット</option>{pets.map(pet => <option key={pet.id} value={pet.id}>{pet.name}</option>)}</select><button type="submit" className="task-secondary">この条件で表示</button>{selectedPet && <Link href="/reviews/progress">すべてに戻す</Link>}</form>
     <div className="pipeline-legend"><span><i className="complete" />通過済み</span><span><i className="current" />現在地</span><span><i className="upcoming" />未着手</span><p>各行を選択すると審査ワークフローを開きます。</p></div>
     <details className="pipeline-help"><summary>各工程で確認すること</summary><div className="pipeline-help-grid">
-      <p><strong>受付</strong>申込みの内容と生活計画を受け付け、不足する回答を整理します。</p>
+      <p><strong>受付</strong>申込者のプロフィールを表示します。ここでの操作はありません。</p>
       <p><strong>適合性</strong>ペットに必要なケアと希望者の計画を照らし、重要な不一致や質問を整理します。</p>
       <p><strong>書類確認</strong>提出済み書類と本人確認、住居の飼育許可、同居者の同意などの状態を記録します。</p>
       <p><strong>面談</strong>会話や住環境を通して、実際のお世話の体制を確かめます。</p>

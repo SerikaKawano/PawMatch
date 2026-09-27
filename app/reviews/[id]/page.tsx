@@ -9,7 +9,7 @@ import { demoUsers } from "@/lib/demoUsers";
 export const dynamic = "force-dynamic";
 
 export default async function ApplicationReviewPage({ params }: { params: Promise<{ id: string }> }) {
-  const user = await requirePageAccess("review", "/reviews");
+  const user = await requirePageAccess("review", "/reviews/progress");
   const { id } = await params;
   const [allApplications, pets] = await Promise.all([getApplicants(), getPets()]);
   const applications = visibleApplications(user, allApplications, pets);

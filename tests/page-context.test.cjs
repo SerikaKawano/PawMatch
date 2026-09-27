@@ -4,7 +4,7 @@ const load = require("./load-ts.cjs");
 const { pageContext } = load("lib/page-context.ts");
 
 test("every app page except home has a title and a predictable parent link", () => {
-  const pages = ["/login", "/guide", "/pets", "/pets/momo", "/pets/momo/consult", "/dashboard", "/rehoming", "/rehoming/consultations", "/reviews", "/reviews/progress", "/reviews/app-aiko", "/reviews/consultations", "/reviews/adopters", "/reviews/adopters/adopter", "/reviews/applicants/app-aiko", "/reviews/records", "/consultations/sample-consultation-1", "/admin/records", "/admin/analytics", "/research", "/research/setup", "/research/results", "/research/session/example", "/terms", "/privacy", "/docs", "/access-denied"];
+  const pages = ["/login", "/guide", "/pets", "/pets/momo", "/pets/momo/consult", "/dashboard", "/rehoming", "/rehoming/consultations", "/reviews/progress", "/reviews/app-aiko", "/reviews/consultations", "/reviews/adopters", "/reviews/adopters/adopter", "/reviews/applicants/app-aiko", "/reviews/records", "/consultations/sample-consultation-1", "/admin/records", "/admin/analytics", "/research", "/research/setup", "/research/results", "/research/session/example", "/terms", "/privacy", "/docs", "/access-denied"];
   assert.equal(pageContext("/", null), null);
   for (const page of pages) {
     const context = pageContext(page, "admin");
