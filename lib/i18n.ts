@@ -655,6 +655,8 @@ const english: Record<string, string> = {
   "「正式譲渡へ進める」の保存には確認状態・面談・トライアルのチェックが必要です。": "To record ‘Proceed to adoption’, verification, meeting and trial checks must be complete.",
   "確認した根拠・未解決事項・判断理由（必須）": "Evidence, unresolved issues and rationale (required)",
   "確認済の事項・未解決事項、判断事由（必須）": "Confirmed items, unresolved issues and rationale (required)",
+  "確認済みの工程内容は変更できません。相手の確認を待っています。": "The confirmed stage details cannot be changed. Waiting for the other party's confirmation.",
+  "確認済みの工程内容は変更できません。内容を確認し、あなたの確認事項と判断事由を入力してください。": "The confirmed stage details cannot be changed. Review them and enter your own findings and rationale.",
   "見送る場合の理由（応募者に開示されます）": "Reason for not proceeding (shared with the applicant)",
   "気になる点の理由と必要な確認を整理します。点数だけで合否を決めることはありません。": "Review the reasons for concerns and the checks still needed. A score alone does not decide approval.",
   "「この申込みの確認・記録へ」を押す": "Open ‘Review and record this application’",

@@ -45,7 +45,6 @@ export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {
     const action=data.action??(data.decisionRecorded?(data.decision==="decline"?"decline":"decide"):to===from+1?"advance":"save");
     if(actorRole==="rehomer"&&!isJointStage(previous.stage))throw new Error("この工程は審査担当者が確認します。譲渡者の操作は必要ありません。");
     if(isJointStage(previous.stage)&&!['save','confirm','decline'].includes(action))throw new Error("この工程は審査担当者と譲渡者の双方の確認が必要です。");
-    if(previous.stage==="final_review"&&actorRole==="rehomer"&&action==="save")throw new Error("審査担当者の最終判断を待ってください。");
     if(!isJointStage(previous.stage)&&['confirm','decide'].includes(action))throw new Error("この工程では双方の確認は行いません。");
     if(action==="advance"&&to!==from+1)throw new Error("次の工程を指定してください。");
     if(action!=="advance"&&to!==from)throw new Error("現在の工程を確認してください。");
@@ -54,7 +53,7 @@ export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {
     if(data.trial?.periodFrom&&data.trial.periodTo&&data.trial.periodFrom>data.trial.periodTo)throw new Error("トライアルの終了日は開始日以降にしてください。");
     if(previous.stage==="trial"&&action==="confirm"&&(!data.trial?.periodFrom||!data.trial.periodTo||!data.trial.transportFrom.trim()||!data.trial.transportTo.trim()||!data.trial.transportMethod.trim()||!data.trial.criteria||Object.values(data.trial.criteria).some(value=>value==="pending")||data.trial.result==="pending"))throw new Error("トライアルの期間・輸送・各確認項目の結果を記録してください。");
     if(previous.stage==="trial"&&action==="confirm"&&data.trial?.criteria&&data.trial.result!==(Object.values(data.trial.criteria).some(value=>value==="ng")?"ng":"ok"))throw new Error("トライアルの総合結果と項目別の結果が一致しません。");
-    if(previous.stage==="meeting"&&action==="confirm"&&data.meetingChecks.some(value=>!value))throw new Error("面談・住環境の確認項目を完了してください。");
+    if(previous.stage==="meeting"&&action==="confirm"&&data.meetingChecks.some(value=>!value))throw new Error("面談の確認項目を完了してください。");
     if(previous.stage==="final_review"&&action==="confirm"&&data.decision==="approve"){
       if(Object.values(data.verification).some(v=>v!=="verified")||data.meetingChecks.some(v=>!v)||data.trial?.result!=="ok")throw new Error("書類確認・面談・トライアルの結果を確認してください。");
       if(!data.riskAcknowledged)throw new Error("点数以外の根拠・残るリスクを確認し、判断理由を記録してください。");
@@ -63,13 +62,13 @@ export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {
     const currentSignoffs=isJointStage(previous.stage)?{...signoffs[previous.stage]}:null;
     if(currentSignoffs?.[actorRole]&&action==="save")throw new Error("この工程はすでに確認済みです。");
     if(currentSignoffs&&(action==="save"||action==="confirm")&&(currentSignoffs.reviewer||currentSignoffs.rehomer)){
-      const unchanged=JSON.stringify({verification:data.verification,meetingChecks:data.meetingChecks,trial:data.trial,decision:data.decision,riskAcknowledged:data.riskAcknowledged,note:data.note})===JSON.stringify({verification:previous.verification,meetingChecks:previous.meetingChecks,trial:previous.trial,decision:previous.decision,riskAcknowledged:previous.riskAcknowledged,note:previous.note});
+      const unchanged=JSON.stringify({verification:data.verification,meetingChecks:data.meetingChecks,trial:data.trial,decision:data.decision,riskAcknowledged:data.riskAcknowledged})===JSON.stringify({verification:previous.verification,meetingChecks:previous.meetingChecks,trial:previous.trial,decision:previous.decision,riskAcknowledged:previous.riskAcknowledged});
       if(!unchanged)throw new Error("一方が確認済みの内容は変更できません。再確認が必要な場合は担当者へ連絡してください。");
     }
     if(action==="confirm"&&currentSignoffs){
       if(currentSignoffs[actorRole])throw new Error("この工程はすでに確認済みです。");
       if(previous.stage==="final_review"&&actorRole==="rehomer"&&!currentSignoffs.reviewer)throw new Error("審査担当者の最終判断を待ってください。");
-      currentSignoffs[actorRole]={userId:actor.id,name:actor.name,at:new Date().toISOString()};
+      currentSignoffs[actorRole]={userId:actor.id,name:actor.name,at:new Date().toISOString(),note:data.note};
       signoffs[previous.stage as JointStage]=currentSignoffs;
     }
     const bothConfirmed=Boolean(currentSignoffs?.reviewer&&currentSignoffs?.rehomer);
