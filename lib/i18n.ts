@@ -92,6 +92,7 @@ const english: Record<string, string> = {
   "必要なケア": "Care needs",
   "時間と生活": "Time and daily routine",
   "対象ペット": "Pet",
+  "累積・履歴分析を見る": "View cumulative and historical analysis",
   "確認待ち": "Awaiting review",
   "未提出": "Not submitted",
   "提出済": "Submitted",
