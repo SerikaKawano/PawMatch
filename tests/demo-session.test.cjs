@@ -19,7 +19,12 @@ test("demo login validates roles and accepts only local intended destinations", 
 
 test("consultations validate, persist, avoid duplicates and isolate users and pets", async () => {
   assert.equal(consultationInput.safeParse({ petId: "momo", contactEmail: "noah@pawmatch.test", message: "  ", requestId: randomUUID() }).success, false);
-  assert.equal(consultationInput.safeParse({ petId: "momo", contactEmail: "real@example.com", message: "質問です", requestId: randomUUID() }).success, false);
+  for (const contactEmail of ["real@example.com", "090-1234-5678", "+44 7700 900123"]) {
+    assert.equal(consultationInput.safeParse({ petId: "momo", contactEmail, message: "質問です", requestId: randomUUID() }).success, true);
+  }
+  for (const contactEmail of ["12345", "not-an-address", "090-abc-5678"]) {
+    assert.equal(consultationInput.safeParse({ petId: "momo", contactEmail, message: "質問です", requestId: randomUUID() }).success, false);
+  }
   const requestId = randomUUID();
   const input = { petId: "momo", contactEmail: "noah@pawmatch.test", message: "  お世話について相談します。  ", requestId };
   const first = await saveConsultation("adopter", input);

@@ -6,7 +6,12 @@ import type { DemoUserId } from "./demoUsers";
 export const consultationInput = z.object({
   petId: z.string().regex(/^[a-zA-Z0-9-]+$/).max(80),
   message: z.string().trim().min(1, "相談内容を入力してください。").max(2000),
-  contactEmail: z.string().email().max(254).refine(value => value.toLowerCase().endsWith(".test"), "テスト用メールアドレス（.test）を入力してください。"),
+  // Keep the persisted key for existing consultations; it now accepts either contact method.
+  contactEmail: z.string().trim().max(254).refine(value => {
+    if (z.string().email().safeParse(value).success) return true;
+    const digits = value.replace(/\D/g, "");
+    return /^\+?[0-9][0-9\s()-]*$/.test(value) && digits.length >= 10 && digits.length <= 15;
+  }, "メールアドレスまたは電話番号を入力してください。"),
   requestId: z.string().uuid(),
 });
 export type ConsultationStatus = "received" | "profile_requested" | "closed";

@@ -16,7 +16,10 @@ async function cookieFor(userId) {
   const page = await (await fetch(base + "/pets/momo/consult", { headers: { Cookie: adopter } })).text();
   assert.match(page, /Bella(?:<!-- -->)?について問い合わせる/);
   assert.ok(page.includes("相談内容（必須・2,000文字まで）"));
-  assert.ok(page.includes("連絡の取りやすいメールアドレス"));
+  assert.ok(page.includes("連絡の取りやすいメールアドレスまたは電話番号"));
+  assert.ok(!page.includes("連絡の取りやすいメールアドレス（必須・.test）"));
+  assert.ok(!page.includes("相談の受付と審査担当者の確認状況を表示します。"));
+  assert.ok(page.includes("まだ相談はありません。"));
   assert.ok(!page.includes("相談の種類"));
   assert.ok(!page.includes("相談者："));
 
@@ -26,6 +29,9 @@ async function cookieFor(userId) {
   const { consultation } = await create.json();
   assert.equal(consultation.status, "received");
   assert.equal(consultation.contactEmail, "noah@pawmatch.test");
+  const phoneCreate = await fetch(base + "/api/consultations", { method: "POST", headers: { Cookie: adopter, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ petId: "yuki", message: "電話での連絡も可能です。", contactEmail: "+44 7700 900123", requestId: crypto.randomUUID() }) });
+  assert.equal(phoneCreate.status, 201);
+  assert.equal((await phoneCreate.json()).consultation.contactEmail, "+44 7700 900123");
 
   const queue = await (await fetch(base + "/reviews/consultations", { headers: { Cookie: reviewer } })).text();
   assert.ok(queue.includes("通院とお世話の条件を確認したいです。"));

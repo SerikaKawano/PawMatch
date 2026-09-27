@@ -31,8 +31,8 @@ export function ConsultationForm({ petId, userEmail }: { petId: string; userEmai
   return <form className="consultation-form" onSubmit={submit}>
     <label htmlFor="consultation-message">相談内容（必須・2,000文字まで）</label>
     <textarea id="consultation-message" rows={7} required maxLength={2000} value={message} disabled={busy} onChange={event => { setMessage(event.target.value); requestId.current = null; }} placeholder="気になること、お迎えを検討している理由を入力してください。" />
-    <label htmlFor="consultation-contact">連絡の取りやすいメールアドレス（必須・.test）</label>
-    <input id="consultation-contact" type="email" required maxLength={254} pattern=".+@.+\.test" title="実在の連絡先ではなく、.testで終わるメールアドレスを入力してください。" autoComplete="off" value={contactEmail} disabled={busy} onChange={event => { setContactEmail(event.target.value); requestId.current = null; }} />
+    <label htmlFor="consultation-contact">連絡の取りやすいメールアドレスまたは電話番号</label>
+    <input id="consultation-contact" type="text" required maxLength={254} autoComplete="off" value={contactEmail} disabled={busy} onChange={event => { setContactEmail(event.target.value); requestId.current = null; }} />
     <p className="consultation-process-note">相談の送信だけでは審査は始まりません。審査担当者が内容を確認し、必要な情報の提出を案内します。</p>
     <button className="session-primary" disabled={busy || !message.trim() || !contactEmail.trim()}>{busy ? "送信中…" : "相談を送信する"}</button>
     <p role="status" aria-live="polite">{notice}</p>

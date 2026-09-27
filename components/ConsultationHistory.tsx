@@ -3,8 +3,7 @@ import type { Consultation } from "@/lib/consultations";
 
 export function ConsultationHistory({ records, names, title = "あなたの相談履歴" }: { records: Consultation[]; names: Record<string, string>; title?: string }) {
   return <section className="consultation-history" id="consultations"><h2>{title}</h2>
-    <p>相談の受付と審査担当者の確認状況を表示します。相談だけで審査が始まることはありません。</p>
-    {!records.length ? <p className="consultation-empty">まだ相談はありません。気になるペットの詳細から相談できます。</p> :
+    {!records.length ? <p className="consultation-empty">まだ相談はありません。</p> :
       <ul>{records.map(record => <li key={record.id}>
         <div><Link href={`/pets/${record.petId}/consult`}>{names[record.petId] ?? record.petId}への相談</Link><span className={`consultation-status ${record.status ?? "received"}`}>{record.status === "profile_requested" ? "事前情報の提出待ち" : record.status === "closed" ? "対応終了" : "審査担当者の確認待ち"}</span></div>
         <p><time dateTime={record.createdAt}>{new Date(record.createdAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })}</time></p>
