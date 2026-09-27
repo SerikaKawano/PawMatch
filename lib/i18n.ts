@@ -1,6 +1,7 @@
 /** Japanese is the source copy reviewed for the study; English is a presentation layer. */
 import { petCaseTranslations } from "./pet-editorial-en";
 import { researchCaseTranslations } from "./research-scenarios-en";
+import { researchResultsTranslations } from "./research-results-en";
 export type Language = "ja" | "en";
 
 const english: Record<string, string> = {
@@ -298,6 +299,10 @@ const english: Record<string, string> = {
   "掲載中のペット": "Pets listed",
   "届いた里親申込み": "Adoption applications received",
   "掲載中のペットと届いた里親申込み": "Listed pets and adoption applications",
+  "全譲渡元の管理画面": "All rehomers",
+  "全譲渡元の掲載ペットは": "Pets listed by all rehomers: ",
+  "頭です。": " pets. ",
+  "掲載元：": "Listed by: ",
   "確認するペットを選ぶ": "Select a pet to review",
   "応募者を選び内容を読む": "Select an applicant and read their details",
   "応募者の条件を比較する": "Compare applicant information",
@@ -358,13 +363,61 @@ const english: Record<string, string> = {
   "掲載中のペットと里親申込み": "Pet listings and applications",
   "審査の進捗一覧": "Review progress list",
   "届いた相談": "Incoming enquiries",
+  "審査担当者の操作": "Reviewer tasks",
+  "内容を確認して、事前情報の提出へ進めるか、相談を終了するかを記録します。プロフィールが揃う前に適合性の判断はしません。": "Review each enquiry and record whether to request profile information or close it. Do not assess suitability before the profile is complete.",
   "審査対象の内訳": "Review breakdown",
   "応募者の比較": "Applicant comparison",
   "確認・審査の記録": "Review record",
   "運営状況・履歴": "Activity and history",
   "記録の内訳": "Record breakdown",
+  "ダッシュボードへ戻る": "Back to dashboard",
+  "集計の内訳": "Breakdown of totals",
+  "登録団体": "Registered organisations",
+  "登録済みの保護団体・NPOと確認状況です。": "Registered rescue organisations and their verification status.",
+  "審査中の申込み": "Applications under review",
+  "正式譲渡までの審査工程にある申込みです。": "Applications in the review process before adoption.",
+  "担当者が正式譲渡へ進めると記録した合成ケースです。": "Prepared cases for which a reviewer recorded a decision to proceed.",
+  "重要度の高い確認ポイントが残っている申込みです。": "Applications with important checks still unresolved.",
+  "情報なし、または確認待ちの項目がある申込みです。": "Applications with missing information or checks awaiting verification.",
+  "面談・住環境確認が予定されている申込みです。": "Applications with a meeting and home check scheduled.",
+  "相性と飼育状況を確認しているケースです。": "Cases checking compatibility and care during trial.",
+  "申込み状況": "Application status",
+  "里親希望者として送信した申込みの進捗です。": "Progress of applications submitted as an adopter.",
+  "メッセージ": "Messages",
+  "譲渡者とのやり取りを確認できます。": "Review communication with the rehomer.",
+  "該当する記録はまだありません。": "No matching records yet.",
+  "この一覧は研究評価用の合成データです。実在する人物・団体の情報ではありません。": "This list uses constructed study data and does not describe real people or organisations.",
+  "新着メッセージあり": "New message",
+  "担当者の判断記録あり": "Reviewer decision recorded",
   "研究と評価": "Research and evaluation",
   "開発者向けAPI": "Developer API",
+  "開発者向け情報": "Developer information",
+  "シンプルで分かりやすい REST API": "A straightforward REST API",
+  "ペットと申込みのAPIをOpenAPI 3.1形式で公開しています。": "Pet and application endpoints are documented in OpenAPI 3.1 format.",
+  "エンドポイント": "Endpoints",
+  "JSONを開く": "Open JSON",
+  "MongoDB対応": "MongoDB support",
+  "を設定してから": "Set ",
+  "へPOSTします。未設定でも初期データを表示できます。": " and POST to the seed endpoint. Sample data is available without MongoDB.",
+  "個人情報に配慮": "Privacy-aware design",
+  "本人確認書類、顔写真、住所、賃貸契約書、収入証明は保存せず、確認状況のみを扱います。": "Identity documents, face photos, addresses, tenancy agreements and income evidence are not stored; only check statuses are recorded.",
+  "現在のテストユーザーを取得（未ログインはnull）": "Get the current test user (null if signed out)",
+  "管理者・審査担当・譲渡者・里親希望者のテストユーザーを選択。本番認証ではない": "Select a test administrator, reviewer, rehomer or adopter; not production authentication",
+  "サーバーのセッションを無効化しCookieを消去": "Revoke the server session and clear its cookie",
+  "里親希望者・管理者：自分の相談履歴": "Adopter or administrator: own enquiry history",
+  "里親希望者・管理者：相談を保存。外部送信なし。requestIdで再送の重複を防止": "Adopter or administrator: save an enquiry locally; requestId prevents duplicate retries",
+  "合成の動物プロフィール": "Constructed pet profiles",
+  "譲渡者は自分の掲載分のみ、審査担当・管理者は全件：根拠付きスコア・リスク・審査記録": "Rehomer sees own listings; reviewers and administrators see all evidence, risks and review records",
+  "譲渡者は自分の掲載分のみ、審査担当・管理者は全件：確認・進捗・判断と理由を保存（revisionで競合検出）": "Save checks, progress, decisions and reasons for authorised cases, with revision conflict detection",
+  "合成プロフィールをMongoDBへ登録": "Seed constructed profiles into MongoDB",
+  "研究設定を取得": "Get study settings",
+  "研究設定を保存。発行済みセッションは変更しない": "Save study settings without changing issued sessions",
+  "評価セッションを発行し、ケース・基準・採点結果を固定": "Issue an evaluation session and freeze its cases, criteria and scores",
+  "招待URLのIDを持つ参加者：現在の課題のみ取得。基本表示には推論結果・想定解答を含めない": "Invited participant: get only the current task; basic mode excludes model conclusions and expected answers",
+  "招待URLのIDを持つ参加者：参加同意・課題開始・回答送信・回答削除と中止": "Invited participant: consent, start a task, submit answers or withdraw and delete answers",
+  "研究者による自由記述のリスク照合・説明採点": "Researcher coding of free-text risks and explanation clarity",
+  "参加者／合成を区別したCSV、または条件スナップショットJSON": "Participant or synthetic CSV, or JSON with a snapshot of study conditions",
+  "管理者：OpenAPI定義": "Administrator: OpenAPI specification",
   "ご案内": "Information",
   "ユーザーを切り替える": "Switch user",
   "まずは、ここから": "Start here",
@@ -469,6 +522,51 @@ const english: Record<string, string> = {
   "プロフィールの根拠・重要リスク・未確認事項を確認し、判断理由を記録した": "I reviewed profile evidence, key risks and unknowns, and recorded my rationale.",
   "「正式譲渡へ進める」の保存には確認状態・面談・トライアルのチェックが必要です。": "To record ‘Proceed to adoption’, verification, meeting and trial checks must be complete.",
   "確認した根拠・未解決事項・判断理由（必須）": "Evidence, unresolved issues and rationale (required)",
+  "気になる点の理由と必要な確認を整理します。点数だけで合否を決めることはありません。": "Review the reasons for concerns and the checks still needed. A score alone does not decide approval.",
+  "「この申込みの確認・記録へ」を押す": "Open ‘Review and record this application’",
+  "確認する動物": "Select a pet",
+  "この画面は判断を補助するものです。": "This screen supports, but does not replace, your judgement.",
+  "次へ進める前に、プロフィールと未確認事項をご自身で確認してください。": "Check the profile and unresolved items yourself before moving forward.",
+  "初回確認": "Initial check",
+  "適合性の確認": "Suitability check",
+  "面談・住環境確認": "Meeting and home check",
+  "最終確認": "Final check",
+  "重要な確認": "Important check",
+  "重要な未確認なし": "No critical unknowns",
+  "申込み内容": "Application details",
+  "のケア条件に照らして確認": " — checked against this pet's care needs",
+  "重要な確認が必要": "Important checks needed",
+  "確認待ちがあります": "Checks are pending",
+  "重要な未確認はありません": "No critical unknowns",
+  "この表示は合否ではありません。人が根拠と確認状態を見て判断します。": "This is not an approval decision. A person reviews the evidence and verification status.",
+  "確認状態": "Verification status",
+  "根拠と確認状態を記録してから進めます": "Record evidence and verification before proceeding",
+  "ケア計画と確認事項": "Care plan and checks",
+  "ケア計画の確認": "Care plan review",
+  "何を確認できて、何が残っているか": "What is known and what still needs checking",
+  "暫定点": "Indicative score",
+  "情報充足率": "Information coverage",
+  "点数は下の6項目の記録状況を示す参考値です。譲渡成功率や応募者の順位ではありません。重要な不一致・確認待ちは点数と別に見てください。": "This indicative score summarises the six recorded criteria; it is not an adoption success rate or applicant ranking. Review important mismatches and pending checks separately.",
+  "重み": "Weight",
+  "点": " points",
+  "受付 ·": "Received ·",
+  "重みは管理者が変更できますが、現時点では研究用の仮設定であり、引用論文から推定した係数ではありません。採点規則：": "Administrators can change weights, but they remain provisional research settings rather than coefficients estimated from cited studies. Rule version: ",
+  "参照：": "References: ",
+  "Onoderaら": "Onodera et al.",
+  "Lordら": "Lord et al.",
+  "Griffinら": "Griffin et al.",
+  "。いずれも配点の妥当性を証明するものではありません。": ". None of these sources validates the chosen weights.",
+  "重要な不一致・確認": "Important mismatches and checks",
+  "確認待ち・追加相談": "Pending checks and follow-up",
+  "確認すること：": "Check: ",
+  "この仮ルールでは未解決の確認事項はありません。面談は省略しません。": "No unresolved items are shown under this provisional rule. The meeting is still required.",
+  "採点規則と研究上の限界": "Scoring rules and study limitations",
+  "計画あり＝重みの100%、一部不足＝50%、情報不足・条件不一致＝0%。情報不足と条件不一致は別の状態として表示します。属性、年齢区分、職業、所得は採点しません。": "A complete plan earns 100% of its weight, a partial plan 50%, and missing or conflicting information 0%. Missing information and a genuine mismatch are shown separately. Demographics, age, job and income are not scored.",
+  "申告内容と確認済みであることは別です。確認状況は点数とは別に扱います。": "A statement is not the same as verification. Review verification separately from the score.",
+  "ペット可住宅": "Pet-friendly housing",
+  "同居家族の同意": "Household consent",
+  "終生飼育の同意": "Lifelong-care commitment",
+  "譲渡後の連絡": "Post-adoption contact",
   "判断と理由を保存": "Save decision and rationale",
   "まだ操作記録はありません。": "No actions recorded yet.",
   "累積・履歴を見る →": "View totals and history →",
@@ -541,6 +639,30 @@ const english: Record<string, string> = {
   "配点の理由を記録し、通常の審査画面に反映します。": "Record the rationale for weights and apply them to normal review screens.",
   "審査の比較と評価結果": "Review comparison and evaluation results",
   "時間短縮とリスクの見落としを一緒に確認し、判断の根拠を読み解きます。": "Examine speed and missed risks together, and interpret the reasoning behind decisions.",
+  "研究メニュー": "Research menu",
+  "管理者ホーム": "Administrator home",
+  "重み・ケース設定": "Weights and case settings",
+  "PAWMATCH · 研究者用": "PAWMATCH · Researcher",
+  "研究者用 · SCORING": "RESEARCHER · SCORING",
+  "現在の配点設定は v": "Current weight configuration: v",
+  "。テスト参加者の実回答はまだ入力されていません。既存の旧A/B比較データは今回の形成的評価の結果として使用しません。": ". No real participant responses have been entered yet. Previous A/B comparison data are not used as results of this formative evaluation.",
+  "暫定点の重みを設定する": "Set indicative score weights",
+  "ペット詳細と応募者審査は同じ6項目を、重みの大きい順に表示します。合計は100点にしてください。この配点は検証前の研究用仮設定で、応募者の合否や譲渡成功率を示しません。": "Pet details and applicant reviews show the same six criteria in descending weight order. The total must be 100 points. These are provisional research weights; they do not indicate approval or adoption success.",
+  "現在の合計：": "Current total: ",
+  "100点": "100 points",
+  "/ 100点": "/ 100 points",
+  "— 合計を100点にしてください": "— The total must be 100 points",
+  "設定・変更の理由": "Reason for setting or changing weights",
+  "配点を変えた理由と、確認したい影響を記録してください。": "Record why you changed the weights and what effect you want to examine.",
+  "重みを保存": "Save weights",
+  "設定 v": "Settings v",
+  "現在の審査点の重み · 設定 v": "Current review weights · settings v",
+  "重要リスク": "Important risks",
+  "件 →": " cases →",
+  "· 未保存": "· Unsaved",
+  "保存しました。通常の審査画面に新しい重みが反映されます。保存済みの人の判断は変更されません。": "Saved. The new weights now appear in normal reviews. Previously recorded human decisions are unchanged.",
+  "評価ケースの確認": "Review evaluation cases",
+  "テスターに提示するケースは、住居の確認待ちや動物固有の医療・ケア条件など、異なる判断の難しさを含めます。これは想定された確認点であり、唯一の正解ではありません。": "The cases shown to testers include different review challenges, such as unverified housing and pet-specific medical or care needs. The listed concerns are expected checks, not the only correct answer.",
   "匿名コード": "Anonymous code",
   "· 練習用": "· Practice",
   "里親審査の画面評価": "Interface evaluation for adoption review",
@@ -585,7 +707,7 @@ const english: Record<string, string> = {
   "このセッションの回答を削除して参加を中止しますか？": "Delete this session's answers and withdraw?",
 };
 
-const exact = Object.freeze({ ...english, ...petCaseTranslations, ...researchCaseTranslations });
+const exact = Object.freeze({ ...english, ...petCaseTranslations, ...researchCaseTranslations, ...researchResultsTranslations });
 
 export function translateText(value: string): string {
   const left = value.match(/^\s*/)?.[0] ?? "";
@@ -601,6 +723,8 @@ export function translateText(value: string): string {
   if ((match = source.match(/^保存して「(.+)」へ進む$/))) return left + `Save and move to ${translateText(match[1])}` + right;
   if ((match = source.match(/^保存済みの審査履歴（(\d+)件）$/))) return left + `Saved review history (${match[1]})` + right;
   if ((match = source.match(/^(.+?)の詳細を見る$/))) return left + `View details for ${match[1]}` + right;
+  if ((match = source.match(/^(.+)の写真$/))) return left + `Photo of ${match[1]}` + right;
+  if ((match = source.match(/^(.+)に届いた里親申込みを確認 →$/))) return left + `Review applications for ${match[1]} →` + right;
   if ((match = source.match(/^(.+)（(.+)）$/))) {
     const first = translateText(match[1]);
     const second = translateText(match[2]);
@@ -608,8 +732,31 @@ export function translateText(value: string): string {
   }
   if ((match = source.match(/^(.+)の([A-Za-z][A-Za-z -]*)$/)) && exact[match[1]]) return left + `${match[2]}, ${exact[match[1]]}` + right;
   if ((match = source.match(/^([A-Za-z][A-Za-z ]+)さん$/))) return left + match[1] + right;
+  if ((match = source.match(/^(\d+)名$/))) return left + `${match[1]} applicants` + right;
+  if ((match = source.match(/^(\d+)回答$/))) return left + `${match[1]} responses` + right;
+  if ((match = source.match(/^(\d+)件$/))) return left + `${match[1]} cases` + right;
+  if ((match = source.match(/^(\d+)件の確認ポイント$/))) return left + `${match[1]} points to check` + right;
+  if ((match = source.match(/^未集計 \/ 採点済み (\d+)回答$/))) return left + `Not calculated / ${match[1]} coded responses` + right;
+  if ((match = source.match(/^未集計 \/ (\d+)回答$/))) return left + `Not calculated / ${match[1]} responses` + right;
+  if ((match = source.match(/^対象外 (\d+)回答$/))) return left + `Not applicable (${match[1]} responses)` + right;
+  if (/^保護・譲渡経験 \d+件 \/ 飼育経験 \d+件 \/ IT分野 \d+件 \/ その他 \d+件$/.test(source)) {
+    return left + source.split(" / ").map(part => {
+      const group = part.match(/^(.+) (\d+)件$/)!;
+      return `${translateText(group[1])} ${group[2]}`;
+    }).join(" / ") + right;
+  }
+  if ((match = source.match(/^(.+)への申込み$/))) return left + `Applications for ${match[1]}` + right;
+  if ((match = source.match(/^(.+)の確認待ち$/)) && translateText(match[1]) !== match[1]) return left + `${translateText(match[1])} awaiting verification` + right;
+  if ((match = source.match(/^(.+)について担当者の確認結果を記録する$/)) && translateText(match[1]) !== match[1]) return left + `Record the reviewer's result for ${translateText(match[1]).toLowerCase()}` + right;
+  if ((match = source.match(/^(.+)：(.+)$/))) {
+    const first = translateText(match[1]);
+    const second = translateText(match[2]);
+    if (first !== match[1] || second !== match[2]) return left + `${first}: ${second}` + right;
+  }
+  if ((match = source.match(/^\/ (\d+)点$/))) return left + `/ ${match[1]} points` + right;
   if ((match = source.match(/^(.+)\/5件$/))) return left + `${match[1]}/5 documents` + right;
   if ((match = source.match(/^約(\d+)歳$/))) return left + `About ${match[1]} years old` + right;
+  if ((match = source.match(/^(\d+)点$/))) return left + `${match[1]} points` + right;
   if ((match = source.match(/^(\d+)歳$/))) return left + `${match[1]} years old` + right;
   if ((match = source.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日$/))) return left + `${match[3]}/${match[2]}/${match[1]}` + right;
   if ((match = source.match(/^(\d{4})年(\d{1,2})月頃$/))) return left + `Around ${match[2]}/${match[1]}` + right;

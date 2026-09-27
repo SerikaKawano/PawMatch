@@ -15,6 +15,11 @@ test("shared Japanese actions have consistent English labels", () => {
   assert.equal(translateText("全国のペットを 8件表示しています"), "Showing 8 pets in All regions");
   assert.equal(translateText("日本猫・キジトラのBella"), "Bella, Domestic shorthair · tabby");
   assert.equal(translateText("2015年4月18日（11歳）"), "18/4/2015 (11 years old)");
+  assert.equal(translateText("4名"), "4 applicants");
+  assert.equal(translateText("ペット可住宅の確認待ち"), "Pet-friendly housing awaiting verification");
+  assert.equal(translateText("住環境：一部不足"), "Housing: Partly addressed");
+  assert.equal(translateText("未集計 / 0回答"), "Not calculated / 0 responses");
+  assert.equal(translateText("評価の準備へ →"), "Prepare the evaluation →");
 });
 
 test("every pet has English case narratives, checks and vaccination history", () => {
