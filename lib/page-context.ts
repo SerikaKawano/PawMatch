@@ -20,6 +20,7 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
     "/reviews/adopters": { title: "里親希望者のプロファイル", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/admin/records": { title: "管理記録", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/admin/analytics": { title: "審査の履歴・累積分析", backHref: "/dashboard", backLabel: "マイページへ戻る" },
+    "/admin/users": { title: "ユーザ管理", backHref: "/dashboard", backLabel: "管理者ホームへ戻る" },
     "/research": { title: "研究評価", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/research/setup": { title: "審査項目と重みの設定", backHref: "/research", backLabel: "研究評価へ戻る" },
     "/research/results": { title: "審査の比較と評価結果", backHref: "/research", backLabel: "研究評価へ戻る" },

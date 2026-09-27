@@ -9,6 +9,7 @@ process.env.PAWMATCH_DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "pawmatch-con
 const load = require("./load-ts.cjs");
 const { safeLoginNext, resolveDemoUser } = load("lib/demo-session.ts");
 const { getConsultations, saveConsultation, updateConsultationStatus, consultationInput } = load("lib/consultations.ts");
+const { listManagedUsers, effectiveDemoUser, updateManagedUser } = load("lib/admin-users.ts");
 
 test("demo login validates roles and accepts only local intended destinations", () => {
   for (const id of ["admin", "reviewer", "rehomer", "adopter"]) assert.equal(resolveDemoUser(id).id, id);
@@ -41,4 +42,17 @@ test("consultations validate, persist, avoid duplicates and isolate users and pe
   assert.equal((await updateConsultationStatus(first.id, "profile_requested", "reviewer")).status, "profile_requested");
   assert.equal(await updateConsultationStatus(first.id, "closed", "reviewer"), null);
   assert.equal((await getConsultations("adopter", "momo")).find(item => item.id === first.id).status, "profile_requested");
+});
+
+test("administrators can change test-user roles and suspend access without locking the primary administrator", async () => {
+  const alex = resolveDemoUser("reviewer-alex");
+  const changed = await updateManagedUser("reviewer-alex", { role: "adopter", status: "active" }, "admin");
+  assert.equal(changed.role, "adopter");
+  assert.equal((await effectiveDemoUser(alex)).role, "adopter");
+  await updateManagedUser("reviewer-alex", { role: "reviewer", status: "suspended" }, "admin");
+  assert.equal(await effectiveDemoUser(alex), null);
+  assert.equal((await listManagedUsers()).find(user => user.id === "reviewer-alex").status, "suspended");
+  await assert.rejects(() => updateManagedUser("admin", { role: "reviewer", status: "active" }, "admin"), /主管理者/);
+  await assert.rejects(() => updateManagedUser("admin", { role: "admin", status: "suspended" }, "admin"), /主管理者/);
+  await updateManagedUser("reviewer-alex", { role: "reviewer", status: "active" }, "admin");
 });

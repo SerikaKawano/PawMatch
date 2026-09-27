@@ -479,6 +479,38 @@ small { font-size: 17px; }
 .role-home-menu small { font-size: 18px; line-height: 1.5; }
 .role-home-menu svg { width: 28px; height: 28px; }
 .rehomer-home-menu a.listing, .rehomer-home-menu a.progress, .rehomer-home-menu a.enquiries, .reviewer-home-menu a.progress, .reviewer-home-menu a.enquiries, .reviewer-home-menu a.documents { background: #dff1f2; border-color: #77b6bf; color: #164f5b; }
+
+.admin-home-menu a.analytics, .admin-home-menu a.progress, .admin-home-menu a.settings, .admin-home-menu a.users { background: #dff1f2; border-color: #77b6bf; color: #164f5b; }
+.admin-users-page { padding-top: 34px; padding-bottom: 90px; }
+.admin-users-intro { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 30px 34px; border: 1px solid #b7d3d7; border-radius: 18px; background: #e7f3f4; }
+.admin-users-intro p { margin: 0; max-width: 760px; font-size: 18px; line-height: 1.7; }
+.admin-users-intro > svg { width: 76px; height: 76px; color: #087080; }
+.admin-users-message { display: flex; align-items: center; gap: 9px; margin: 20px 0 0; padding: 14px 18px; border-radius: 10px; background: #e7f4eb; color: #185c3e; font-size: 17px; font-weight: 800; }
+.admin-user-list { display: grid; gap: 14px; margin-top: 24px; }
+.admin-user-row { display: grid; grid-template-columns: 62px minmax(190px, 1.35fr) minmax(150px, .8fr) minmax(125px, .55fr) minmax(220px, 1.1fr); align-items: center; gap: 18px; padding: 20px 22px; border: 1px solid #cbdadd; border-radius: 15px; background: #fff; box-shadow: 0 7px 20px #244b5a0d; }
+.admin-user-row.suspended { border-color: #e6b9b2; background: #fff8f6; }
+.admin-user-identity { display: grid; gap: 2px; }
+.admin-user-identity strong { font-size: 19px; }
+.admin-user-identity span, .admin-user-identity small { font-size: 17px; color: #50676d; }
+.admin-user-row label { display: grid; gap: 6px; }
+.admin-user-row label > span { font-size: 17px; font-weight: 800; }
+.admin-user-row select { width: 100%; min-height: 48px; padding: 0 12px; border: 1px solid #9fb9bf; border-radius: 8px; background: #fff; font-size: 17px; }
+.admin-user-status { display: grid; gap: 5px; justify-items: start; }
+.admin-user-status small { font-size: 17px; color: #62767a; }
+.user-status-badge { display: inline-flex; padding: 7px 11px; border-radius: 999px; font-size: 17px; font-weight: 850; }
+.user-status-badge.active { background: #dff0e6; color: #246246; }
+.user-status-badge.suspended { background: #fde3de; color: #9b3023; }
+.admin-user-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.admin-user-actions button { min-height: 50px; padding: 8px 10px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-size: 17px; font-weight: 850; cursor: pointer; }
+.admin-user-actions button svg { width: 19px; }
+.admin-user-actions button:disabled { opacity: .45; cursor: not-allowed; }
+.secondary-action { border: 1px solid #68a9b3; background: #e7f4f5; color: #075c69; }
+.danger-action { border: 1px solid #b83227; background: #b83227; color: #fff; }
+.restore-action { border: 1px solid #24734f; background: #e0f1e7; color: #1b5c3f; }
+.demo-user.suspended { opacity: .62; border-style: dashed; cursor: not-allowed; }
+
+@media (max-width: 1050px) { .admin-user-row { grid-template-columns: 58px 1fr 1fr; } .admin-user-status { grid-column: 2; } .admin-user-actions { grid-column: 3; grid-row: 1 / 3; } }
+@media (max-width: 720px) { .admin-users-intro > svg { display: none; } .admin-user-row { grid-template-columns: 54px 1fr; } .admin-user-row label, .admin-user-status, .admin-user-actions { grid-column: 1 / -1; } .admin-user-actions { grid-row: auto; } }
 .role-dashboard .next-task-panel, .role-dashboard .other-tasks a, .role-dashboard .dashboard-stats > a, .role-menu-grid article { background: #dff1f2 !important; border-color: #77b6bf !important; color: #164f5b; }
 .review-case-participants { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 20px 0 12px; padding: 20px 24px; border: 1px solid #9acbd0; border-radius: 12px; background: #eaf6f6; font-size: 18px; }
 .review-case-participants a { color: #075d6b; font-weight: 850; text-decoration: underline; text-underline-offset: 3px; }

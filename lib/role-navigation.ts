@@ -16,11 +16,11 @@ export const roleNavigation: Record<DemoRole, { title: string; purpose: string; 
     { label: "審査進捗ボード", href: "/reviews/progress", description: "現在地を確認し、対象の審査を開いて確認内容を保存します。" },
     { label: "届いた相談を見る", href: "/reviews/consultations", description: "相談内容を確認し、審査準備への案内を記録します。" },
   ] },
-  admin: { title: "管理者のホーム", purpose: "運営の履歴・審査の停滞を確認し、必要に応じて各担当の画面を開けます。", tasks: [
-    { label: "運営状況・履歴を確認する", href: "/admin/analytics", description: "保存された判断・操作履歴と、未解決の確認項目を把握します。" },
-    { label: "届いた相談を確認する", href: "/reviews/consultations", description: "受付後の相談と審査準備への案内を確認します。" },
-    { label: "全申込みの進捗を確認する", href: "/reviews/progress", description: "各審査の現在地を一覧で確認し、個別の記録へ進みます。" },
-    { label: "研究の評価方針と配点を見る", href: "/research", description: "5名の形成的評価の手順と、審査点の仮の重みを確認します。" },
+  admin: { title: "管理者のホーム", purpose: "運営状況、審査、設定、ユーザを管理できます。", tasks: [
+    { label: "運営状況と履歴を確認する", href: "/admin/analytics", description: "運営指標、審査状況、保存された操作履歴を確認します。" },
+    { label: "審査進捗ボード", href: "/reviews/progress", description: "すべての申込みの現在地と停滞している工程を確認します。" },
+    { label: "設定", href: "/research/setup", description: "審査項目の配点と重みを変更します。" },
+    { label: "ユーザ管理", href: "/admin/users", description: "権限の変更、アカウントの停止・再開を行います。" },
   ] },
 };
 export function navigationLabel(path: string) {
@@ -35,6 +35,7 @@ export function navigationLabel(path: string) {
   if (path === "/reviews") return "審査の進捗一覧";
   if (path.startsWith("/reviews/")) return "確認・審査の記録";
   if (path === "/admin/analytics") return "運営状況・履歴";
+  if (path === "/admin/users") return "ユーザ管理";
   if (path === "/admin/records") return "記録の内訳";
   if (path === "/guide") return uiCopy.adoptionFlow;
   if (path.startsWith("/research")) return "研究と評価";

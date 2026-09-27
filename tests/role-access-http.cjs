@@ -14,7 +14,7 @@ const matrix=[
  ["/reviews/applicants/app-ren",["rehomer","reviewer","admin"]],
  ["/reviews/app-aiko",["rehomer","reviewer","admin"]],
  ["/pets/momo/consult",["adopter","admin"]],
- ...["/admin/records","/admin/analytics","/research","/research/setup","/research/results","/docs"].map(p=>[p,["admin"]])
+ ...["/admin/records","/admin/analytics","/admin/users","/research","/research/setup","/research/results","/docs"].map(p=>[p,["admin"]])
 ];
 const apis=[
  ["GET","/api/applications",["rehomer","reviewer","admin"]],
@@ -22,6 +22,7 @@ const apis=[
  ["GET","/api/adopter-profile",["adopter","admin"]],
  ["GET","/api/adopter-documents",["adopter","admin"]],
  ...["/api/research/config","/api/research/export","/api/openapi"].map(p=>["GET",p,["admin"]]),
+ ["GET","/api/admin/users",["admin"]],
  ["PATCH","/api/applications/app-aiko",["rehomer","reviewer","admin"]],
  ["POST","/api/consultations",["adopter","admin"]],
  ...[["PUT","/api/research/config"],["PUT","/api/research/coding"],["POST","/api/research/sessions"],["POST","/api/seed"]].map(([m,p])=>[m,p,["admin"]])
@@ -49,7 +50,7 @@ const apis=[
   if(role!=="guest"){
    const html=await(await fetch(base+"/dashboard",{headers:{Cookie:cookie}})).text();
    assert.ok(html.includes('class="role-home-hero"'));
-   assert.ok(html.includes(role==="adopter"?'class="role-home-menu"':role==="rehomer"?'class="rehomer-home-menu"':role==="reviewer"?'class="reviewer-home-menu"':'class="next-task-panel"'));
+   assert.ok(html.includes(role==="adopter"?'class="role-home-menu"':role==="rehomer"?'class="rehomer-home-menu"':role==="reviewer"?'class="reviewer-home-menu"':'class="reviewer-home-menu admin-home-menu"'));
    const anchors=[...html.matchAll(/href="([^"]+)"/g)].map(m=>m[1]);
    if(role==="adopter") assert.ok(!anchors.some(p=>/^\/(?:rehoming|reviews|admin|research|docs)(?:[/?#]|$)/.test(p)));
    if(["rehomer","reviewer"].includes(role)){assert.ok(!anchors.some(p=>/^\/(?:admin|research|docs)(?:[/?#]|$)/.test(p)));assert.ok(!anchors.includes("/dashboard#consultations"));}

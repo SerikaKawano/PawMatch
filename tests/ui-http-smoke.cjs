@@ -101,7 +101,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       adopter: ["/pets", "/adopter/profile", "/adopter/history", "/guide"],
       rehomer: ["/rehoming", "/reviews/progress", "/rehoming/consultations", "/guide"],
       reviewer: ["/reviews/progress", "/reviews/consultations", "/guide"],
-      admin: ["/admin/analytics", "/reviews/consultations", "/reviews/progress", "/research", "/guide"],
+      admin: ["/admin/analytics", "/reviews/progress", "/research/setup", "/admin/users", "/guide"],
     }[role];
     for (const href of headerLinks) assert.ok(headerMenu.includes(`href="${href}"`), `${role} header: ${href}`);
     assert.equal((headerMenu.match(/href="/g) || []).length, headerLinks.length);
@@ -128,8 +128,11 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       assert.ok(html.includes("審査担当のホーム"));
       assert.ok(!html.includes('class="next-task-panel"'));
     } else {
-      const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];
-      assert.ok(nextTask.includes('href="' + target + '"'));
+      const menu = html.split('class="reviewer-home-menu admin-home-menu"')[1]?.split('</nav>')[0];
+      assert.ok(menu);
+      for (const href of ["/admin/analytics", "/reviews/progress", "/research/setup", "/admin/users"]) assert.ok(menu.includes(`href="${href}"`));
+      assert.equal((menu.match(/href="/g) || []).length, 4);
+      assert.ok(!html.includes('class="next-task-panel"'));
     }
     assert.ok(!html.includes('aria-label="現在地"'));
     assert.ok(!html.includes('class="role-navigation"'));
@@ -143,7 +146,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       assert.ok(!screenHtml.includes("/reviews?pet=momo"));
       assert.ok(!screenHtml.includes("個人譲渡者の管理画面"));
     }
-    if (role === "admin") for (const path of Object.values(primary)) assert.ok(html.includes('href="' + path + '"'));
+    if (role === "admin") assert.ok(html.includes('href="/admin/users"'));
   }
   const progress = await (await fetch(base + "/reviews/progress?pet=momo", {headers:{Cookie:reviewCookie}})).text();
   assert.equal((progress.match(/class="pipeline-open"/g) || []).length, 4);
@@ -160,6 +163,10 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   assert.ok(workflow.includes("次の工程へ進める") && workflow.includes("今回は見送る"));
   const adminPet = await (await fetch(base + "/pets/momo", { headers: { Cookie: adminCookie } })).text();
   assert.ok(!adminPet.includes(">重み "));
+  const adminUsers = await (await fetch(base + "/admin/users", { headers: { Cookie: adminCookie } })).text();
+  assert.ok(adminUsers.includes("権限を保存") && adminUsers.includes("アカウントを停止"));
+  assert.equal((adminUsers.match(/<h1[^>]*>ユーザ管理<\/h1>/g) || []).length, 1);
+  assert.ok(adminUsers.includes("主管理者（保護）"));
   const reviewerPet = await (await fetch(base + "/pets/momo", { headers: { Cookie: reviewCookie } })).text();
   assert.ok(!reviewerPet.includes(">重み "));
   const guest = await fetch(base + "/rehoming", { redirect: "manual" });

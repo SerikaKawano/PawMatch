@@ -1,14 +1,7 @@
-import { canAccess } from "@/lib/permissions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, BarChart3, ClipboardList, MessageCircle, PawPrint, ShieldCheck } from "lucide-react";
+import { ArrowRight, BarChart3, ClipboardList, MessageCircle, PawPrint, Settings2, UsersRound } from "lucide-react";
 import { currentDemoUser } from "@/lib/demo-session-server";
-import { getConsultations } from "@/lib/consultations";
-import { ConsultationHistory } from "@/components/ConsultationHistory";
-import { getApplicants, getPets } from "@/lib/repository";
-import { selectRecords } from "@/lib/record-filters";
-import { roleNavigation } from "@/lib/role-navigation";
-import { visibleApplications, visiblePets } from "@/lib/ownership";
 import { RoleHomeHero } from "@/components/RoleHomeHero";
 export const dynamic = "force-dynamic";
 
@@ -38,22 +31,13 @@ export default async function DashboardPage() {
       <Link href="/reviews/consultations" className="enquiries"><span className="reviewer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>相談内容を確認し、審査へ進めるか記録する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
     </nav>
   </div>;
-  const [allApplications, allPets, consultations] = await Promise.all([canAccess(user, "review") ? getApplicants() : Promise.resolve([]), getPets(), canAccess(user, "consult") ? getConsultations(user.id) : Promise.resolve([])]);
-  const applications = visibleApplications(user, allApplications, allPets);
-  const pets = visiblePets(user, allPets);
-  const navigation = roleNavigation[user.role];
-  const primary = navigation.tasks[0];
-  const RoleIcon = { rehomer: PawPrint, reviewer: ClipboardList, admin: BarChart3 }[user.role];
-  const count = (view: string) => selectRecords(view, applications).length;
-  const stats = [{ label: "全申込み", value: applications.length, href: "/reviews/progress" }, { label: "要確認", value: count("attention"), href: "/admin/records?view=attention" }, { label: "譲渡へ進める判断", value: count("adoptions"), href: "/admin/records?view=adoptions" }];
-
-  return <div className="dashboard-page role-dashboard">
-    <RoleHomeHero name={user.name} description={navigation.purpose} />
-    <section className="next-task-panel"><span className="role-hero-art" aria-hidden="true"><RoleIcon size={100} strokeWidth={1.35} /></span><div><span className="task-eyebrow">まずは、ここから</span><h2>{primary.label}</h2><p>{primary.description}</p></div><Link className="task-primary" href={primary.href}>{primary.label}<ArrowRight size={22} /></Link></section>
-    <section className="other-tasks"><h2>目的に合わせて選ぶ</h2><div>{navigation.tasks.slice(1).map(task => <Link href={task.href} key={task.href}><h3>{task.label}<ArrowRight size={21} /></h3><p>{task.description}</p></Link>)}</div></section>
-    <section className="dashboard-main"><h2>状況から確認する</h2><p>数字を押すと、該当する一覧が開きます。</p><div className="dashboard-stats">{stats.map(stat => <Link href={stat.href} key={stat.label} aria-label={`${stat.label} ${stat.value}件の内容を見る`}><strong>{stat.value}</strong><span>{stat.label}</span><span className="stat-action">一覧を見る <ArrowRight size={20} /></span></Link>)}</div></section>
-    {user.role === "admin" && <section className="admin-all-menus"><div className="admin-menu-heading"><div><span className="section-kicker">管理者はすべての画面を利用できます</span><h2>役割別の操作メニュー</h2></div><p>管理者のまま各画面を開きます。別ユーザーとして試す場合は、上の「ユーザーを切り替える」を使ってください。</p></div><div className="role-menu-grid">{Object.entries(roleNavigation).map(([id, group], index) => <article className={["pink", "yellow", "brown", "cream"][index]} key={id}><h3>{group.title}</h3>{group.tasks.map(task => <Link href={task.href} key={task.href}><strong>{task.label}</strong><ArrowRight /></Link>)}</article>)}</div></section>}
-    {canAccess(user, "consult") && <ConsultationHistory records={consultations} names={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} applications={applications} />}
-    <div className="demo-notice"><ShieldCheck /><p><strong>操作上のご案内</strong>相談と審査の履歴はこのサイト内に保存されます。実際の譲渡や外部送信は行いません。</p></div>
+  return <div className="admin-home page-wrap">
+    <RoleHomeHero name={user.name} description="運営状況、審査、設定、ユーザを管理できます。" />
+    <nav className="reviewer-home-menu admin-home-menu" aria-label="管理者のメニュー">
+      <Link href="/admin/analytics" className="analytics"><span className="reviewer-menu-icon"><BarChart3 /></span><span><strong>運営状況と履歴を確認する</strong><small>運営指標、審査状況、保存された操作履歴を確認する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
+      <Link href="/reviews/progress" className="progress"><span className="reviewer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>すべての申込みの現在地と停滞している工程を確認する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
+      <Link href="/research/setup" className="settings"><span className="reviewer-menu-icon"><Settings2 /></span><span><strong>設定</strong><small>審査項目の配点と重みを変更する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
+      <Link href="/admin/users" className="users"><span className="reviewer-menu-icon"><UsersRound /></span><span><strong>ユーザ管理</strong><small>権限の変更、アカウントの停止・再開を行う</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
+    </nav>
   </div>;
 }

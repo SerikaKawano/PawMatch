@@ -1,9 +1,11 @@
 import { cookies } from "next/headers";
 import { DEMO_COOKIE } from "./demo-session";
 import { resolveDemoSession } from "./demo-session-store";
+import { effectiveDemoUser } from "./admin-users";
 
 export async function currentDemoUser() {
-  return resolveDemoSession((await cookies()).get(DEMO_COOKIE)?.value);
+  const user = await resolveDemoSession((await cookies()).get(DEMO_COOKIE)?.value);
+  return user ? effectiveDemoUser(user) : null;
 }
 export function isSameOrigin(request: Request) {
   const origin = request.headers.get("origin");
