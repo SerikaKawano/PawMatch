@@ -32,7 +32,7 @@ export default async function DashboardPage() {
     </nav>
   </div>;
   return <div className="admin-home page-wrap">
-    <RoleHomeHero name={user.name} description="運営状況、審査、設定、ユーザを管理できます。" />
+    <RoleHomeHero name={user.name} description="運営の履歴・審査状況を確認したり設定の変更やユーザ管理が行えます" />
     <nav className="reviewer-home-menu admin-home-menu" aria-label="管理者のメニュー">
       <Link href="/admin/analytics" className="analytics"><span className="reviewer-menu-icon"><BarChart3 /></span><span><strong>運営状況と履歴を確認する</strong><small>運営指標、審査状況、保存された操作履歴を確認する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
       <Link href="/reviews/progress" className="progress"><span className="reviewer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>すべての申込みの現在地と停滞している工程を確認する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>

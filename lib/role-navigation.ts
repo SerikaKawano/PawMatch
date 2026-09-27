@@ -16,7 +16,7 @@ export const roleNavigation: Record<DemoRole, { title: string; purpose: string; 
     { label: "審査進捗ボード", href: "/reviews/progress", description: "現在地を確認し、対象の審査を開いて確認内容を保存します。" },
     { label: "届いた相談を見る", href: "/reviews/consultations", description: "相談内容を確認し、審査準備への案内を記録します。" },
   ] },
-  admin: { title: "管理者のホーム", purpose: "運営状況、審査、設定、ユーザを管理できます。", tasks: [
+  admin: { title: "管理者のホーム", purpose: "運営の履歴・審査状況を確認したり設定の変更やユーザ管理が行えます", tasks: [
     { label: "運営状況と履歴を確認する", href: "/admin/analytics", description: "運営指標、審査状況、保存された操作履歴を確認します。" },
     { label: "審査進捗ボード", href: "/reviews/progress", description: "すべての申込みの現在地と停滞している工程を確認します。" },
     { label: "設定", href: "/research/setup", description: "審査項目の配点と重みを変更します。" },
