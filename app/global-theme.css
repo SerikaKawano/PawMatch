@@ -481,3 +481,9 @@ small { font-size: 17px; }
 .review-readonly-note { padding: 15px 18px; border-radius: 10px; background: #fff4d7; color: #564328; font-size: 18px; }
 .review-trial-form { min-width: 0; border: 0; padding: 0; }
 @media (max-width: 650px) { .role-home-hero { min-height: 250px; padding: 28px; background-position: 62% center; } .role-home-menu a { min-height: 120px; padding: 20px; } .review-actor-status { grid-template-columns: 1fr; } }
+
+/* Give the adoption guide an editorial photo and a clear, readable introduction. */
+.guide-hero { min-height: 420px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 18px; padding: 54px max(30px, calc((100vw - 1120px) / 2)); text-align: left; background: linear-gradient(90deg, rgba(35, 28, 27, .9) 0%, rgba(35, 28, 27, .78) 34%, rgba(35, 28, 27, .18) 70%, transparent 100%), url('/guide-hero-pets.png') center 38% / cover; }
+.guide-hero .hero-label { padding: 9px 16px; background: rgba(255, 255, 255, .95); color: #47352f; font-size: 20px; font-weight: 850; }
+.guide-hero p { max-width: 620px; margin: 0; color: #fff; font-size: clamp(25px, 2.5vw, 33px); font-weight: 850; line-height: 1.55; text-shadow: 0 2px 8px rgba(0, 0, 0, .35); }
+@media (max-width: 760px) { .guide-hero { min-height: 370px; padding: 42px 24px; background-position: 64% center; background-image: linear-gradient(90deg, rgba(35, 28, 27, .92), rgba(35, 28, 27, .62)), url('/guide-hero-pets.png'); } .guide-hero p { font-size: clamp(25px, 6vw, 31px); } }

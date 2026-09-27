@@ -837,7 +837,7 @@ const english: Record<string, string> = {
   "申込者のプロフィールを表示します。この工程での操作はありません。": "View the applicant profile. No action is required at this stage.",
   "通院への備え": "Veterinary care plan",
   "費用への備え": "Financial readiness",
-  "申込日": "Application date",
+  "申込日": "Applied",
   "届いた相談はまだありません。": "No enquiries have arrived yet.",
   "受付から最終判断までの進捗を一目で確認できます。": "See progress from receipt to final decision at a glance.",
   "各工程で確認すること": "What each stage checks",

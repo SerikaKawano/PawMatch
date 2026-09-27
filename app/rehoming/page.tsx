@@ -13,7 +13,7 @@ export default async function RehomingPage() {
   const pets = visiblePets(user, allPets);
   const applications = visibleApplications(user, allApplications, allPets);
   return <div className="page-wrap">
-    <header className="role-page-heading"><span className="section-kicker">{user.role === "admin" ? "全譲渡元の管理画面" : user.kind === "organization" ? "譲渡団体の管理画面" : "個人譲渡者の管理画面"}</span><p>{user.role === "admin" ? `全譲渡元の掲載ペットは${pets.length}頭です。` : `${user.name}の掲載ペットは${pets.length}頭です。`}掲載内容と、ペットごとの審査進捗を確認できます。</p></header>
+    <header className="role-page-heading"><p>{user.role === "admin" ? `全譲渡元の掲載ペットは${pets.length}頭です。` : `${user.name}の掲載ペットは${pets.length}頭です。`}掲載内容と、ペットごとの審査進捗を確認できます。</p></header>
     <TaskGuide title="この画面で行うこと" steps={["掲載中のペットを選ぶ", "掲載内容を見る", "審査進捗を見る"]} />
     <div className="rehoming-list">{pets.map(pet => <article key={pet.id}>
       {pet.imageUrl && <Image src={pet.imageUrl} alt={pet.name + "の写真"} width={160} height={160} unoptimized />}

@@ -40,6 +40,10 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   }
   assert.ok(!guide.includes("4 STEPS"));
   assert.ok(!guide.includes("図はSVGアイコンです。"));
+  assert.ok(guide.includes('class="guide-hero"'));
+  const guideHero = await fetch(base + "/guide-hero-pets.png");
+  assert.equal(guideHero.status, 200);
+  assert.match(guideHero.headers.get("content-type"), /image\/png/);
   const listings = await (await fetch(base + "/pets")).text();
   assert.ok(listings.includes("里親募集中のペットたち"));
   assert.ok(listings.includes("・「詳細を見る」ボタンから募集内容を確認できます"));
@@ -126,6 +130,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     if (role === "rehomer") {
       assert.ok(screenHtml.includes("/reviews/progress?pet=momo"));
       assert.ok(!screenHtml.includes("/reviews?pet=momo"));
+      assert.ok(!screenHtml.includes("個人譲渡者の管理画面"));
     }
     if (role === "admin") for (const path of Object.values(primary)) assert.ok(html.includes('href="' + path + '"'));
   }
