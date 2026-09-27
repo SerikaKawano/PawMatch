@@ -5,6 +5,7 @@ const { translateText } = load("lib/i18n.ts");
 const { petEditorial } = load("lib/pet-editorial.ts");
 const { scenarios } = load("lib/research/scenarios.ts");
 const { uiCopy } = load("lib/ui-copy.ts");
+const { reviewStageDescriptions } = load("lib/review-labels.ts");
 const { initialAdopterProfile } = load("lib/adopter-profile.ts");
 const { demoUsers } = load("lib/demoUsers.ts");
 const { sampleConsultations } = load("lib/consultations.ts");
@@ -25,6 +26,10 @@ test("shared Japanese actions have consistent English labels", () => {
   assert.equal(translateText("住環境：一部不足"), "Housing: Partly addressed");
   assert.equal(translateText("未集計 / 0回答"), "Not calculated / 0 responses");
   assert.equal(translateText("評価の準備へ →"), "Prepare the evaluation →");
+  assert.equal(translateText("トライアル を進行中"), "Trial in progress");
+  for (const description of Object.values(reviewStageDescriptions)) {
+    assert.doesNotMatch(translateText(description), /[ぁ-んァ-ン一-龯]/);
+  }
 });
 
 test("every pet has English case narratives, checks and vaccination history", () => {

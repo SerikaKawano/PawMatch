@@ -488,18 +488,38 @@ small { font-size: 17px; }
 .guide-hero p { max-width: 620px; margin: 0; color: #fff; font-size: clamp(25px, 2.5vw, 33px); font-weight: 850; line-height: 1.55; text-shadow: 0 2px 8px rgba(0, 0, 0, .35); }
 @media (max-width: 760px) { .guide-hero { min-height: 370px; padding: 42px 24px; background-position: 64% center; background-image: linear-gradient(90deg, rgba(35, 28, 27, .92), rgba(35, 28, 27, .62)), url('/guide-hero-pets.png'); } .guide-hero p { font-size: clamp(25px, 6vw, 31px); } }
 
-/* Keep the case summary, confirmations and linked people in one readable band. */
-.review-state-banner { display: block; padding: 0; overflow: hidden; }
-.review-state-banner > .review-state-top { display: flex; justify-content: space-between; align-items: center; gap: 22px; padding: 18px 22px 12px; }
-.review-state-banner .review-state-title { display: flex; align-items: center; gap: 12px; }
-.review-state-banner .review-state-title > span { display: grid; }
-.review-state-banner .review-state-top p { max-width: 620px; }
-.review-state-banner .review-actor-status { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 0; padding: 0 22px 14px; }
-.review-state-banner .review-state-top .review-actor-status { padding: 0; }
-.review-state-banner .review-actor-status > span { display: flex; align-items: center; gap: 8px; padding: 0; border: 0; border-radius: 0; background: none; color: inherit; font-size: 17px; }
-.review-state-banner .review-actor-status strong { font-size: 17px; }
-.review-state-banner .review-case-participants { display: flex; gap: 10px 24px; margin: 0 22px; padding: 14px 0 18px; border: 0; border-top: 1px solid currentColor; border-radius: 0; background: none; color: inherit; }
-.review-state-banner .review-case-participants a { color: inherit; }
+/* Keep the current stage, confirmations and people in one white case summary. */
+.review-state-banner { display: block; padding: 0; overflow: hidden; border: 1px solid #cddde0; border-left: 6px solid #087486; background: #fff; color: #1c3942; box-shadow: 0 9px 26px #18374012; }
+.review-state-banner.positive, .review-state-banner.caution, .review-state-banner.negative { background: #fff; color: #1c3942; border-color: #cddde0; }
+.review-state-banner.positive { border-left-color: #208369; }
+.review-state-banner.caution { border-left-color: #bb8225; }
+.review-state-banner.negative { border-left-color: #b44b5a; }
+.review-state-banner > .review-state-top { display: flex; justify-content: space-between; align-items: center; gap: 22px; padding: 21px 24px 17px; }
+.review-state-banner .review-state-title { display: flex; align-items: center; gap: 14px; }
+.review-state-banner .review-state-symbol { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 14px; background: #e9f4f4; color: #086b78; }
+.review-state-banner.caution .review-state-symbol { background: #fff3dc; color: #81560b; }
+.review-state-banner.negative .review-state-symbol { background: #fff0f1; color: #a13243; }
+.review-state-banner .review-state-symbol svg { width: 27px; height: 27px; }
+.review-state-banner .review-state-copy { display: grid; gap: 2px; }
+.review-state-banner .review-state-copy small { color: #536b73; }
+.review-state-banner .review-state-copy strong { font-size: clamp(23px, 2.2vw, 29px); color: #183e49; }
+.review-state-banner .review-state-message { max-width: 540px; padding: 10px 14px; border-radius: 8px; background: #f2f7f8; color: #35535b; line-height: 1.5; }
+.review-state-banner.negative .review-state-message { background: #fff0f1; color: #862d3d; }
+.review-state-banner.caution .review-state-message { background: #fff6e4; color: #705012; }
+.review-state-banner .review-actor-status { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 0; padding: 0 24px 20px; }
+.review-state-banner .review-actor-status > .review-actor-pill { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px 16px; border: 1px solid #e7d4ad; border-radius: 10px; background: #fff9ed; color: #654a19; }
+.review-state-banner .review-actor-status > .review-actor-pill.confirmed { border-color: #a9d8c4; background: #edf8f2; color: #165c44; }
+.review-state-banner .review-actor-status > .review-actor-pill.neutral { border-color: #d7e1e4; background: #f4f7f8; color: #455f69; }
+.review-state-banner .review-actor-pill > svg { width: 24px; height: 24px; }
+.review-state-banner .review-actor-pill > span { display: grid; gap: 2px; min-width: 0; padding: 0; border: 0; background: none; }
+.review-state-banner .review-actor-pill strong, .review-state-banner .review-actor-pill small { font-size: 17px; color: inherit; }
+.review-state-banner .review-case-participants { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 15px; margin: 0; padding: 17px 24px 19px; border: 0; border-top: 1px solid #dbe6e8; border-radius: 0; background: #f5f9fa; color: #1d414c; }
+.review-state-banner .review-person { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.review-state-banner .review-person > svg { width: 24px; height: 24px; flex: none; color: #087486; }
+.review-state-banner .review-person > span { display: grid; gap: 2px; min-width: 0; }
+.review-state-banner .review-person small { color: #526c75; font-size: 17px; }
+.review-state-banner .review-person strong, .review-state-banner .review-person a { overflow-wrap: anywhere; color: #174b5a; font-size: 18px; font-weight: 800; }
+.review-state-banner .review-person a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* The current step is the main action area; the trial form reads as one sheet. */
 .review-stage-heading { align-items: center; margin: -24px -24px 24px; padding: 18px 24px; border: 0; border-radius: 10px 10px 0 0; background: #086b78; color: #fff; }
@@ -537,4 +557,5 @@ small { font-size: 17px; }
 .adopter-review-detail .adopter-review-surface > section:first-child { border-top: 0; }
 .adopter-review-detail .adopter-review-surface h3 { margin: 0 0 16px; padding-bottom: 10px; border-bottom: 3px solid #6eabb2; color: #164f5b; font-size: 23px; }
 .adopter-review-detail .adopter-review-surface p { font-size: 17px; }
-@media (max-width: 760px) { .review-state-banner > .review-state-top, .review-trial-form .trial-criterion { align-items: flex-start; flex-direction: column; } .review-trial-form .trial-fields { grid-template-columns: 1fr; } .review-trial-form .trial-fields label:last-child:nth-child(3) { grid-column: auto; } }
+@media (max-width: 900px) { .review-state-banner .review-case-participants { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 760px) { .review-state-banner > .review-state-top, .review-trial-form .trial-criterion { align-items: flex-start; flex-direction: column; } .review-state-banner .review-actor-status, .review-state-banner .review-case-participants { grid-template-columns: 1fr; } .review-trial-form .trial-fields { grid-template-columns: 1fr; } .review-trial-form .trial-fields label:last-child:nth-child(3) { grid-column: auto; } }

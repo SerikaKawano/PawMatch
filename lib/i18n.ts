@@ -158,6 +158,10 @@ const english: Record<string, string> = {
   "進行中": "In progress",
   "完了": "Complete",
   "現在の状態 ·": "Current status ·",
+  "現在の状態": "Current status",
+  "最終判断を記録済み": "Final decision recorded",
+  "審査を終了（見送り）": "Review closed (declined)",
+  "最終判断を記録済み（保留）": "Final decision recorded (on hold)",
   "この工程を進行中": "This stage is in progress",
   "重要な懸念あり": "Important concerns",
   "確認待ちあり": "Checks outstanding",
@@ -852,6 +856,7 @@ const english: Record<string, string> = {
   "受付済み": "Received",
   "担当者返信待ち": "Awaiting a reviewer reply",
   "申込者のプロフィールを表示します。ここでの操作はありません。": "View the applicant profile. No action is required at this stage.",
+  "提出済み書類と本人確認、住居の飼育許可、同居者の同意などの状態を記録します。": "Record the status of submitted documents, identity, housing permission and household consent.",
   "申込者のプロフィールを表示します。この工程での操作はありません。": "View the applicant profile. No action is required at this stage.",
   "通院への備え": "Veterinary care plan",
   "費用への備え": "Financial readiness",
@@ -904,6 +909,8 @@ export function translateText(value: string): string {
   if (direct !== undefined) return left + direct + right;
   let match: RegExpMatchArray | null;
   if ((match = source.match(/^(.+?)について問い合わせる$/))) return left + `Enquire about ${match[1]}` + right;
+  if ((match = source.match(/^(.+) を進行中$/))) return left + `${translateText(match[1])} in progress` + right;
+  if ((match = source.match(/^確認済み · (.+)$/))) return left + `Confirmed · ${match[1]}` + right;
   if ((match = source.match(/^([犬猫])・(.+)$/))) return left + `${match[1] === "犬" ? "Dog" : "Cat"} · ${translateText(match[2])}` + right;
   if ((match = source.match(/^申込みを受け付け、現在は「(.+)」です。最終判断はまだ記録されていません。$/))) return left + `Application received. Current stage: ${translateText(match[1])}. No final decision has been recorded.` + right;
   if ((match = source.match(/^(.+)に受付$/))) return left + `Received on ${match[1]}` + right;
