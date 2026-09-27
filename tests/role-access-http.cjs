@@ -7,14 +7,12 @@ const matrix=[
  ["/adopter/history",["adopter","admin"]],
  ["/rehoming",["rehomer","admin"]],
  ["/rehoming/consultations",["rehomer","admin"]],
- ["/reviews",["rehomer","reviewer","admin"]],
  ["/reviews/progress",["rehomer","reviewer","admin"]],
  ["/reviews/consultations",["reviewer","admin"]],
  ["/reviews/adopters",["reviewer","admin"]],
  ["/reviews/adopters/adopter",["rehomer","reviewer","admin"]],
  ["/reviews/applicants/app-ren",["rehomer","reviewer","admin"]],
  ["/reviews/app-aiko",["rehomer","reviewer","admin"]],
- ["/reviews/records?view=pending",["rehomer","reviewer","admin"]],
  ["/pets/momo/consult",["adopter","admin"]],
  ...["/admin/records","/admin/analytics","/research","/research/setup","/research/results","/docs"].map(p=>[p,["admin"]])
 ];

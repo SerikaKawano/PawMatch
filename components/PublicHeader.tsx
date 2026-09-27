@@ -5,10 +5,10 @@ import { ChevronDown, HeartHandshake, Menu, UserRound } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import type { DemoUser } from "@/lib/demoUsers";
-import { canAccess } from "@/lib/permissions";
 import { safeLoginNext } from "@/lib/demo-session";
 import { uiCopy } from "@/lib/ui-copy";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { roleNavigation } from "@/lib/role-navigation";
 
 export function PublicHeader({ user }: { user: DemoUser | null }) {
   const [mobile, setMobile] = useState(false);
@@ -32,8 +32,10 @@ export function PublicHeader({ user }: { user: DemoUser | null }) {
     <div className="public-header-inner">
       <Link href="/" className="public-brand"><span className="brand-mark"><HeartHandshake size={25} /></span><span><strong>PawMatch <b className="brand-demo">DEMO</b></strong><small>ペットと家族をつなぐ</small></span></Link>
       <nav className={mobile ? "public-nav mobile-open" : "public-nav"} aria-label="メインメニュー" onClick={event => { if ((event.target as HTMLElement).closest("a")) setMobile(false); }}>
-        {(!user || canAccess(user, "consult")) && <Link href="/pets">ペットを探す（里親希望者）</Link>}
-        {(!user || canAccess(user, "rehome")) && <Link href={user ? "/rehoming" : "/login?intent=list&next=%2Frehoming"}>{`${uiCopy.manageListings}（譲渡者）`}</Link>}
+        {user ? roleNavigation[user.role].tasks.map(task => <Link key={task.href} href={task.href}>{task.label}</Link>) : <>
+          <Link href="/pets">ペットを探す（里親希望者）</Link>
+          <Link href="/login?intent=list&next=%2Frehoming">{`${uiCopy.manageListings}（譲渡者）`}</Link>
+        </>}
         <Link href="/guide">{uiCopy.adoptionFlow}</Link>
       </nav>
       <div className="public-actions">

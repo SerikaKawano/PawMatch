@@ -36,7 +36,6 @@ export default async function DashboardPage() {
     <nav className="reviewer-home-menu" aria-label="審査担当者のメニュー">
       <Link href="/reviews/progress" className="progress"><span className="reviewer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>担当する申込みを選び、現在の工程と次に確認する項目を見る</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
       <Link href="/reviews/consultations" className="enquiries"><span className="reviewer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>相談内容を確認し、審査へ進めるか記録する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
-      <Link href="/reviews/records?view=pending" className="documents"><span className="reviewer-menu-icon"><ShieldCheck /></span><span><strong>書類の確認待ちを見る</strong><small>提出書類と同意の確認状況を更新する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
     </nav>
   </div>;
   const [allApplications, allPets, consultations] = await Promise.all([canAccess(user, "review") ? getApplicants() : Promise.resolve([]), getPets(), canAccess(user, "consult") ? getConsultations(user.id) : Promise.resolve([])]);
@@ -46,11 +45,7 @@ export default async function DashboardPage() {
   const primary = navigation.tasks[0];
   const RoleIcon = { rehomer: PawPrint, reviewer: ClipboardList, admin: BarChart3 }[user.role];
   const count = (view: string) => selectRecords(view, applications).length;
-  const stats = {
-    admin: [{ label: "全申込み", value: applications.length, href: "/reviews/progress" }, { label: "要確認", value: count("attention"), href: "/admin/records?view=attention" }, { label: "譲渡へ進める判断", value: count("adoptions"), href: "/admin/records?view=adoptions" }],
-    reviewer: [{ label: "要確認の申込み", value: count("attention"), href: "/reviews/records?view=attention" }, { label: "書類・項目の確認待ち", value: count("pending"), href: "/reviews/records?view=pending" }, { label: "面談の工程にある申込み", value: count("meetings"), href: "/reviews/records?view=meetings" }],
-    rehomer: [{ label: "掲載中のペット", value: pets.length, href: "/rehoming" }, { label: "審査中の申込み", value: applications.length, href: "/reviews/progress" }, { label: "トライアル中", value: count("trials"), href: "/reviews/records?view=trials" }],
-  }[user.role];
+  const stats = [{ label: "全申込み", value: applications.length, href: "/reviews/progress" }, { label: "要確認", value: count("attention"), href: "/admin/records?view=attention" }, { label: "譲渡へ進める判断", value: count("adoptions"), href: "/admin/records?view=adoptions" }];
 
   return <div className="dashboard-page role-dashboard">
     <RoleHomeHero name={user.name} description={navigation.purpose} />

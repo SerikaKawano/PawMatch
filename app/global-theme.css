@@ -341,7 +341,7 @@ body[data-role="rehomer"] .role-nav-links a.current:not(.role-nav-primary) { bac
 .pipeline-help-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
 .pipeline-help-grid p { display: grid; align-content: start; gap: 4px; margin: 0; padding: 14px; border: 1px solid #cbdfe4; border-radius: 8px; background: #fff; font-size: 17px; line-height: 1.55; }
 .pipeline-help-grid strong { color: #0d5664; font-size: 19px; }
-.pipeline-board .pipeline-row { grid-template-columns: minmax(115px, 1fr) minmax(145px, 1.2fr) repeat(6, minmax(85px, 1fr)) 110px 82px; min-width: 1120px; }
+.pipeline-board .pipeline-row { grid-template-columns: minmax(165px, 1.2fr) minmax(115px, .85fr) minmax(150px, 1.15fr) repeat(6, minmax(85px, 1fr)) 110px 82px; min-width: 1320px; }
 .pipeline-board .pipeline-row:not(.pipeline-heading):nth-child(even) { background: #f3f5f6; }
 .pipeline-board .pipeline-row:not(.pipeline-heading):nth-child(odd) { background: #e9eef0; }
 .pipeline-board .pipeline-row:not(.pipeline-heading):hover { background: #dfedf0; }

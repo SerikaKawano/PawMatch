@@ -102,7 +102,7 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
       </div>
       {view!=="screening"&&<div className="review-actor-status" aria-label="担当者の確認状況">
         <span className={`review-actor-pill ${confirmations?.reviewer?"confirmed":jointStage?"waiting":"neutral"}`}>{confirmations?.reviewer?<CheckCircle2 aria-hidden="true"/>:jointStage?<Clock3 aria-hidden="true"/>:<MinusCircle aria-hidden="true"/>}<span><strong>審査担当者</strong><small>{jointStage?confirmations?.reviewer?`確認済み · ${confirmations.reviewer.name}`:"確認待ち":reviewerName==="未定"?"未定":"確認中"}</small></span></span>
-        <span className={`review-actor-pill ${confirmations?.rehomer?"confirmed":jointStage?"waiting":"neutral no-action"}`}>{confirmations?.rehomer?<CheckCircle2 aria-hidden="true"/>:jointStage?<Clock3 aria-hidden="true"/>:<MinusCircle aria-hidden="true"/>}<span><strong>譲渡者</strong><small>{jointStage?confirmations?.rehomer?`確認済み · ${confirmations.rehomer.name}`:"確認待ち":"この工程の操作は不要"}</small></span></span>
+        <span className={`review-actor-pill ${confirmations?.rehomer?"confirmed":jointStage?"waiting":role==="rehomer"?"neutral no-action":"neutral"}`}>{confirmations?.rehomer?<CheckCircle2 aria-hidden="true"/>:jointStage?<Clock3 aria-hidden="true"/>:<MinusCircle aria-hidden="true"/>}<span><strong>譲渡者</strong><small>{jointStage?confirmations?.rehomer?`確認済み · ${confirmations.rehomer.name}`:"確認待ち":"この工程の操作は不要"}</small></span></span>
       </div>}
       <div className="review-case-participants" aria-label="審査対象と担当者">
         <span className="review-person"><PawPrint aria-hidden="true"/><span><small>ペット</small><Link href={`/pets/${pet.id}`}>{pet.name}</Link></span></span>

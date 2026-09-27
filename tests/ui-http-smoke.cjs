@@ -95,6 +95,16 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     assert.ok(html.includes("<span>おかえりなさい、</span><span>"));
     assert.ok(html.includes({adopter:"Noah Williams",rehomer:"Emma Wilson",reviewer:"Sophie Bennett",admin:"Serika Kawano"}[role]));
     assert.ok(!html.includes('class="page-context-back"'));
+    const headerMenu = html.split('aria-label="メインメニュー"')[1]?.split('</nav>')[0];
+    assert.ok(headerMenu);
+    const headerLinks = {
+      adopter: ["/pets", "/adopter/profile", "/adopter/history", "/guide"],
+      rehomer: ["/rehoming", "/reviews/progress", "/rehoming/consultations", "/guide"],
+      reviewer: ["/reviews/progress", "/reviews/consultations", "/guide"],
+      admin: ["/admin/analytics", "/reviews/consultations", "/reviews/progress", "/research", "/guide"],
+    }[role];
+    for (const href of headerLinks) assert.ok(headerMenu.includes(`href="${href}"`), `${role} header: ${href}`);
+    assert.equal((headerMenu.match(/href="/g) || []).length, headerLinks.length);
     if (role === "adopter") {
       const menu = html.split('class="role-home-menu"')[1]?.split('</nav>')[0];
       assert.ok(menu);
@@ -112,8 +122,9 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     } else if (role === "reviewer") {
       const menu = html.split('class="reviewer-home-menu"')[1]?.split('</nav>')[0];
       assert.ok(menu);
-      for (const href of ["/reviews/progress", "/reviews/consultations", "/reviews/records?view=pending"]) assert.ok(menu.includes(`href="${href.replaceAll("&", "&amp;")}"`));
-      assert.equal((menu.match(/href="/g) || []).length, 3);
+      for (const href of ["/reviews/progress", "/reviews/consultations"]) assert.ok(menu.includes(`href="${href}"`));
+      assert.equal((menu.match(/href="/g) || []).length, 2);
+      assert.ok(!menu.includes("書類の確認待ちを見る"));
       assert.ok(html.includes("審査担当のホーム"));
       assert.ok(!html.includes('class="next-task-panel"'));
     } else {

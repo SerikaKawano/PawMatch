@@ -18,7 +18,6 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
     "/reviews/progress": { title: "審査進捗ボード", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/consultations": { title: "相談一覧", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/adopters": { title: "里親希望者のプロファイル", backHref: "/dashboard", backLabel: "マイページへ戻る" },
-    "/reviews/records": { title: "審査記録", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/admin/records": { title: "管理記録", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/admin/analytics": { title: "審査の履歴・累積分析", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/research": { title: "研究評価", backHref: "/dashboard", backLabel: "マイページへ戻る" },
@@ -35,7 +34,7 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
   if (parts[0] === "pets" && parts.length === 2) return { title: "ペットの詳細", backHref: "/pets", backLabel: "ペット一覧へ戻る" };
   if (parts[0] === "reviews" && parts[1] === "applicants" && parts.length === 3) return { title: "申込者のプロファイル", backHref: `/reviews/${parts[2]}`, backLabel: "審査ケースへ戻る" };
   if (parts[0] === "reviews" && parts[1] === "adopters" && parts.length === 3) return { title: "里親希望者のプロファイル", backHref: role === "rehomer" ? "/reviews/progress" : "/reviews/adopters", backLabel: role === "rehomer" ? "審査進捗へ戻る" : "里親希望者一覧へ戻る" };
-  if (parts[0] === "reviews" && parts.length === 2) return { title: "審査ケース", backHref: "/reviews/progress", backLabel: "審査進捗へ戻る" };
+  if (parts[0] === "reviews" && parts.length === 2 && parts[1] !== "records") return { title: "審査ケース", backHref: "/reviews/progress", backLabel: "審査進捗へ戻る" };
   if (parts[0] === "consultations" && parts.length === 2) return { title: "相談の詳細", backHref: role === "adopter" ? "/adopter/history" : role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations", backLabel: "相談一覧へ戻る" };
   if (parts[0] === "research" && parts[1] === "session" && parts.length === 3) return { title: "研究評価セッション", backHref: "/research", backLabel: "研究評価へ戻る" };
   return null;

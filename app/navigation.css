@@ -49,10 +49,18 @@
 .rehoming-actions .task-primary { white-space: nowrap; }
 .rehoming-actions > a:last-child { text-align: center; font-size: 17px; padding: 10px; text-decoration: underline; }
 .pipeline-board { overflow-x: auto; }
-.pipeline-board .pipeline-row { grid-template-columns: minmax(200px, 1.5fr) 100px repeat(6, minmax(95px, 1fr)) 110px 160px; min-width: 1200px; }
+.pipeline-board .pipeline-row { grid-template-columns: minmax(165px, 1.2fr) minmax(110px, .8fr) minmax(180px, 1.3fr) repeat(6, minmax(95px, 1fr)) 110px 160px; min-width: 1420px; }
 .pipeline-open { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; background: #80513d; color: white; border-radius: 8px; font-size: 17px; font-weight: 700; }
-.pipeline-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 20px 0; font-size: 18px; }
-.pipeline-filter select { padding: 12px; border: 1px solid #ae8a6e; border-radius: 8px; background: white; color: #533c2b; font: inherit; }
+.pipeline-filter { display: grid; grid-template-columns: repeat(3, minmax(190px, 1fr)) auto; align-items: end; gap: 14px; margin: 20px 0; padding: 20px; border: 1px solid #cbdde2; border-radius: 12px; background: #f5fafb; font-size: 18px; }
+.pipeline-filter > label { display: grid; gap: 7px; color: #244653; font-weight: 800; }
+.pipeline-filter select { width: 100%; min-height: 50px; padding: 10px 12px; border: 1px solid #8baeb8; border-radius: 8px; background: white; color: #263f48; font: inherit; }
+.pipeline-filter-checks { grid-column: 1 / -2; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; min-height: 50px; }
+.pipeline-filter-checks label { display: inline-flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 750; }
+.pipeline-filter-checks input { width: 20px; height: 20px; accent-color: #087080; }
+.pipeline-owner { display: grid; gap: 4px; align-content: center; }
+.pipeline-owner strong { font-size: 17px; line-height: 1.4; }
+.pipeline-owner small { color: #526b75; font-size: 17px; line-height: 1.4; }
+.pipeline-empty { margin: 0; padding: 28px; font-size: 18px; text-align: center; }
 .current-stage-help { padding: 20px; background: #fff2de; border-left: 5px solid #9b6947; border-radius: 8px; margin: 18px 0; font-size: 18px; line-height: 1.8; }
 .current-stage-help button { min-height: 48px; padding: 8px 16px; margin-left: 12px; background: white; border: 1px solid #997455; border-radius: 8px; font-size: 17px; color: #68432d; font-weight: 700; }
 .review-detail .review-top-action { display: flex; justify-content: flex-end; margin: 18px 0; }
@@ -64,6 +72,8 @@
   .rehoming-list article { grid-template-columns: 130px 1fr; }
   .rehoming-list img { width: 130px; height: 130px; }
   .rehoming-actions { grid-column: 1 / -1; }
+  .pipeline-filter { grid-template-columns: 1fr 1fr; }
+  .pipeline-filter-checks { grid-column: 1 / -1; }
 }
 @media (max-width: 600px) {
   .role-navigation-inner { padding: 14px 16px; }
@@ -76,4 +86,6 @@
   .other-tasks > div { grid-template-columns: 1fr; }
   .rehoming-list article { padding: 16px; gap: 16px; grid-template-columns: 96px 1fr; }
   .rehoming-list img { width: 96px; height: 110px; }
+  .pipeline-filter { grid-template-columns: 1fr; padding: 16px; }
+  .pipeline-filter-checks { grid-column: auto; align-items: flex-start; flex-direction: column; }
 }
