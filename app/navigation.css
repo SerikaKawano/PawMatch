@@ -1,10 +1,10 @@
 .role-navigation { background: #fffcf7; border-bottom: 1px solid #e2d3c4; }
 .role-navigation-inner { max-width: 1440px; margin: auto; padding: 16px 40px; }
-.location-trail { display: flex; flex-wrap: wrap; gap: 8px; color: #654d3d; font-size: 16px; line-height: 1.8; }
+.location-trail { display: flex; flex-wrap: wrap; gap: 8px; color: #654d3d; font-size: 17px; line-height: 1.8; }
 .location-trail a { text-decoration: underline; text-underline-offset: 4px; }
 .location-trail [aria-current] { font-weight: 700; }
 .role-nav-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.role-nav-links a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; min-height: 48px; border: 1px solid #dfcdbb; border-radius: 8px; background: white; color: #634634; font-size: 16px; font-weight: 700; }
+.role-nav-links a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; min-height: 48px; border: 1px solid #dfcdbb; border-radius: 8px; background: white; color: #634634; font-size: 17px; font-weight: 700; }
 .role-nav-links a.current { background: #79543f; color: white; border-color: #79543f; }
 .role-nav-links a:hover { border-color: #79543f; box-shadow: 0 0 0 1px #79543f; }
 .role-back { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; font-size: 17px; }
@@ -32,7 +32,7 @@
 .task-guide h2 { font-size: 20px; margin: 0 0 14px; color: #60432f; }
 .task-guide ol { display: flex; flex-wrap: wrap; gap: 12px 20px; list-style: none; margin: 0; padding: 0; }
 .task-guide li { display: flex; align-items: center; gap: 10px; font-size: 18px; line-height: 1.7; }
-.task-guide li > span { display: grid; place-items: center; width: 30px; height: 30px; flex-shrink: 0; background: #80513d; color: white; border-radius: 50%; font-size: 16px; font-weight: 700; }
+.task-guide li > span { display: grid; place-items: center; width: 30px; height: 30px; flex-shrink: 0; background: #80513d; color: white; border-radius: 50%; font-size: 17px; font-weight: 700; }
 .pet-card { display: flex; flex-direction: column; }
 .pet-card .pet-photo-link { display: block; position: relative; width: 100%; aspect-ratio: 1; height: auto; overflow: hidden; }
 .pet-photo-link img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -41,7 +41,7 @@
 .pet-card-action { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 52px; padding: 12px 14px; margin-top: auto; background: #f8e8df; color: #714832; border: 1px solid #d5b7a1; border-radius: 8px; font-size: 17px; font-weight: 700; }
 .pet-card .tag-row { margin-bottom: 18px; }
 .pet-card-action:hover { background: #f0d7c9; }
-.pet-photo-note { font-size: 16px; color: #695a4c; line-height: 1.7; margin: 12px 0 0; }
+.pet-photo-note { font-size: 17px; color: #695a4c; line-height: 1.7; margin: 12px 0 0; }
 .pet-primary-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .pet-primary-actions > a { width: 100%; }
 .rehoming-list { display: grid; gap: 20px; }
@@ -53,7 +53,7 @@
 .rehoming-actions > a:last-child { text-align: center; font-size: 17px; padding: 10px; text-decoration: underline; }
 .pipeline-board { overflow-x: auto; }
 .pipeline-board .pipeline-row { grid-template-columns: minmax(200px, 1.5fr) 100px repeat(6, minmax(95px, 1fr)) 110px 160px; min-width: 1200px; }
-.pipeline-open { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; background: #80513d; color: white; border-radius: 8px; font-size: 16px; font-weight: 700; }
+.pipeline-open { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; background: #80513d; color: white; border-radius: 8px; font-size: 17px; font-weight: 700; }
 .pipeline-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 20px 0; font-size: 18px; }
 .pipeline-filter select { padding: 12px; border: 1px solid #ae8a6e; border-radius: 8px; background: white; color: #533c2b; font: inherit; }
 .current-stage-help { padding: 20px; background: #fff2de; border-left: 5px solid #9b6947; border-radius: 8px; margin: 18px 0; font-size: 18px; line-height: 1.8; }

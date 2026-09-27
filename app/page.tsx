@@ -5,6 +5,7 @@ import { ArrowRight, Heart, Search } from "lucide-react";
 import { PetCard } from "@/components/PetCard";
 import { getPets } from "@/lib/repository";
 import { REGIONS } from "@/lib/regions";
+import { adoptionSteps } from "@/lib/adoption-flow";
 
 export default async function HomePage() {
   if (await currentDemoUser()) redirect("/dashboard");
@@ -29,11 +30,6 @@ export default async function HomePage() {
       <button type="submit" className="search-submit">この条件で探す <ArrowRight size={21} /></button>
     </form>
     <section className="public-section pets-showcase"><div className="public-section-heading"><div><span className="section-kicker">募集の例</span><h2>新しい家族を待っている子たち</h2></div><Link href="/pets">すべて見る <ArrowRight size={20} /></Link></div><div className="pet-grid">{petList.slice(0, 4).map((pet) => <PetCard pet={pet} key={pet.id} />)}</div></section>
-    <section className="public-section flow-section" id="flow"><h2 className="flow-title">譲渡までの流れ</h2><div className="public-flow">{[
-      ["1", "探す", "里親募集中のペットの詳細や譲渡の条件をよく読みます。"],
-      ["2", "相談", "譲渡を希望する場合は、譲渡者へ相談します。書類で提出された里親希望者のプロファイルとペットの飼育条件が適合しているかどうかを審査担当者がチェックします。"],
-      ["3", "面談、トライアル", "書類チェックを通過後、面談とトライアル飼育を行います。"],
-      ["4", "譲渡", "環境や相性に問題がないと判断されれば、両者の合意後に譲渡が成立します。"],
-    ].map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div><Link href="/guide" className="flow-guide-link">手順を見る <ArrowRight size={21} /></Link></section>
+    <section className="public-section flow-section" id="flow"><h2 className="flow-title">譲渡までの流れ</h2><div className="public-flow">{adoptionSteps.map((step, index) => { const Icon = step.icon; return <article key={step.title}><div className="flow-step-heading"><span>{index + 1}</span><Icon size={31} strokeWidth={1.9} aria-hidden="true" /></div><h3>{step.title}</h3><p>{step.text}</p></article>; })}</div><Link href="/guide" className="flow-guide-link">手順を見る <ArrowRight size={21} /></Link></section>
   </>;
 }

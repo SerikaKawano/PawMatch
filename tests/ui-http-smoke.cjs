@@ -10,6 +10,25 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   assert.ok(!home.includes("犬や猫との、新しい家族のかたち"));
   assert.ok(!home.includes("探す、確認する、迎える。"));
   assert.ok(!home.includes("研究用の募集例"));
+  assert.ok(home.includes('class="flow-step-heading"'));
+  const guide = await (await fetch(base + "/guide")).text();
+  for (const text of [
+    "相談から正式譲渡まで", "確認事項の例", "細かな質問には理由があります",
+    "事前に本人確認を完了する。", "譲渡成立後、譲渡契約書はきちんと保管する。",
+    "ペットの受け渡しは対面で。輸送業者に任せない。",
+    "取引を即時中止する。",
+  ]) assert.ok(guide.includes(text), `Guide should include: ${text}`);
+  for (const text of [
+    "里親募集中のペットの詳細や譲渡の条件をよく読みます。",
+    "譲渡を希望する場合は、譲渡者へ相談します。書類で提出された里親希望者のプロファイルとペットの飼育条件が適合しているかどうかを審査担当者がチェックします。",
+    "書類チェックを通過後、面談とトライアル飼育を行います。",
+    "環境や相性に問題がないと判断されれば、両者の合意後に譲渡が成立します。",
+  ]) {
+    assert.ok(home.includes(text), `TOP flow should include: ${text}`);
+    assert.ok(guide.includes(text), `Guide flow should include: ${text}`);
+  }
+  assert.ok(!guide.includes("4 STEPS"));
+  assert.ok(!guide.includes("図はSVGアイコンです。"));
   const login = await (await fetch(base + "/login")).text();
   for (const name of ["Serika Kawano", "Sophie Bennett", "Alex Morgan", "Noah Williams", "Olivia Parker"]) assert.ok(login.includes(name));
   const { data: pets } = await (await fetch(base + "/api/pets")).json();

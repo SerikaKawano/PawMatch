@@ -22,13 +22,13 @@
 .research-columns{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .research-columns .research-card{padding:24px}
 .research-notice{background:#fff3d3;border:1px solid #e5d5a7;border-radius:12px;padding:18px 22px;margin:20px 0;overflow-wrap:anywhere}
-.research-notice code{font-size:16px}
+.research-notice code{font-size:17px}
 .research-page fieldset{border:1px solid #decec2;padding:18px;margin:20px 0;border-radius:12px}
 .research-page legend{font-size:19px;font-weight:700;padding:0 8px}
 .research-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .research-check-grid label,.research-check{display:flex;align-items:flex-start;gap:12px;padding:8px 0}
 .research-page input[type=checkbox]{width:24px;height:24px;flex:none;accent-color:#9b5966;margin-top:5px}
-.research-check small{display:block;font-size:16px;color:#746257;margin-top:6px}
+.research-check small{display:block;font-size:17px;color:#746257;margin-top:6px}
 .research-field{display:flex;flex-direction:column;gap:8px;margin:22px 0;font-weight:700}
 .research-page textarea,.research-page select,.research-page input[type=number]{background:#fff;border:1px solid #a99588;border-radius:8px;padding:12px;font-size:18px;line-height:1.6;min-height:50px;width:100%;max-width:100%}
 .research-page textarea{min-height:110px;resize:vertical;font-weight:400}
@@ -80,5 +80,5 @@
 .research-breakdown table{min-width:580px}
 .research-empty{padding:22px}
 @media(max-width:900px){.research-columns,.research-form-row{grid-template-columns:1fr}.research-kpis{grid-template-columns:1fr 1fr}.research-candidates{grid-template-columns:1fr}}
-@media(max-width:600px){.research-page{padding:20px 15px 60px}.research-card{padding:22px 17px}.research-check-grid,.research-weight-grid{grid-template-columns:1fr}.research-kpis{gap:10px}.research-kpis article{padding:16px}.research-nav a{font-size:16px}.research-inline-note{display:block;margin:12px 0}.research-rating{grid-template-columns:1fr}.research-rating select{width:110px}.research-score{gap:14px;flex-wrap:wrap}}
+@media(max-width:600px){.research-page{padding:20px 15px 60px}.research-card{padding:22px 17px}.research-check-grid,.research-weight-grid{grid-template-columns:1fr}.research-kpis{gap:10px}.research-kpis article{padding:16px}.research-nav a{font-size:17px}.research-inline-note{display:block;margin:12px 0}.research-rating{grid-template-columns:1fr}.research-rating select{width:110px}.research-score{gap:14px;flex-wrap:wrap}}
 :root{--font-sans:"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN",Meiryo,system-ui,sans-serif;--font-display:"Yu Mincho","Hiragino Mincho ProN",serif}
