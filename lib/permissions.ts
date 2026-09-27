@@ -10,6 +10,8 @@ export function canAccess(user: Pick<DemoUser, "role"> | null, capability: Capab
   return Boolean(user && grants[capability].includes(user.role));
 }
 export function capabilityForPath(path: string): Capability | null {
+  if (/^\/api\/adopter-profile\/identity\/[^/]+$/.test(path)) return "review";
+  if (path === "/api/adopter-profile" || path === "/api/adopter-profile/identity" || path === "/api/adopter-documents" || /^\/api\/adopter-documents\/[^/]+$/.test(path)) return "consult";
   if (/^\/pets\/[^/]+\/consult$/.test(path) || path === "/api/consultations") return "consult";
   if (path === "/rehoming") return "rehome";
   if (path === "/reviews" || path.startsWith("/reviews/") || path === "/api/applications" || path.startsWith("/api/applications/")) return "review";

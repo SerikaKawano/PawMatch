@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { Consultation } from "@/lib/consultations";
 
-export function ConsultationHistory({ records, names }: { records: Consultation[]; names: Record<string, string> }) {
-  return <section className="consultation-history" id="consultations"><h2>あなたの相談履歴</h2>
+export function ConsultationHistory({ records, names, title = "あなたの相談履歴" }: { records: Consultation[]; names: Record<string, string>; title?: string }) {
+  return <section className="consultation-history" id="consultations"><h2>{title}</h2>
     <p>相談の受付と審査担当者の確認状況を表示します。相談だけで審査が始まることはありません。</p>
     {!records.length ? <p className="consultation-empty">まだ相談はありません。気になるペットの詳細から相談できます。</p> :
       <ul>{records.map(record => <li key={record.id}>

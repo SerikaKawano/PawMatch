@@ -15,6 +15,8 @@ const matrix=[
 const apis=[
  ["GET","/api/applications",["rehomer","reviewer","admin"]],
  ["GET","/api/consultations",["adopter","admin"]],
+ ["GET","/api/adopter-profile",["adopter","admin"]],
+ ["GET","/api/adopter-documents",["adopter","admin"]],
  ...["/api/research/config","/api/research/export","/api/openapi"].map(p=>["GET",p,["admin"]]),
  ["PATCH","/api/applications/app-aiko",["rehomer","reviewer","admin"]],
  ["POST","/api/consultations",["adopter","admin"]],
@@ -34,7 +36,7 @@ const apis=[
   }
   if(role!=="guest"){
    const html=await(await fetch(base+"/dashboard",{headers:{Cookie:cookie}})).text();
-   assert.ok(html.includes('class="role-hero-art"'));
+   assert.ok(html.includes(role==="adopter"?'class="adopter-home-header"':'class="role-hero-art"'));
    const anchors=[...html.matchAll(/href="([^"]+)"/g)].map(m=>m[1]);
    if(role==="adopter") assert.ok(!anchors.some(p=>/^\/(?:rehoming|reviews|admin|research|docs)(?:[/?#]|$)/.test(p)));
    if(["rehomer","reviewer"].includes(role)){assert.ok(!anchors.some(p=>/^\/(?:admin|research|docs)(?:[/?#]|$)/.test(p)));assert.ok(!anchors.includes("/dashboard#consultations"));}

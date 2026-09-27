@@ -65,8 +65,18 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     if (role === "reviewer") reviewCookie = Cookie;
     if (role === "admin") adminCookie = Cookie;
     const html = await (await fetch(base + "/dashboard", { headers: { Cookie } })).text();
-    const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];
-    assert.ok(nextTask.includes('href="' + target + '"'));
+    if (role === "adopter") {
+      assert.ok(html.includes('class="adopter-home-header"'));
+      assert.ok(html.includes("Noah Williams"));
+      assert.ok(html.includes("自分のプロフィール"));
+      assert.ok(html.includes("本人確認"));
+      assert.ok(html.includes("相談、申込履歴"));
+      assert.ok(html.includes('href="/pets"'));
+      for (const old of ["里親希望者のホーム", "里親希望者としてログイン中", "目的に合わせて選ぶ", "あなたの利用状況", 'class="dashboard-user"']) assert.ok(!html.includes(old));
+    } else {
+      const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];
+      assert.ok(nextTask.includes('href="' + target + '"'));
+    }
     assert.ok(html.includes('aria-label="現在地"'));
     assert.ok(!html.includes(">お気に入り<"));
     const screen = await fetch(base + target, { headers: { Cookie }, redirect: "manual" });
