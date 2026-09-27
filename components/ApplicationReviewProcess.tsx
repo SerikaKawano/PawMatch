@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { AlertCircle, ArrowRight, CheckCircle2, ClipboardCheck, Clock3, HeartHandshake, MinusCircle, PawPrint, PauseCircle, UserRound } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, CircleDotDashed, ClipboardCheck, Clock3, HeartHandshake, MinusCircle, PawPrint, PauseCircle, UserRound } from "lucide-react";
 import type { Applicant, Pet, ReviewRecord, ReviewStage } from "@/lib/types";
 import type { DemoRole } from "@/lib/demoUsers";
 import type { AdopterDocumentSummary } from "@/lib/adopter-documents";
@@ -85,7 +85,7 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
     <nav className="review-stepper" aria-label="審査工程">{stages.map((s,i)=><button type="button" key={s.id} disabled={i>current} className={(i===current?"active ":"")+(i<current?"done ":"")+(i>current?"upcoming ":"")} onClick={()=>{if(i<=current)setView(s.id);}} aria-current={view===s.id?"step":undefined}><span>{i<current?<CheckCircle2 size={20}/>:i+1}</span><strong>{s.label}</strong><small>{i<current?"完了":i===current&&finalState?"判断済み":i===current?"進行中":"未着手"}</small></button>)}</nav>
     <div className={`review-state-banner ${stateTone}`}>
       <div className="review-state-top" role="status">
-        <div className="review-state-title"><span className="review-state-symbol" aria-hidden="true">{stateTone==="positive"?<CheckCircle2 />:stateTone==="negative"?<AlertCircle />:<PauseCircle />}</span><span className="review-state-copy"><small>現在の状態</small><strong>{stateLabel}</strong></span></div>
+        <div className="review-state-title"><span className="review-state-symbol" aria-hidden="true">{finalState==="approve"?<CheckCircle2 />:finalState==="decline"||highRisks.length>0?<AlertCircle />:finalState==="hold"?<PauseCircle />:pending>0?<Clock3 />:<CircleDotDashed />}</span><span className="review-state-copy"><small>現在の状態</small><strong>{stateLabel}</strong></span></div>
         {view!=="screening"&&(finalState||highRisks.length>0||pending>0)&&<p className="review-state-message">{finalState?"担当者の判断と理由が記録されています。":highRisks.length>0?`重要な確認 ${highRisks.length}件。詳細を確認の上、進行可否を判断してください。`:`確認待ち ${pending}件。未確認を「適合」と扱わず、次の対応を記録してください。`}</p>}
       </div>
       {view!=="screening"&&<div className="review-actor-status" aria-label="担当者の確認状況">
