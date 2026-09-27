@@ -44,6 +44,6 @@ export function ResearchSession({ initial }: { initial: ParticipantView }) {
       </section>
     </>}
     <p role="alert" className="research-error">{error}</p>
-    {view.consented&&!view.withdrawn&&<button className="secondary-button" disabled={busy} onClick={()=>act("withdraw")}>回答を削除して参加を中止</button>}
+    {view.consented&&!view.withdrawn&&<button className="decision-button outline" disabled={busy} onClick={()=>act("withdraw")}>回答を削除して参加を中止</button>}
   </div>;
 }

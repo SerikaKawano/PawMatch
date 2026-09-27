@@ -13,11 +13,13 @@ export const roleNavigation: Record<DemoRole, { title: string; purpose: string; 
   ] },
   reviewer: { title: "審査担当のホーム", purpose: "進捗一覧から1件を選び、根拠を確認・記録して次の工程へ進めましょう。", tasks: [
     { label: "対応する申込みを選ぶ", href: "/reviews/progress", description: "現在地を確認 →「この審査を開く」→ 確認内容を保存" },
+    { label: "届いた相談を確認する", href: "/reviews/consultations", description: "相談内容を確認し、審査準備への案内を記録します。" },
     { label: "未確認の書類・項目を見る", href: "/reviews/records?view=pending", description: "確認待ちの申込みを開き、書類・同意の確認状態を更新します。" },
     { label: "応募者の条件を比較する", href: "/reviews", description: "同じペットへの申込みを比較し、気になる点の理由を確認します。" },
   ] },
   admin: { title: "管理者のホーム", purpose: "運営の履歴・審査の停滞を確認し、必要に応じて各担当の画面を開けます。", tasks: [
     { label: "運営状況・履歴を確認する", href: "/admin/analytics", description: "保存された判断・操作履歴と、未解決の確認項目を把握します。" },
+    { label: "届いた相談を確認する", href: "/reviews/consultations", description: "受付後の相談と審査準備への案内を確認します。" },
     { label: "全申込みの進捗を確認する", href: "/reviews/progress", description: "各審査の現在地を一覧で確認し、個別の記録へ進みます。" },
     { label: "研究の評価方針と配点を見る", href: "/research", description: "5名の形成的評価の手順と、審査点の仮の重みを確認します。" },
   ] },
@@ -30,6 +32,7 @@ export function navigationLabel(path: string) {
   if (path.startsWith("/pets/")) return "ペットの詳細";
   if (path === "/rehoming") return "掲載中のペットと里親申込み";
   if (path === "/reviews/progress") return "審査の進捗一覧";
+  if (path === "/reviews/consultations") return "届いた相談";
   if (path === "/reviews/records") return "審査対象の内訳";
   if (path === "/reviews") return "応募者の比較";
   if (path.startsWith("/reviews/")) return "確認・審査の記録";

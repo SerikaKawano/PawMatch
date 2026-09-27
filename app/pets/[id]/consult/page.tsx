@@ -16,9 +16,9 @@ export default async function ConsultationPage({ params }: { params: Promise<{ i
   return <div className="consultation-page">
     <Link className="back-link" href={`/pets/${id}`}>← {pet.name}の詳細へ戻る</Link>
     <span className="section-kicker">譲渡についてのご相談</span>
-    <h1>{pet.name}との暮らしに向けて</h1>
+    <h1>{pet.name}について問い合わせる</h1>
     <p>{pet.breed} · {pet.age} · {pet.location}</p>
-    <ConsultationForm petId={id} petName={pet.name} userName={user.name} />
+    <ConsultationForm petId={id} userEmail={user.email} />
     <ConsultationHistory records={records} names={{ [id]: pet.name }} />
     <Link href="/dashboard#consultations">マイページですべての相談を見る →</Link>
   </div>;
