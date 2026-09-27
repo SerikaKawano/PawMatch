@@ -5,7 +5,6 @@ import { PublicHeader } from "@/components/PublicHeader";
 import { currentDemoUser } from "@/lib/demo-session-server";
 
 import "./session.css";
-import { RoleNavigation } from "@/components/RoleNavigation";
 import "./navigation.css";
 import "./roles.css";
 import "./global-theme.css";
@@ -25,7 +24,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body data-role={user?.role ?? "guest"}>
         <PublicHeader user={user} />
 
-        <main className="main-shell"><RoleNavigation user={user} /><PageContextBar role={user?.role ?? null} />{children}</main>
+        <main className="main-shell"><PageContextBar role={user?.role ?? null} />{children}</main>
         <SiteFooter />
       </body>
     </html>

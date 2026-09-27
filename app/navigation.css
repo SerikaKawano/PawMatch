@@ -46,6 +46,7 @@
 .rehoming-list h2 { font-size: 25px; margin: 10px 0; }
 .rehoming-list p { font-size: 18px; line-height: 1.8; }
 .rehoming-actions { display: grid; gap: 10px; }
+.rehoming-actions .task-primary { white-space: nowrap; }
 .rehoming-actions > a:last-child { text-align: center; font-size: 17px; padding: 10px; text-decoration: underline; }
 .pipeline-board { overflow-x: auto; }
 .pipeline-board .pipeline-row { grid-template-columns: minmax(200px, 1.5fr) 100px repeat(6, minmax(95px, 1fr)) 110px 160px; min-width: 1200px; }

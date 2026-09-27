@@ -16,6 +16,7 @@ const english: Record<string, string> = {
   "里親募集中の子を探す": "Find a pet to adopt",
   "掲載・里親申込みを管理": "Manage listings and applications",
   "詳細を見る": "View details",
+  "届いた里親申込みを見る →": "View applications →",
   "マイページ": "My account",
   "ホーム": "Home",
   "おかえりなさい、": "Welcome back, ",

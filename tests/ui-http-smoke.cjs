@@ -88,6 +88,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     const html = await (await fetch(base + "/dashboard", { headers: { Cookie } })).text();
     assert.ok(html.includes('class="role-home-hero"'));
     assert.ok(html.includes("おかえりなさい、"));
+    assert.ok(html.includes("<span>おかえりなさい、</span><span>"));
     assert.ok(html.includes({adopter:"Noah Williams",rehomer:"Emma Wilson",reviewer:"Sophie Bennett",admin:"Serika Kawano"}[role]));
     assert.ok(!html.includes('class="page-context-back"'));
     if (role === "adopter") {
@@ -120,7 +121,12 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     assert.ok(!html.includes(">お気に入り<"));
     const screen = await fetch(base + target, { headers: { Cookie }, redirect: "manual" });
     assert.equal(screen.status, 200);
-    if (role === "rehomer") assert.ok((await screen.text()).includes("/reviews?pet=momo"));
+    const screenHtml = await screen.text();
+    assert.ok(!screenHtml.includes('class="role-navigation"'));
+    if (role === "rehomer") {
+      assert.ok(screenHtml.includes("/reviews?pet=momo"));
+      assert.ok(screenHtml.includes("届いた里親申込みを見る →"));
+    }
     if (role === "admin") for (const path of Object.values(primary)) assert.ok(html.includes('href="' + path + '"'));
   }
   const progress = await (await fetch(base + "/reviews/progress?pet=momo", {headers:{Cookie:reviewCookie}})).text();
