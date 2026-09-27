@@ -29,6 +29,10 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   }
   assert.ok(!guide.includes("4 STEPS"));
   assert.ok(!guide.includes("図はSVGアイコンです。"));
+  const listings = await (await fetch(base + "/pets")).text();
+  assert.ok(listings.includes("里親募集中のペットたち"));
+  assert.ok(listings.includes("・「写真・条件を見る」ボタンから詳細を確認できます"));
+  assert.ok(!listings.includes("写真・名前・「写真・条件を見る」ボタンから詳細へ。"));
   const login = await (await fetch(base + "/login")).text();
   for (const name of ["Serika Kawano", "Sophie Bennett", "Alex Morgan", "Noah Williams", "Olivia Parker"]) assert.ok(login.includes(name));
   const { data: pets } = await (await fetch(base + "/api/pets")).json();
