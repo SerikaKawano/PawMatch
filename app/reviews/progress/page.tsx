@@ -22,7 +22,7 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
   return <div className="progress-board-page">
     <header className="progress-board-header"><div><span className="section-kicker">REVIEW PIPELINE</span><p>受付から最終判断までの進捗を一目で確認できます。</p></div><span><ClipboardList />全 {applications.length}件</span></header>
     <form className="pipeline-filter" action="/reviews/progress"><label htmlFor="progress-pet">対象のペット</label><select id="progress-pet" name="pet" defaultValue={selectedPet?.id ?? ""}><option value="">すべてのペット</option>{pets.map(pet => <option key={pet.id} value={pet.id}>{pet.name}</option>)}</select><button type="submit" className="task-secondary">この条件で表示</button>{selectedPet && <Link href="/reviews/progress">すべてに戻す</Link>}</form>
-    <div className="pipeline-legend"><span><i className="complete" />通過済み</span><span><i className="current" />現在地</span><span><i className="upcoming" />未着手</span><p>各行を選択すると審査ワークフローを開きます。</p></div>
+    <div className="pipeline-legend"><span><i className="complete" />完了</span><span><i className="current" />現在地</span><span><i className="upcoming" />未着手</span><p>各行を選択すると審査ワークフローを開きます。</p></div>
     <details className="pipeline-help"><summary>各工程で確認すること</summary><div className="pipeline-help-grid">
       <p><strong>受付</strong>申込者のプロフィールを表示します。ここでの操作はありません。</p>
       <p><strong>適合性</strong>ペットに必要なケアと希望者の計画を照らし、重要な不一致や質問を整理します。</p>
@@ -40,7 +40,7 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
         return <Link href={`/reviews/${application.id}`} className="pipeline-row" key={application.id}>
           <span className="pipeline-pet">{pets.find(pet => pet.id === application.petId)?.name}</span>
           <span className="pipeline-applicant"><strong>{application.name}</strong><small>{application.submittedAt}</small></span>
-          {stages.map((stage,index) => <span key={stage.id} className={`pipeline-stage ${index < current ? "complete" : index === current ? declined ? "stopped" : "current" : "upcoming"}`}><i>{index < current ? <CheckCircle2 /> : index + 1}</i><b>{index < current ? "通過済み" : index === current ? declined ? "見送り" : "現在" : "—"}</b>{index < stages.length - 1 && <ArrowRight className="pipeline-arrow" />}</span>)}
+          {stages.map((stage,index) => <span key={stage.id} className={`pipeline-stage ${index < current ? "complete" : index === current ? declined ? "stopped" : "current" : "upcoming"}`}><i>{index < current ? <CheckCircle2 /> : index + 1}</i><b>{index < current ? "完了" : index === current ? declined ? "見送り" : "現在" : "—"}</b>{index < stages.length - 1 && <ArrowRight className="pipeline-arrow" />}</span>)}
           <span className={`pipeline-alert ${declined || pending || application.risks.length ? "has-alert" : ""}`}>{declined ? <><AlertTriangle />見送り</> : pending ? <><FileWarning />未確認 {pending}</> : application.risks.length ? <><AlertTriangle />確認 {application.risks.length}</> : <><CheckCircle2 />確認済み</>}</span>
           <span className="pipeline-open">開く <ArrowRight size={18} /></span>
         </Link>;

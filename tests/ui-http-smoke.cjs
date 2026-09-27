@@ -137,6 +137,8 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   const progress = await (await fetch(base + "/reviews/progress?pet=momo", {headers:{Cookie:reviewCookie}})).text();
   assert.equal((progress.match(/class="pipeline-open"/g) || []).length, 4);
   assert.ok(progress.includes("審査進捗ボード") && progress.includes("各工程で確認すること"));
+  assert.ok(progress.includes("完了"));
+  assert.ok(!progress.includes("通過済み"));
   assert.ok(!progress.includes("ここから審査を進めます"));
   const removedComparison = await fetch(base + "/reviews?pet=momo", {headers:{Cookie:reviewCookie},redirect:"manual"});
   assert.equal(removedComparison.status,307);
