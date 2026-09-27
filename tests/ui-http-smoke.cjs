@@ -103,6 +103,13 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       assert.ok(menu);
       for (const href of ["/rehoming", "/reviews/progress", "/rehoming/consultations"]) assert.ok(menu.includes(`href="${href}"`));
       assert.equal((menu.match(/href="/g) || []).length, 3);
+    } else if (role === "reviewer") {
+      const menu = html.split('class="reviewer-home-menu"')[1]?.split('</nav>')[0];
+      assert.ok(menu);
+      for (const href of ["/reviews/progress", "/reviews/consultations", "/reviews/records?view=pending"]) assert.ok(menu.includes(`href="${href.replaceAll("&", "&amp;")}"`));
+      assert.equal((menu.match(/href="/g) || []).length, 3);
+      assert.ok(html.includes("審査担当のホーム"));
+      assert.ok(!html.includes('class="next-task-panel"'));
     } else {
       const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];
       assert.ok(nextTask.includes('href="' + target + '"'));

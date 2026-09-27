@@ -425,6 +425,24 @@ small { font-size: 17px; }
 @media (max-width: 650px) { .page-context-inner { padding: 10px 16px; flex-wrap: wrap; gap: 6px 14px; } .page-context-title { font-size: 19px; } .page-context-back { font-size: 17px; } }
 .dashboard-welcome h2 { font-family: var(--font-display); font-size: 39px; margin: 7px 0; }
 .rehomer-home-intro h2 { margin: 8px 0; font-size: clamp(34px, 4vw, 48px); color: #163f4d; }
+.reviewer-home { max-width: 1120px; }
+.reviewer-home-intro { padding: 32px 38px; border: 1px solid #a9d1d9; border-radius: 20px; background: linear-gradient(120deg, #e5f4f5 0%, #f6faf7 58%, #fff2d3 100%); }
+.reviewer-home-intro h2 { margin: 8px 0; font-size: clamp(34px, 4vw, 48px); color: #163f4d; }
+.reviewer-home-intro p { margin: 0; font-size: 19px; }
+.reviewer-home-menu { display: grid; gap: 18px; margin-top: 22px; }
+.reviewer-home-menu a { display: grid; grid-template-columns: 82px minmax(0, 1fr) 32px; align-items: center; gap: 22px; min-height: 144px; padding: 24px 30px; border: 2px solid; border-radius: 18px; box-shadow: 0 10px 24px #28424d14; }
+.reviewer-home-menu a.progress { background: #e5f4f5; border-color: #87bec6; color: #164f5b; }
+.reviewer-home-menu a.enquiries { background: #fff0f3; border-color: #dfacc0; color: #7d284c; }
+.reviewer-home-menu a.documents { background: #fff2c7; border-color: #e5b839; color: #493411; }
+.reviewer-home-menu a:hover { transform: translateY(-2px); box-shadow: 0 14px 28px #28424d25; }
+.reviewer-menu-icon { display: grid; place-items: center; width: 78px; height: 78px; border-radius: 16px; background: #ffffffbd; }
+.reviewer-menu-icon svg { width: 42px; height: 42px; }
+.reviewer-home-menu a > span:nth-child(2) { display: grid; gap: 5px; }
+.reviewer-home-menu strong { font-size: clamp(24px, 2.8vw, 30px); }
+.reviewer-home-menu small { font-size: 18px; line-height: 1.5; }
+.reviewer-menu-arrow { width: 28px; height: 28px; }
+@media (max-width: 800px) { .reviewer-home-menu a { grid-template-columns: 65px minmax(0, 1fr) 25px; padding: 20px; gap: 14px; } .reviewer-menu-icon { width: 64px; height: 64px; } .reviewer-menu-icon svg { width: 34px; height: 34px; } }
+@media (max-width: 560px) { .reviewer-home-intro { padding: 23px; } .reviewer-home-menu a { min-height: 130px; grid-template-columns: 1fr 24px; } .reviewer-menu-icon { display: none; } }
 .language-switch { display: inline-flex; flex: none; gap: 2px; padding: 3px; border: 1px solid #b59b8f; border-radius: 9px; background: #fff; }
 .language-switch button { min-width: 64px; min-height: 39px; border: 0; border-radius: 6px; background: transparent; color: #4e403a; font-size: 17px; font-weight: 800; cursor: pointer; }
 .language-switch button[aria-pressed="true"] { background: #66483e; color: #fff; }

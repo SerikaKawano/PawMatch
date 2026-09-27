@@ -30,6 +30,14 @@ export default async function DashboardPage() {
       <Link href="/rehoming/consultations" className="enquiries"><span className="rehomer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>掲載ペットについて届いた相談と対応状況を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
     </nav>
   </div>;
+  if (user.role === "reviewer") return <div className="reviewer-home page-wrap">
+    <header className="reviewer-home-intro"><h2>{user.name}さん</h2><p>担当する相談と申込みの確認・記録を行います。</p></header>
+    <nav className="reviewer-home-menu" aria-label="審査担当者のメニュー">
+      <Link href="/reviews/progress" className="progress"><span className="reviewer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>担当する申込みを選び、現在の工程と次に確認する項目を見る</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
+      <Link href="/reviews/consultations" className="enquiries"><span className="reviewer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>相談内容を確認し、審査へ進めるか記録する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
+      <Link href="/reviews/records?view=pending" className="documents"><span className="reviewer-menu-icon"><ShieldCheck /></span><span><strong>書類の確認待ちを見る</strong><small>提出書類と同意の確認状況を更新する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
+    </nav>
+  </div>;
   const [allApplications, allPets, consultations] = await Promise.all([canAccess(user, "review") ? getApplicants() : Promise.resolve([]), getPets(), canAccess(user, "consult") ? getConsultations(user.id) : Promise.resolve([])]);
   const applications = visibleApplications(user, allApplications, allPets);
   const pets = visiblePets(user, allPets);

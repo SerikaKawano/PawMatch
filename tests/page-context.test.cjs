@@ -13,6 +13,9 @@ test("every app page except home has a title and a predictable parent link", () 
     assert.notEqual(context.backHref, page);
   }
   assert.equal(pageContext("/pets/momo/consult", "adopter").backHref, "/pets/momo");
+  assert.equal(pageContext("/dashboard", "reviewer").title, "審査担当のホーム");
+  assert.equal(pageContext("/dashboard", "rehomer").title, "譲渡者のホーム");
+  assert.equal(pageContext("/dashboard", "admin").title, "管理者のホーム");
   assert.equal(pageContext("/consultations/example", "rehomer").backHref, "/rehoming/consultations");
   assert.equal(pageContext("/reviews/adopters/adopter", "rehomer").backHref, "/reviews/progress");
   assert.equal(pageContext("/reviews/adopters/adopter", "reviewer").backHref, "/reviews/adopters");

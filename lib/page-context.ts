@@ -6,11 +6,11 @@ export type PageContext = { title: string; backHref: string; backLabel: string }
 /** One predictable parent destination per page; never depends on browser history. */
 export function pageContext(pathname: string, role: Role): PageContext | null {
   if (pathname === "/") return null;
+  if (pathname === "/dashboard") return { title: role === "reviewer" ? "審査担当のホーム" : role === "rehomer" ? "譲渡者のホーム" : role === "admin" ? "管理者のホーム" : "マイページ", backHref: "/", backLabel: "トップへ戻る" };
   const exact: Record<string, PageContext> = {
     "/login": { title: "ログイン", backHref: "/", backLabel: "トップへ戻る" },
     "/guide": { title: "譲渡までの流れ", backHref: "/", backLabel: "トップへ戻る" },
     "/pets": { title: "里親募集中のペットたち", backHref: "/", backLabel: "トップへ戻る" },
-    "/dashboard": { title: "マイページ", backHref: "/", backLabel: "トップへ戻る" },
     "/rehoming": { title: "掲載中のペットと届いた里親申込み", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/rehoming/consultations": { title: "届いた相談", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews": { title: "申込みの確認", backHref: "/dashboard", backLabel: "マイページへ戻る" },
