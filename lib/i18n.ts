@@ -3,6 +3,7 @@ import { petCaseTranslations } from "./pet-editorial-en";
 import { researchCaseTranslations } from "./research-scenarios-en";
 import { researchResultsTranslations } from "./research-results-en";
 import { adopterCopyTranslations } from "./adopter-copy-en";
+import { consultationCopyTranslations } from "./consultation-copy-en";
 export type Language = "ja" | "en";
 
 const english: Record<string, string> = {
@@ -904,7 +905,7 @@ const english: Record<string, string> = {
   "判断が記録済みのため、この審査は更新できません。": "This case cannot be changed after a decision is recorded.",
 };
 
-const exact = Object.freeze({ ...english, ...petCaseTranslations, ...researchCaseTranslations, ...researchResultsTranslations, ...adopterCopyTranslations });
+const exact = Object.freeze({ ...english, ...petCaseTranslations, ...researchCaseTranslations, ...researchResultsTranslations, ...adopterCopyTranslations, ...consultationCopyTranslations });
 
 export function translateText(value: string): string {
   const left = value.match(/^\s*/)?.[0] ?? "";

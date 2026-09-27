@@ -326,6 +326,9 @@ body[data-role="rehomer"] .role-nav-links a.current:not(.role-nav-primary) { bac
 .rehomer-home-menu small { font-size: 18px; line-height: 1.5; }
 .rehomer-menu-arrow { width: 28px; height: 28px; }
 .rehomer-consultations-page { max-width: 1100px; }
+.rehomer-consultation-group { margin-top: 30px; }
+.rehomer-consultation-group > h2 { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0; padding: 16px 20px; border-radius: 10px; background: #0b7180; color: #fff; font-size: 24px; }
+.rehomer-consultation-group > h2 span { padding: 4px 10px; border-radius: 999px; background: #fff; color: #174f5d; font-size: 17px; }
 .rehomer-consultation-list { display: grid; gap: 10px; margin-top: 24px; }
 .rehomer-consultation-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto 25px; align-items: center; gap: 16px; min-height: 100px; padding: 18px 22px; border: 1px solid #d7e2e7; border-radius: 10px; background: #fff; }
 .rehomer-consultation-row:nth-child(even) { background: #f2f6f7; }

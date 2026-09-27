@@ -75,6 +75,7 @@ test("prepared adopter profiles and consultation messages have English copy", ()
   for (const consultation of sampleConsultations) {
     assert.doesNotMatch(translateText(journeySummary(consultation, linkedApplication(consultation, applicants))), /[ぁ-んァ-ン一-龯]/);
     if (consultation.replyMessage) assert.doesNotMatch(translateText(consultation.replyMessage), /[ぁ-んァ-ン一-龯]/);
+    for (const message of consultation.messages ?? []) assert.doesNotMatch(translateText(message.body), /[ぁ-んァ-ン一-龯]/, message.body);
   }
   assert.equal(translateText("犬・ゴールデン・レトリバー"), "Dog · Golden Retriever");
 });

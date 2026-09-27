@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { currentDemoUser } from "@/lib/demo-session-server";
-import { consultationReply, getAllConsultations } from "@/lib/consultations";
+import { consultationThread, getAllConsultations } from "@/lib/consultations";
 import { journeySteps, journeySummary, linkedApplication } from "@/lib/consultation-journey";
 import { getApplicants, getPets } from "@/lib/repository";
 import { demoUsers } from "@/lib/demoUsers";
@@ -23,8 +23,7 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
   const maySeeAsRehomer = user.role === "rehomer" && pet?.ownerId === user.id;
   if (!consultation || (!maySeeAsRehomer && consultation.userId !== user.id && user.role !== "admin" && user.role !== "reviewer")) notFound();
   const application = linkedApplication(consultation, applications);
-  const reviewer = demoUsers.find(item => item.id === consultation.reviewedBy);
-  const response = consultation.replyMessage ?? (consultation.reviewedAt && consultation.status && consultation.status !== "received" ? consultationReply(consultation.status) : null);
+  const messages = consultationThread(consultation);
   const outcome = application?.review?.decisionRecorded
     ? application.review.decision === "approve" ? "譲渡へ進める判断" : application.review.decision === "decline" ? "今回は見送り" : "追加確認・保留"
     : consultation.status === "closed" ? "審査前に終了" : "未判定";
@@ -44,8 +43,17 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
       {application?.review?.history.length ? <div className="journey-actions"><h3>担当者が記録した工程の変更</h3><ul>{application.review.history.map((entry, index) => <li key={`${entry.at}-${index}`}>{displayDate(entry.at)}：{entry.action}</li>)}</ul></div> : null}
     </section>
     <section className="journey-panel"><h2>連絡・メッセージ履歴</h2>
-      <article className="journey-message"><div><strong>{user.role === "adopter" ? "あなたからの相談" : `${demoUsers.find(item => item.id === consultation.userId)?.name ?? "里親希望者"}からの相談`}</strong><time dateTime={consultation.createdAt}>{displayDate(consultation.createdAt)}</time></div><p>{consultation.message}</p></article>
-      {response && consultation.reviewedAt ? <article className="journey-message reviewer"><div><strong>{reviewer?.name ?? "審査担当者"}からの対応記録</strong><time dateTime={consultation.reviewedAt}>{displayDate(consultation.reviewedAt)}</time></div><p>{response}</p></article> : <p className="journey-no-reply">担当者からの連絡はまだありません。</p>}
+      {messages.map((message, index) => {
+        const author = demoUsers.find(item => item.id === message.authorId);
+        const isReviewer = author?.role === "reviewer" || author?.role === "admin";
+        const label = message.authorId === user.id ? "あなた"
+          : isReviewer ? `${author?.name ?? "審査担当者"}（審査担当者）`
+            : author?.name ?? "里親希望者";
+        return <article className={`journey-message ${isReviewer ? "reviewer" : "applicant"}`} key={message.id}>
+          <div><strong>{index === 0 ? `${label}からの相談` : label}</strong><time dateTime={message.createdAt}>{displayDate(message.createdAt)}</time></div><p>{message.body}</p>
+        </article>;
+      })}
+      {messages.length === 1 && <p className="journey-no-reply">担当者からの連絡はまだありません。</p>}
     </section>
     {pet && <Link className="task-secondary" href={`/pets/${pet.id}`}>{pet.name}の詳細を見る</Link>}
   </div>;
