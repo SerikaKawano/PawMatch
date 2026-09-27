@@ -479,6 +479,7 @@ small { font-size: 17px; }
 .review-actor-status span { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 16px 20px; border: 1px solid #9acbd0; border-radius: 10px; background: #eaf6f6; color: #124c55; font-size: 18px; }
 .review-actor-status strong { font-weight: 850; }
 .review-readonly-note { padding: 15px 18px; border-radius: 10px; background: #fff4d7; color: #564328; font-size: 18px; }
+.review-no-action-note { border-left: 5px solid #bd3045; background: #fff1f2; color: #a12638; font-weight: 850; }
 .review-trial-form { min-width: 0; border: 0; padding: 0; }
 @media (max-width: 650px) { .role-home-hero { min-height: 250px; padding: 28px; background-position: 62% center; } .role-home-menu a { min-height: 120px; padding: 20px; } .review-actor-status { grid-template-columns: 1fr; } }
 
@@ -510,6 +511,8 @@ small { font-size: 17px; }
 .review-state-banner .review-actor-status > .review-actor-pill { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px 16px; border: 1px solid #e7d4ad; border-radius: 10px; background: #fff9ed; color: #654a19; }
 .review-state-banner .review-actor-status > .review-actor-pill.confirmed { border-color: #a9d8c4; background: #edf8f2; color: #165c44; }
 .review-state-banner .review-actor-status > .review-actor-pill.neutral { border-color: #d7e1e4; background: #f4f7f8; color: #455f69; }
+.review-state-banner .review-actor-status > .review-actor-pill.no-action { border-color: #e7b7bd; background: #fff4f5; color: #a12638; }
+.review-state-banner .review-actor-pill.no-action small { color: #a12638; font-weight: 850; }
 .review-state-banner .review-actor-pill > svg { width: 24px; height: 24px; }
 .review-state-banner .review-actor-pill > span { display: grid; gap: 2px; min-width: 0; padding: 0; border: 0; background: none; }
 .review-state-banner .review-actor-pill strong, .review-state-banner .review-actor-pill small { font-size: 17px; color: inherit; }
