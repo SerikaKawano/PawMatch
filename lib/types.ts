@@ -65,6 +65,7 @@ export interface VerificationStatus {
 }
 
 export interface Applicant {
+  userId?: DemoUserId;
   researchCandidate?: ResearchCandidate;
   assessment?: Assessment;
   review?: ReviewRecord;

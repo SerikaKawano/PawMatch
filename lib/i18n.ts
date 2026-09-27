@@ -2,6 +2,7 @@
 import { petCaseTranslations } from "./pet-editorial-en";
 import { researchCaseTranslations } from "./research-scenarios-en";
 import { researchResultsTranslations } from "./research-results-en";
+import { adopterCopyTranslations } from "./adopter-copy-en";
 export type Language = "ja" | "en";
 
 const english: Record<string, string> = {
@@ -213,6 +214,8 @@ const english: Record<string, string> = {
   "マイクロチップ": "Microchip",
   "診療・検査記録": "Consultation and test records",
   "これまでの経緯とお迎えの条件": "Background and adoption arrangements",
+  "譲渡に至った経緯とお迎えの条件": "Why this pet needs a new home and adoption arrangements",
+  "その他": "Other arrangements",
   "譲渡に出すことになった経緯": "Why this pet needs a new home",
   "譲渡者からのメッセージ": "A message from the rehomer",
   "譲渡に伴う費用": "Adoption-related costs",
@@ -450,10 +453,26 @@ const english: Record<string, string> = {
   "事前情報の提出へ進める": "Request profile information",
   "相談を終了する": "Close enquiry",
   "自分のプロフィール": "My profile",
+  "里親希望者のプロフィール": "Adopter profiles",
+  "里親希望者の情報": "Adopter information",
+  "里親希望者の一覧": "Adopter list",
+  "応募者のプロフィール・書類を見る →": "View applicant profile and documents →",
+  "里親希望者のプロフィール・書類を見る →": "View adopter profiles and documents →",
+  "属性だけで譲渡の可否を判断しないでください。": "Do not decide adoption from personal characteristics alone.",
+  "登録情報、確認状況、提出書類を確認します。属性だけで譲渡の可否を判断しないでください。": "Review registered information, verification status and submitted documents. Do not decide from personal characteristics alone.",
+  "プロフィール": "Profile", "登録済み書類": "Registered documents", "審査の進捗": "Review progress", "審査中の申込みはありません。": "No applications are under review.",
+  "相談の進捗": "Enquiry progress",
+  "審査担当者が次の手続きへ進めました。事前情報の提出が済むまで、適合性の審査は始まりません。": "The reviewer has moved this enquiry to the next step. Suitability review will not begin until the requested profile information is submitted.",
+  "この相談は終了しました。必要な場合は新しくお問い合わせください。": "This enquiry is closed. Please make a new enquiry if needed.",
+  "申込みなし": "No application", "本人確認待ち": "Identity check pending", "本人確認未申請": "Identity check not requested", "審査を開く →": "Open review →",
   "編集する": "Edit profile",
   "表示に戻る": "Return to profile",
   "氏名": "Name",
   "お住まいの地域": "Area where you live",
+  "性別": "Gender", "年代": "Age range", "仕事の状況": "Employment status", "連絡先": "Contact details",
+  "同居者の同意": "Household consent", "家族のアレルギー": "Household allergies", "先住動物": "Existing pets",
+  "住居の飼育許可": "Permission to keep pets", "留守にする時間": "Time away from home", "主なお世話の担当": "Primary carer",
+  "通院・健康管理の計画": "Veterinary and health plan", "飼育費・医療費への備え": "Care and veterinary budget", "お迎えを希望する理由": "Reason for adopting",
   "一緒に暮らす人": "Household members",
   "住まいと飼育環境": "Housing and pet environment",
   "飼育経験": "Pet care experience",
@@ -473,6 +492,9 @@ const english: Record<string, string> = {
   "未申請": "Not requested",
   "プロフィールを保存": "Save profile",
   "書類": "Documents",
+  "飼育計画書": "Care plan", "住居・お世話の確認メモ": "Housing and care notes",
+  "登録済み書類は管理者・審査担当者が閲覧できます。飼育計画などの一般書類のみ登録してください。本人確認書類、顔写真、住所や収入の分かる書類は登録しないでください。": "Administrators and reviewers can view registered documents. Add only general documents such as care plans; do not upload identity documents, face photos, or records showing your address or income.",
+  "本人確認書類や住所の証明は保存していません。資料の内容と確認状況を区別して確認してください。": "Identity and address proofs are not stored. Review document content separately from verification status.",
   "飼育計画などの一般書類を登録できます。本人確認書類、顔写真、住所や収入の分かる書類は登録しないでください。": "You may add general documents such as a care plan. Do not upload identity documents, face photos or documents showing your address or income.",
   "書類名": "Document name",
   "ファイル（PDF・PNG・JPEG、2MB以下）": "File (PDF, PNG or JPEG, up to 2 MB)",
@@ -707,7 +729,7 @@ const english: Record<string, string> = {
   "このセッションの回答を削除して参加を中止しますか？": "Delete this session's answers and withdraw?",
 };
 
-const exact = Object.freeze({ ...english, ...petCaseTranslations, ...researchCaseTranslations, ...researchResultsTranslations });
+const exact = Object.freeze({ ...english, ...petCaseTranslations, ...researchCaseTranslations, ...researchResultsTranslations, ...adopterCopyTranslations });
 
 export function translateText(value: string): string {
   const left = value.match(/^\s*/)?.[0] ?? "";
@@ -763,6 +785,7 @@ export function translateText(value: string): string {
   if ((match = source.match(/^(.+)のペットを (\d+)件表示しています$/))) return left + `Showing ${match[2]} pets in ${translateText(match[1])}` + right;
   if ((match = source.match(/^重み (\d+)点$/))) return left + `Weight: ${match[1]} points` + right;
   if ((match = source.match(/^(.+)への相談$/))) return left + `Enquiry about ${match[1]}` + right;
+  if ((match = source.match(/^申込日：(.+)$/))) return left + `Applied: ${match[1]}` + right;
   if ((match = source.match(/^(.+)の詳細へ戻る$/))) return left + `Back to ${match[1]}'s details` + right;
   return value;
 }

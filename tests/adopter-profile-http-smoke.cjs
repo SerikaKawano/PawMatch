@@ -33,6 +33,12 @@ async function cookieFor(userId) {
   assert.equal(download.status, 200);
   assert.equal(await download.text(), "%PDF-1.4\n%%EOF");
   assert.equal((await fetch(base + `/api/adopter-documents/${document.id}`, { headers: { Cookie: otherAdopter } })).status, 404);
+  assert.equal((await fetch(base + `/api/adopter-documents/${document.id}`, { headers: { Cookie: reviewer } })).status, 200);
+  assert.equal((await fetch(base + `/api/adopter-documents/${document.id}`, { headers: { Cookie: rehomer } })).status, 404);
+  const reviewerProfile = await (await fetch(base + "/reviews/adopters/adopter", { headers: { Cookie: reviewer } })).text();
+  assert.ok(reviewerProfile.includes("Noah Williams"));
+  assert.ok(reviewerProfile.includes("住居の飼育許可"));
+  assert.equal((await fetch(base + "/reviews/adopters/adopter", { headers: { Cookie: rehomer }, redirect: "manual" })).status, 307);
   assert.equal((await fetch(base + `/api/adopter-documents/${document.id}`, { method: "DELETE", headers: { Cookie: otherAdopter, Origin: base } })).status, 404);
 
   const identity = await fetch(base + "/api/adopter-profile/identity", { method: "POST", headers: { Cookie: adopter, Origin: base } });
@@ -47,6 +53,6 @@ async function cookieFor(userId) {
   assert.equal((await verify.json()).profile.identityStatus, "verified");
   assert.equal((await (await fetch(base + "/api/adopter-profile", { headers: { Cookie: adopter } })).json()).profile.identityStatus, "verified");
   assert.equal((await fetch(base + `/api/adopter-documents/${document.id}`, { method: "DELETE", headers: { Cookie: adopter, Origin: base } })).status, 200);
-  assert.equal((await (await fetch(base + "/api/adopter-documents", { headers: { Cookie: adopter } })).json()).documents.length, 0);
+  assert.equal((await (await fetch(base + "/api/adopter-documents", { headers: { Cookie: adopter } })).json()).documents.length, 2);
   console.log("PASS: adopter profile, protected document upload/download/delete, human identity review and role isolation.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

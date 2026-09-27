@@ -5,6 +5,9 @@ const { translateText } = load("lib/i18n.ts");
 const { petEditorial } = load("lib/pet-editorial.ts");
 const { scenarios } = load("lib/research/scenarios.ts");
 const { uiCopy } = load("lib/ui-copy.ts");
+const { initialAdopterProfile } = load("lib/adopter-profile.ts");
+const { demoUsers } = load("lib/demoUsers.ts");
+const { sampleConsultations } = load("lib/consultations.ts");
 
 test("shared Japanese actions have consistent English labels", () => {
   assert.equal(translateText(uiCopy.findPets), "Find a pet to adopt");
@@ -45,4 +48,21 @@ test("research case facts and applicant evidence remain readable in English", ()
       assert.notEqual(translateText(value), value, value);
     }
   }
+});
+
+test("prepared adopter profiles and consultation messages have English copy", () => {
+  assert.equal(translateText("相談の進捗"), "Enquiry progress");
+  assert.equal(translateText("Snowへの相談"), "Enquiry about Snow");
+  assert.equal(translateText("申込日：2026-09-07"), "Applied: 2026-09-07");
+  assert.equal(translateText("2/5件"), "2/5 documents");
+  assert.doesNotMatch(translateText("審査担当者が次の手続きへ進めました。事前情報の提出が済むまで、適合性の審査は始まりません。"), /[ぁ-んァ-ン一-龯]/);
+  assert.doesNotMatch(translateText("この相談は終了しました。必要な場合は新しくお問い合わせください。"), /[ぁ-んァ-ン一-龯]/);
+  for (const user of demoUsers.filter(item => item.role === "adopter")) {
+    const profile = initialAdopterProfile(user);
+    for (const [key, value] of Object.entries(profile)) {
+      if (["userId", "fullName", "contact", "updatedAt", "identityStatus", "identityVerifiedAt", "identityVerifiedBy"].includes(key)) continue;
+      assert.doesNotMatch(translateText(value), /[ぁ-んァ-ン一-龯]/, `${key}: ${value}`);
+    }
+  }
+  for (const consultation of sampleConsultations) assert.doesNotMatch(translateText(consultation.message), /[ぁ-んァ-ン一-龯]/);
 });

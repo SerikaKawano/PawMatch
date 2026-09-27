@@ -2,6 +2,8 @@ import { z } from "zod";
 import { configSchema, createSessionSchema, responseSchema, codingSchema } from "./research/validation";
 import { reviewInput } from "./review-store";
 import { consultationInput } from "./consultations";
+import { adopterProfileInput } from "./adopter-profile";
+import { demoUsers } from "./demoUsers";
 const jsonBody=(schema:unknown)=>({required:true,content:{"application/json":{schema}}});
 const success={ "401":{description:"未ログイン・セッション失効"}, "403":{description:"ロール権限なし、または別Originからの操作"}, "200":{description:"成功"}, "400":{description:"入力が不正、または状態が不一致"}, "404":{description:"記録なし"} };
 const idParameter=[{name:"id",in:"path",required:true,schema:{type:"string"}}];
@@ -14,12 +16,24 @@ export const openApiSpec={
   paths:{
     "/demo-session":{
       get:{security:[],summary:"現在のテストユーザーを取得（未ログインはnull）",responses:success},
-      post:{security:[],summary:"管理者・審査担当・譲渡者・里親希望者のテストユーザーを選択。本番認証ではない",requestBody:jsonBody({type:"object",required:["userId"],properties:{userId:{enum:["admin","reviewer","reviewer-alex","rehomer","rehomer-hana","rehomer-riku","rehomer-haru","rehomer-nagi","adopter","adopter-olivia"]}}}),responses:{...success,"403":{description:"別Originからの操作"}}},
+      post:{security:[],summary:"管理者・審査担当・譲渡者・里親希望者のテストユーザーを選択。本番認証ではない",requestBody:jsonBody({type:"object",required:["userId"],properties:{userId:{enum:demoUsers.map(user => user.id)}}}),responses:{...success,"403":{description:"別Originからの操作"}}},
       delete:{security:[],summary:"サーバーのセッションを無効化しCookieを消去",responses:success},
     },
     "/consultations":{
       get:{summary:"里親希望者・管理者：自分の相談履歴",parameters:[{name:"petId",in:"query",schema:{type:"string"}}],responses:{...success,"401":{description:"未ログイン"}}},
       post:{summary:"里親希望者・管理者：相談を保存。外部送信なし。requestIdで再送の重複を防止",requestBody:jsonBody(z.toJSONSchema(consultationInput)),responses:{...success,"201":{description:"保存済み相談"},"401":{description:"未ログイン"},"403":{description:"別Originからの操作"},"500":{description:"保存失敗"}}},
+    },
+    "/adopter-profile":{
+      get:{summary:"里親希望者・管理者：自分のプロフィールと本人確認状態",responses:success},
+      put:{summary:"里親希望者・管理者：自分のプロフィールを保存",requestBody:jsonBody(z.toJSONSchema(adopterProfileInput)),responses:success},
+    },
+    "/adopter-documents":{
+      get:{summary:"里親希望者・管理者：自分の一般書類の一覧",responses:success},
+      post:{summary:"里親希望者・管理者：2MB以下のPDF・PNG・JPEGを登録",responses:success},
+    },
+    "/adopter-documents/{id}":{
+      get:{summary:"本人・審査担当・管理者：一般書類をダウンロード",parameters:idParameter,responses:success},
+      delete:{summary:"本人：自分で登録した一般書類を削除。組み込みの例示資料は削除不可",parameters:idParameter,responses:success},
     },
     "/pets":{get:{security:[],summary:"合成の動物プロフィール",responses:success}},
     "/applications":{get:{summary:"譲渡者は自分の掲載分のみ、審査担当・管理者は全件：根拠付きスコア・リスク・審査記録",parameters:[{name:"petId",in:"query",schema:{type:"string"}}],responses:success}},

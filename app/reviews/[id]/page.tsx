@@ -14,5 +14,5 @@ export default async function ApplicationReviewPage({ params }: { params: Promis
   if (!application) notFound();
   const pet = pets.find(item => item.id === application.petId);
   if (!pet) notFound();
-  return <div className="page-wrap review-process-page"><ApplicationReviewProcess application={application} pet={pet} isAdmin={user.id === "admin"} /></div>;
+  return <div className="page-wrap review-process-page"><ApplicationReviewProcess application={application} pet={pet} isAdmin={user.id === "admin"} canInspectAdopter={user.role === "reviewer" || user.role === "admin"} /></div>;
 }

@@ -52,6 +52,9 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     assert.ok(detail.includes("pet-primary-actions"));
     assert.ok(detail.includes("健康状態と必要なケア"));
     assert.ok(detail.includes("暮らしのポイント"));
+    assert.ok(detail.includes("LIVING TOGETHER"));
+    assert.ok(detail.includes("譲渡に至った経緯とお迎えの条件"));
+    assert.ok(!detail.includes("これまでの経緯とお迎えの条件"));
     assert.ok(detail.includes(pet.listingNumber));
     assert.ok(detail.includes("譲渡に出すことになった経緯"));
     assert.ok(!detail.includes("お迎え前に確認する条件"));
@@ -68,7 +71,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   const primary = { adopter: "/pets", rehomer: "/rehoming", reviewer: "/reviews/progress", admin: "/admin/analytics" };
   let reviewCookie, adminCookie;
   for (const [role, target] of Object.entries(primary)) {
-    const session = await fetch(base + "/api/demo-session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId: role }) });
+    const session = await fetch(base + "/api/demo-session", { method: "POST", headers: { Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ userId: role }) });
     const Cookie = session.headers.get("set-cookie").split(";")[0];
     if (role === "reviewer") reviewCookie = Cookie;
     if (role === "admin") adminCookie = Cookie;
@@ -79,7 +82,11 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       assert.ok(html.includes("自分のプロフィール"));
       assert.ok(html.includes("本人確認"));
       assert.ok(html.includes("相談、申込履歴"));
-      assert.ok(html.includes('href="/pets"'));
+      assert.ok(html.includes("審査の進捗"));
+      assert.ok(html.includes("仕事の状況"));
+      assert.ok(html.includes("管理者・審査担当者が閲覧できます"));
+      assert.ok(!html.includes('class="role-nav-links"'));
+      assert.ok(!html.split('class="adopter-home-header"')[1].split('</header>')[0].includes('href="/pets"'));
       for (const old of ["里親希望者のホーム", "里親希望者としてログイン中", "目的に合わせて選ぶ", "あなたの利用状況", 'class="dashboard-user"']) assert.ok(!html.includes(old));
     } else {
       const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];

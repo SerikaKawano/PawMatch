@@ -34,11 +34,11 @@ test("consultations validate, persist, avoid duplicates and isolate users and pe
   assert.equal(first.status, "received");
   await saveConsultation("adopter", { ...input, petId: "sora", requestId: randomUUID() });
   await saveConsultation("reviewer", input);
-  assert.equal((await getConsultations("adopter")).length, 2);
-  assert.equal((await getConsultations("adopter", "momo")).length, 1);
+  assert.equal((await getConsultations("adopter")).filter(item => !item.id.startsWith("sample-")).length, 2);
+  assert.equal((await getConsultations("adopter", "momo")).filter(item => !item.id.startsWith("sample-")).length, 1);
   assert.equal((await getConsultations("reviewer")).length, 1);
   assert.equal((await getConsultations("admin")).length, 0);
   assert.equal((await updateConsultationStatus(first.id, "profile_requested", "reviewer")).status, "profile_requested");
   assert.equal(await updateConsultationStatus(first.id, "closed", "reviewer"), null);
-  assert.equal((await getConsultations("adopter", "momo"))[0].status, "profile_requested");
+  assert.equal((await getConsultations("adopter", "momo")).find(item => item.id === first.id).status, "profile_requested");
 });

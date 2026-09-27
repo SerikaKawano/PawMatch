@@ -66,12 +66,13 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
                 <div><PawPrint /><span>種類</span><strong>{species}</strong></div>
                 <div><CalendarDays /><span>出生年月日</span><strong>{pet.birthDate}（{ageLabel}）</strong></div>
                 <div><Home /><span>募集地域</span><strong>{pet.location.split(" ")[0]}</strong></div>
+                <div><PawPrint /><span>血統書</span><strong>{pet.rehoming?.pedigree ?? "未確認"}</strong></div>
               </div>
               <PetShareActions petId={pet.id} petName={pet.name} />
             </div>
           </section>
 
-          <section className="detail-section pet-factors"><span className="section-kicker">PET PROFILE</span><h2>暮らしのポイント</h2><p>ペットのプロファイルを里親希望者のプロファイルと照らし合わせて確認・審査を行います。</p><div className="pet-factor-grid">{factors.map((key, index) => <article key={key}><div><span>{String(index + 1).padStart(2, "0")}</span><strong>{criterionLabels[key]}</strong>{config && <b>重み {config.weights[key]}点</b>}</div><p>{factorText[key]}</p></article>)}</div></section>
+          <section className="detail-section pet-factors"><span className="section-kicker">LIVING TOGETHER</span><h2>暮らしのポイント</h2><p>ペットのプロファイルを里親希望者のプロファイルと照らし合わせて確認・審査を行います。</p><div className="pet-factor-grid">{factors.map((key, index) => <article key={key}><div><span>{String(index + 1).padStart(2, "0")}</span><strong>{criterionLabels[key]}</strong>{config && <b>重み {config.weights[key]}点</b>}</div><p>{factorText[key]}</p></article>)}</div></section>
 
           <section className="detail-section">
             <span className="section-kicker">CARE &amp; HEALTH</span><h2>健康状態と必要なケア</h2>
@@ -89,12 +90,13 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
           </section>
 
           <section className="detail-section">
-            <span className="section-kicker">BACKGROUND &amp; ADOPTION</span><h2>これまでの経緯とお迎えの条件</h2>
+            <span className="section-kicker">BACKGROUND &amp; ADOPTION</span><h2>譲渡に至った経緯とお迎えの条件</h2>
             <h3 className="detail-subheading">譲渡に出すことになった経緯</h3>
             <p className="rehomer-message">{pet.rehoming?.story ?? pet.rehoming?.origin}</p>
             <h3 className="detail-subheading">譲渡者からのメッセージ</h3>
             <p className="rehomer-message">{pet.rehoming?.conditionsMessage}</p>
-            <dl className="pet-data-grid"><div><dt>血統書</dt><dd>{pet.rehoming?.pedigree}</dd></div><div><dt>トライアル</dt><dd>{pet.rehoming?.trial}</dd></div><div className="pet-data-wide"><dt>譲渡に伴う費用</dt><dd>{pet.rehoming?.fees}</dd></div></dl>
+            <h3 className="detail-subheading">その他</h3>
+            <p className="rehomer-message">{pet.rehoming?.trial} {pet.rehoming?.fees}</p>
           </section>
 
           <section className="detail-section provider-section">

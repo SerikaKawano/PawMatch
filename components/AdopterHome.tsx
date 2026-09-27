@@ -1,22 +1,27 @@
 "use client";
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { ArrowRight, FileText, Search, ShieldCheck, Upload } from "lucide-react";
+import { FileText, ShieldCheck, Upload } from "lucide-react";
 import type { AdopterProfile, AdopterProfileFields } from "@/lib/adopter-profile";
 import type { AdopterDocumentSummary } from "@/lib/adopter-documents";
 import type { Consultation } from "@/lib/consultations";
+import type { Applicant } from "@/lib/types";
+import { stageLabels } from "@/lib/review-labels";
 import { ConsultationHistory } from "./ConsultationHistory";
-import { uiCopy } from "@/lib/ui-copy";
 
 const profileFields: { key: keyof AdopterProfileFields; label: string; multiline?: boolean }[] = [
-  { key: "fullName", label: "氏名" }, { key: "region", label: "お住まいの地域" },
-  { key: "household", label: "一緒に暮らす人", multiline: true }, { key: "housing", label: "住まいと飼育環境", multiline: true },
+  { key: "fullName", label: "氏名" }, { key: "gender", label: "性別" }, { key: "ageRange", label: "年代" },
+  { key: "employment", label: "仕事の状況" }, { key: "contact", label: "連絡先" }, { key: "region", label: "お住まいの地域" },
+  { key: "household", label: "一緒に暮らす人", multiline: true }, { key: "householdConsent", label: "同居者の同意", multiline: true },
+  { key: "allergies", label: "家族のアレルギー", multiline: true }, { key: "existingPets", label: "先住動物", multiline: true },
+  { key: "housing", label: "住まいと飼育環境", multiline: true }, { key: "housingPermission", label: "住居の飼育許可", multiline: true },
+  { key: "timeAway", label: "留守にする時間", multiline: true }, { key: "primaryCarer", label: "主なお世話の担当", multiline: true },
   { key: "careExperience", label: "飼育経験", multiline: true }, { key: "dailyCare", label: "日々のお世話", multiline: true },
-  { key: "emergencyPlan", label: "緊急時の対応", multiline: true },
+  { key: "veterinaryPlan", label: "通院・健康管理の計画", multiline: true }, { key: "careBudget", label: "飼育費・医療費への備え", multiline: true },
+  { key: "adoptionReason", label: "お迎えを希望する理由", multiline: true }, { key: "emergencyPlan", label: "緊急時の対応", multiline: true },
 ];
 
-export function AdopterHome({ initialProfile, initialDocuments, consultations, petNames }: { initialProfile: AdopterProfile; initialDocuments: AdopterDocumentSummary[]; consultations: Consultation[]; petNames: Record<string, string> }) {
+export function AdopterHome({ initialProfile, initialDocuments, consultations, applications, petNames }: { initialProfile: AdopterProfile; initialDocuments: AdopterDocumentSummary[]; consultations: Consultation[]; applications: Applicant[]; petNames: Record<string, string> }) {
   const router = useRouter();
   const [profile, setProfile] = useState(initialProfile);
   const [draft, setDraft] = useState<AdopterProfileFields>(Object.fromEntries(profileFields.map(field => [field.key, initialProfile[field.key]])) as AdopterProfileFields);
@@ -74,15 +79,16 @@ export function AdopterHome({ initialProfile, initialDocuments, consultations, p
     finally { setBusy(false); }
   }
   return <div className="dashboard-page adopter-home">
-    <header className="adopter-home-header"><div><span className="section-kicker">マイページ</span><h1>{profile.fullName}</h1></div><Link href="/pets" className="task-primary"><Search size={22} />{uiCopy.findPets} <ArrowRight size={20} /></Link></header>
+    <header className="adopter-home-header"><div><span className="section-kicker">マイページ</span><h1>{profile.fullName}</h1></div></header>
     <p className="adopter-home-status" role="status" aria-live="polite">{notice}</p>
     <div className="adopter-home-grid">
       <section className="adopter-profile-card"><div className="adopter-card-heading"><h2>自分のプロフィール</h2><button type="button" className="task-secondary" onClick={() => { setEditing(value => !value); setNotice(""); }}>{editing ? "表示に戻る" : "編集する"}</button></div>
-        {editing ? <form className="adopter-profile-form" onSubmit={saveProfile}>{profileFields.map(field => <label key={field.key}>{field.label}{field.multiline ? <textarea required maxLength={500} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} /> : <input required maxLength={field.key === "fullName" ? 80 : 50} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} />}</label>)}<button className="task-primary" disabled={busy}>プロフィールを保存</button></form> : <dl className="adopter-profile-facts">{profileFields.map(field => <div key={field.key}><dt>{field.label}</dt><dd>{profile[field.key] || "未入力"}</dd></div>)}</dl>}
+        {editing ? <form className="adopter-profile-form" onSubmit={saveProfile}>{profileFields.map(field => <label key={field.key}>{field.label}{field.multiline ? <textarea required maxLength={500} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} /> : <input required maxLength={field.key === "fullName" ? 80 : field.key === "contact" ? 254 : field.key === "employment" ? 200 : 50} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} />}</label>)}<button className="task-primary" disabled={busy}>プロフィールを保存</button></form> : <dl className="adopter-profile-facts">{profileFields.map(field => <div key={field.key}><dt>{field.label}</dt><dd>{profile[field.key] || "未入力"}</dd></div>)}</dl>}
       </section>
-      <div className="adopter-home-side"><section className="adopter-documents-card"><div className="adopter-card-heading"><h2><FileText size={23} />書類</h2><span>{documents.length}/5件</span></div><p>飼育計画などの一般書類を登録できます。本人確認書類、顔写真、住所や収入の分かる書類は登録しないでください。</p><form onSubmit={upload} className="adopter-upload-form"><label>書類名<input required maxLength={80} value={label} onChange={event => setLabel(event.target.value)} placeholder="例：お世話の計画" /></label><label>ファイル（PDF・PNG・JPEG、2MB以下）<input id="adopter-document-file" type="file" required accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" onChange={event => setFile(event.target.files?.[0] ?? null)} /></label><button type="submit" className="task-primary" disabled={busy || !file || documents.length >= 5}><Upload size={20} />書類を登録</button></form>{!documents.length ? <p className="adopter-empty">登録した書類はありません。</p> : <ul className="adopter-document-list">{documents.map(item => <li key={item.id}><div><strong>{item.label}</strong><a href={`/api/adopter-documents/${item.id}`}>{item.filename}</a><small>{Math.ceil(item.size / 1024)} KB · {new Date(item.uploadedAt).toLocaleDateString("ja-JP")}</small></div><button type="button" className="decision-button outline" disabled={busy} onClick={() => remove(item.id)}>削除</button></li>)}</ul>}</section>
+      <div className="adopter-home-side"><section className="adopter-documents-card"><div className="adopter-card-heading"><h2><FileText size={23} />書類</h2><span>{`${documents.length}/5件`}</span></div><p>登録済み書類は管理者・審査担当者が閲覧できます。飼育計画などの一般書類のみ登録してください。本人確認書類、顔写真、住所や収入の分かる書類は登録しないでください。</p><form onSubmit={upload} className="adopter-upload-form"><label>書類名<input required maxLength={80} value={label} onChange={event => setLabel(event.target.value)} placeholder="例：お世話の計画" /></label><label>ファイル（PDF・PNG・JPEG、2MB以下）<input id="adopter-document-file" type="file" required accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" onChange={event => setFile(event.target.files?.[0] ?? null)} /></label><button type="submit" className="task-primary" disabled={busy || !file || documents.length >= 5}><Upload size={20} />書類を登録</button></form>{!documents.length ? <p className="adopter-empty">登録した書類はありません。</p> : <ul className="adopter-document-list">{documents.map(item => <li key={item.id}><div><strong>{item.label}</strong><a href={`/api/adopter-documents/${item.id}`}>{item.filename}</a><small>{Math.ceil(item.size / 1024)} KB · {new Date(item.uploadedAt).toLocaleDateString("ja-JP")}</small></div>{!item.id.startsWith("sample-") && <button type="button" className="decision-button outline" disabled={busy} onClick={() => remove(item.id)}>削除</button>}</li>)}</ul>}</section>
       <section className="adopter-identity-card"><div className="adopter-card-heading"><h2><ShieldCheck size={23} />本人確認</h2><span className={`identity-state ${profile.identityStatus}`}>{profile.identityStatus === "verified" ? "確認済み" : profile.identityStatus === "pending" ? "担当者の確認待ち" : "未申請"}</span></div><p>登録情報を確認後、担当者に本人確認を依頼できます。実物の確認は対面等で行い、ここには結果だけを記録します。</p>{profile.identityStatus === "not_requested" && <button type="button" className="task-secondary" disabled={busy} onClick={requestIdentity}>本人確認を申請する</button>}{profile.identityStatus === "verified" && <p className="adopter-verified">担当者が確認結果を記録しました。</p>}</section></div>
     </div>
     <ConsultationHistory records={consultations} names={petNames} title="相談、申込履歴" />
+    <section className="adopter-application-history"><h2>審査の進捗</h2>{applications.length ? <ul>{applications.map(application => <li key={application.id}><strong>{petNames[application.petId] ?? application.petId}</strong><span className={`application-stage ${application.review?.decisionRecorded && application.review.decision === "decline" ? "stopped" : application.review?.decisionRecorded && application.review.decision === "approve" ? "done" : "active"}`}>{application.review?.decisionRecorded ? application.review.decision === "approve" ? "譲渡へ進める判断" : application.review.decision === "decline" ? "今回は見送り" : "追加確認中" : stageLabels[application.stage]}</span><small>{`申込日：${application.submittedAt}`}</small></li>)}</ul> : <p>審査中の申込みはありません。</p>}</section>
   </div>;
 }

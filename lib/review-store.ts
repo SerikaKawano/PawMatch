@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { mutateStore, readStore } from "./persistence";
 import type { Applicant, ReviewRecord, ReviewStage } from "./types";
+import { stageLabels } from "./review-labels";
+export { stageLabels } from "./review-labels";
 export const reviewStages: ReviewStage[] = ["screening","risk_review","verification","meeting","trial","final_review"];
-export const stageLabels: Record<ReviewStage,string> = {screening:"申込み受付",risk_review:"適合性確認",verification:"確認状況",meeting:"面談・住環境",trial:"トライアル",final_review:"最終判断"};
 const state=z.enum(["verified","pending","not_provided"]);
 export const reviewInput = z.object({
   revision:z.number().int().nonnegative(),

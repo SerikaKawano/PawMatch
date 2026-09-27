@@ -4,6 +4,7 @@ import { assess } from "./research/scoring";
 import { reviewStages } from "./review-store";
 import { petProfiles } from "./pet-profiles";
 import { petEditorial } from "./pet-editorial";
+import { demoUsers, type DemoUserId } from "./demoUsers";
 
 const petOwners: Record<string, Pet["ownerId"]> = {
   momo: "rehomer", yuki: "rehomer", sora: "rehomer", kai: "rehomer",
@@ -30,17 +31,31 @@ export const pets: Pet[] = scenarios.map((scenario,index)=>({
   rehoming: { ...petProfiles[scenario.petId].rehoming!, story: petEditorial[scenario.petId].story, conditionsMessage: petEditorial[scenario.petId].conditionsMessage, livingPoints: petEditorial[scenario.petId].livingPoints, pedigree: petEditorial[scenario.petId].pedigree, trial: petEditorial[scenario.petId].trial, fees: petEditorial[scenario.petId].fees },
 }));
 const aliases:Record<string,string>={"senior-a":"app-aiko","senior-b":"app-ren","senior-c":"app-mai","active-a":"app-daichi"};
+const adopterCases: Record<string, { userId: DemoUserId; stage: Applicant["stage"] }> = {
+  "senior-a": { userId: "adopter", stage: "screening" },
+  "indoor-d": { userId: "adopter-olivia", stage: "verification" },
+  "active-a": { userId: "adopter-amelia", stage: "meeting" },
+  "pending-b": { userId: "adopter-ethan", stage: "risk_review" },
+  "multi-c": { userId: "adopter-grace", stage: "verification" },
+  "preference-a": { userId: "adopter-oliver", stage: "trial" },
+  "emergency-a": { userId: "adopter-ava", stage: "screening" },
+  "equivalent-c": { userId: "adopter-liam", stage: "final_review" },
+  "senior-c": { userId: "adopter-mia", stage: "risk_review" },
+  "active-d": { userId: "adopter-jack", stage: "trial" },
+};
 export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario.candidates.map((candidate,i)=>{
   const assessment=assess(candidate);
+  const linked = adopterCases[candidate.id];
   return {
     id:aliases[candidate.id]??"app-"+candidate.id,petId:scenario.petId,
-    name:candidate.name,submittedAt:"2026-09-"+String(index*3+i+1).padStart(2,"0"),
+    name: linked ? demoUsers.find(user => user.id === linked.userId)!.name : candidate.name,
+    userId: linked?.userId, submittedAt:"2026-09-"+String(index*3+i+1).padStart(2,"0"),
     household:candidate.household,housing:candidate.evidence.housing.detail,experience:candidate.evidence.care.detail,
     availability:candidate.evidence.time.detail,existingPets:candidate.evidence.integration.detail,
     veterinaryAccess:candidate.evidence.medical.detail,financialReadiness:candidate.evidence.medical.detail,
     score:assessment.score,strengths:assessment.breakdown.filter(row=>row.state==="ready").map(row=>row.label+"の計画あり"),
     risks:assessment.risks,nextActions:assessment.nextActions.length?assessment.nextActions:["面談で具体的な計画と意思を確認する"],
-    verification:candidate.verification,stage:reviewStages[(index*4+i)%reviewStages.length],
+    verification:candidate.verification,stage:linked?.stage ?? reviewStages[(index*4+i)%reviewStages.length],
     researchCandidate:candidate,assessment,
   };
 }));

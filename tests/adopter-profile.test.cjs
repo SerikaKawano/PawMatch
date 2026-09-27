@@ -34,9 +34,10 @@ test("document records validate type and keep content private to the owner", asy
   const summary = await documentStore.addAdopterDocument(noah.id, "飼育計画", "care-plan.pdf", pdf);
   assert.equal(summary.mimeType, "application/pdf");
   assert.equal("base64" in summary, false);
-  assert.equal((await documentStore.listAdopterDocuments(olivia.id)).length, 0);
+  assert.equal((await documentStore.listAdopterDocuments(olivia.id)).length, 2);
   assert.equal((await documentStore.getAdopterDocument(summary.id)).base64, pdf.toString("base64"));
   assert.equal(await documentStore.removeAdopterDocument(olivia.id, summary.id), false);
   assert.equal(await documentStore.removeAdopterDocument(noah.id, summary.id), true);
-  assert.equal((await documentStore.listAdopterDocuments(noah.id)).length, 0);
+  assert.equal((await documentStore.listAdopterDocuments(noah.id)).length, 2);
+  assert.match((await documentStore.getAdopterDocument(`sample-${noah.id}-care`)).base64, /^[A-Za-z0-9+/=]+$/);
 });

@@ -18,7 +18,7 @@ const stageTasks: Record<ReviewStage,string> = {
   trial:"トライアル中のケアと相性を確認し、結果を記録する",
   final_review:"未確認事項を見直し、人が判断と理由を記録する",
 };
-export function ApplicationReviewProcess({application,pet,isAdmin=false}:{application:Applicant;pet:Pet;isAdmin?:boolean}){
+export function ApplicationReviewProcess({application,pet,isAdmin=false,canInspectAdopter=false}:{application:Applicant;pet:Pet;isAdmin?:boolean;canInspectAdopter?:boolean}){
   const [record,setRecord]=useState(application);
   const [draft,setDraft]=useState<ReviewRecord>(application.review!);
   const [view,setView]=useState(application.stage);
@@ -50,7 +50,7 @@ export function ApplicationReviewProcess({application,pet,isAdmin=false}:{applic
   function update(patch:Partial<ReviewRecord>){setDraft({...draft,...patch});setMessage("");}
   return <div className="research-page">
     <Link href={"/reviews?pet="+pet.id} className="back-link"><ArrowLeft />申込み比較へ戻る</Link>
-    <header className="research-heading"><span>審査ケース {application.id}</span><h1>{record.name} × {pet.name}</h1><p>{pet.summary}</p></header>
+    <header className="research-heading"><span>審査ケース {application.id}</span><h1>{record.name} × {pet.name}</h1><p>{pet.summary}</p>{canInspectAdopter && application.userId && <Link className="task-secondary" href={`/reviews/adopters/${application.userId}`}>応募者のプロフィール・書類を見る →</Link>}</header>
     <nav className="review-stepper" aria-label="審査工程">{stages.map((s,i)=><button type="button" key={s.id} className={(i===current?"active ":"")+(i<current?"done ":"")+(i>current?"upcoming ":"")} onClick={()=>setView(s.id)} aria-current={view===s.id?"step":undefined}><span>{i<current?<CheckCircle2 size={20}/>:i+1}</span><strong>{s.label}</strong><small>{i<current?"完了":i===current?"進行中":"未着手"}</small></button>)}</nav>
     <div className={`review-state-banner ${stateTone}`} role="status"><div>{stateTone==="positive"?<CheckCircle2 />:stateTone==="negative"?<AlertCircle />:<PauseCircle />}<span><small>現在の状態 · {stages[current].label}</small><strong>{stateLabel}</strong></span></div><p>{highRisks.length>0?`重要な確認 ${highRisks.length}件。自動判定はせず、根拠を読んで進行可否を判断してください。`:pending>0?`確認待ち ${pending}件。未確認を「適合」と扱わず、次の対応を記録してください。`:"確認した内容と判断理由を記録してから次へ進みます。"}</p></div>
     <div className="review-process-layout"><section className="research-card">

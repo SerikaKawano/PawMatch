@@ -7,6 +7,8 @@ const matrix=[
  ["/reviews",["rehomer","reviewer","admin"]],
  ["/reviews/progress",["rehomer","reviewer","admin"]],
  ["/reviews/consultations",["reviewer","admin"]],
+ ["/reviews/adopters",["reviewer","admin"]],
+ ["/reviews/adopters/adopter",["reviewer","admin"]],
  ["/reviews/app-aiko",["rehomer","reviewer","admin"]],
  ["/reviews/records?view=pending",["rehomer","reviewer","admin"]],
  ["/pets/momo/consult",["adopter","admin"]],

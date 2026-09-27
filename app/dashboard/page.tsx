@@ -18,8 +18,8 @@ export default async function DashboardPage() {
   const user = await currentDemoUser();
   if (!user) redirect("/login?next=%2Fdashboard");
   if (user.role === "adopter") {
-    const [profile, documents, consultations, pets] = await Promise.all([getAdopterProfile(user), listAdopterDocuments(user.id), getConsultations(user.id), getPets()]);
-    return <AdopterHome initialProfile={profile} initialDocuments={documents} consultations={consultations} petNames={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} />;
+    const [profile, documents, consultations, applications, pets] = await Promise.all([getAdopterProfile(user), listAdopterDocuments(user.id), getConsultations(user.id), getApplicants(), getPets()]);
+    return <AdopterHome initialProfile={profile} initialDocuments={documents} consultations={consultations} applications={applications.filter(application => application.userId === user.id)} petNames={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} />;
   }
   const [allApplications, allPets, consultations] = await Promise.all([canAccess(user, "review") ? getApplicants() : Promise.resolve([]), getPets(), canAccess(user, "consult") ? getConsultations(user.id) : Promise.resolve([])]);
   const applications = visibleApplications(user, allApplications, allPets);

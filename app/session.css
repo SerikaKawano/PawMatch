@@ -90,6 +90,26 @@
 .identity-state.pending { background: #fff0ce; color: #704d11; }
 .identity-state.verified { background: #ddf2e8; color: #14583c; }
 .adopter-verified { color: #14583c; font-weight: 800; }
+.adopter-application-history { margin: 28px 0; padding: 28px; border: 1px solid #dfcebc; border-radius: 16px; background: #fff; }
+.adopter-application-history h2 { margin: 0 0 15px; font-size: 24px; }
+.adopter-application-history ul { margin: 0; padding: 0; list-style: none; }
+.adopter-application-history li { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; padding: 16px 0; border-top: 1px solid #e5d8cc; font-size: 18px; }
+.adopter-application-history li strong { min-width: 120px; }
+.adopter-application-history li small { font-size: 17px; color: #5e6b70; }
+.application-stage { padding: 6px 11px; border-radius: 7px; font-weight: 800; }
+.application-stage.active { color: #704d11; background: #fff0ce; }
+.application-stage.done { color: #14583c; background: #ddf2e8; }
+.application-stage.stopped { color: #9c2d3e; background: #fbe6e8; }
+.adopter-review-page { max-width: 1180px; }
+.adopter-review-page h1 { font-size: clamp(34px, 4vw, 48px); margin: 8px 0; }
+.adopter-review-page > p { font-size: 18px; line-height: 1.7; }
+.adopter-review-list { display: grid; gap: 12px; margin-top: 28px; }
+.adopter-review-list > a { display: grid; grid-template-columns: 1.2fr .8fr .8fr 1.2fr auto; gap: 12px; align-items: center; min-height: 76px; padding: 16px 20px; border: 1px solid #dfcebc; border-radius: 12px; background: #fff; color: #493e38; text-decoration: none; font-size: 17px; }
+.adopter-review-list > a:hover { border-color: #b77669; box-shadow: 0 8px 22px #513a2420; }
+.adopter-review-list > a > strong { font-size: 20px; }
+.adopter-review-list > a > b { color: #a74758; }
+@media (max-width: 900px) { .adopter-review-list > a { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .adopter-review-list > a { grid-template-columns: 1fr; } }
 .identity-review-queue { margin-top: 30px; }
 .identity-review-queue h2 { margin: 0 0 8px; font-size: 25px; }
 .identity-review-queue article { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 16px 0; border-top: 1px solid #e5edf0; }
