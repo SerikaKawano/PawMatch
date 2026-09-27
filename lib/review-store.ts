@@ -10,13 +10,14 @@ export const reviewInput = z.object({
   stage:z.enum(["screening","risk_review","verification","meeting","trial","final_review"]),
   verification:z.object({identity:state,housing:state,cohabitantConsent:state,lifelongCare:state,followUp:state}).strict(),
   meetingChecks:z.array(z.boolean()).length(3),trialChecks:z.array(z.boolean()).length(3),
+  trial:z.object({periodFrom:z.string().max(10),periodTo:z.string().max(10),transportFrom:z.string().max(200),transportTo:z.string().max(200),transportMethod:z.string().max(200),result:z.enum(["pending","ok","ng"]),memo:z.string().max(3000)}).optional(),
   note:z.string().trim().min(1,"確認の根拠を記録してください").max(5000),
   decision:z.enum(["approve","hold","decline"]), decisionRecorded:z.boolean(), riskAcknowledged:z.boolean(),
 }).strict();
 type ReviewStore = Record<string,ReviewRecord>;
 export const getReviewRecords=()=>readStore<ReviewStore>("review-v1",()=>({}));
 export function initialReview(app:Applicant):ReviewRecord {
-  return {revision:0,stage:app.stage,verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],note:"",decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
+  return {revision:0,stage:app.stage,verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",memo:""},note:"",decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
 }
 export async function saveReview(app:Applicant,input:unknown) {
   const data=reviewInput.parse(input);
@@ -28,8 +29,10 @@ export async function saveReview(app:Applicant,input:unknown) {
     if(to!==from&&to!==from+1)throw new Error("現在の工程を確認してから、次の工程へ進めてください。");
     if(data.decisionRecorded&&data.stage!=="final_review"&&data.decision!=="decline")throw new Error("最終工程で判断を記録してください。");
     if(data.decisionRecorded&&to!==from)throw new Error("判断を記録する際は工程を進めないでください。");
+    if(previous.stage==="trial"&&to===from+1&&(!data.trial?.periodFrom||!data.trial.periodTo||!data.trial.transportFrom.trim()||!data.trial.transportTo.trim()||!data.trial.transportMethod.trim()||data.trial.result==="pending"))throw new Error("トライアルの期間・輸送・結果を記録してください。");
+    if(data.trial?.periodFrom&&data.trial.periodTo&&data.trial.periodFrom>data.trial.periodTo)throw new Error("トライアルの終了日は開始日以降にしてください。");
     if(data.decisionRecorded&&data.decision==="approve"){
-      if(Object.values(data.verification).some(v=>v!=="verified")||data.meetingChecks.some(v=>!v)||data.trialChecks.some(v=>!v))throw new Error("確認状況・面談・トライアルの確認を完了してください。");
+      if(Object.values(data.verification).some(v=>v!=="verified")||data.meetingChecks.some(v=>!v)||data.trial?.result!=="ok")throw new Error("書類確認・面談・トライアルの結果を確認してください。");
       if(!data.riskAcknowledged)throw new Error("点数以外の根拠・残るリスクを確認し、判断理由を記録してください。");
     }
     const {revision:_revision,...fields}=data;void _revision;

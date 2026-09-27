@@ -12,14 +12,15 @@ import { visibleApplications, visiblePets } from "@/lib/ownership";
 import { getAdopterProfile } from "@/lib/adopter-profile";
 import { listAdopterDocuments } from "@/lib/adopter-documents";
 import { AdopterHome } from "@/components/AdopterHome";
+import { requestsForAdopter } from "@/lib/document-requests";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const user = await currentDemoUser();
   if (!user) redirect("/login?next=%2Fdashboard");
   if (user.role === "adopter") {
-    const [profile, documents, consultations, applications, pets] = await Promise.all([getAdopterProfile(user), listAdopterDocuments(user.id), getConsultations(user.id), getApplicants(), getPets()]);
-    return <AdopterHome initialProfile={profile} initialDocuments={documents} consultations={consultations} applications={applications.filter(application => application.userId === user.id)} petNames={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} />;
+    const [profile, documents, requests, consultations, applications, pets] = await Promise.all([getAdopterProfile(user), listAdopterDocuments(user.id), requestsForAdopter(user.id), getConsultations(user.id), getApplicants(), getPets()]);
+    return <AdopterHome initialProfile={profile} initialDocuments={documents} initialRequests={requests} consultations={consultations} applications={applications.filter(application => application.userId === user.id)} petNames={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} />;
   }
   if (user.role === "rehomer") return <div className="rehomer-home page-wrap">
     <header className="rehomer-home-intro"><span className="section-kicker">譲渡者のホーム</span><h1>{user.name}さん</h1><p>掲載、審査、相談を確認できます。</p></header>

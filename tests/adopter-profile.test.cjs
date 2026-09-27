@@ -9,6 +9,7 @@ const load = require("./load-ts.cjs");
 const { demoUsers } = load("lib/demoUsers.ts");
 const profileStore = load("lib/adopter-profile.ts");
 const documentStore = load("lib/adopter-documents.ts");
+const requestStore = load("lib/document-requests.ts");
 const noah = demoUsers.find(user => user.id === "adopter");
 const olivia = demoUsers.find(user => user.id === "adopter-olivia");
 
@@ -43,4 +44,16 @@ test("document records validate type and keep content private to the owner", asy
   assert.equal(await documentStore.removeAdopterDocument(noah.id, summary.id), true);
   assert.equal((await documentStore.listAdopterDocuments(noah.id)).length, 2);
   assert.match((await documentStore.getAdopterDocument(`sample-${noah.id}-care`)).base64, /^[A-Za-z0-9+/=]+$/);
+});
+
+test("review document requests link an uploaded file or a recorded acknowledgement to one adopter", async () => {
+  const requested = await requestStore.createDocumentRequest({applicationId:"case-noah",adopterId:noah.id,petName:"Bella",kind:"document",label:"飼育計画の補足",detail:"通院時の支援を記入",requestedBy:"Reviewer"});
+  assert.equal((await requestStore.requestsForAdopter(olivia.id)).length,0);
+  assert.equal((await requestStore.requestsForApplication("case-noah"))[0].id,requested.id);
+  const pdf = Buffer.from("%PDF-1.4\n%%EOF");
+  const document = await documentStore.addAdopterDocument(noah.id,requested.label,"extra.pdf",pdf,requested.id);
+  assert.equal((await documentStore.listAdopterDocuments(noah.id)).find(item=>item.id===document.id).requestId,requested.id);
+  const consent = await requestStore.createDocumentRequest({applicationId:"case-noah",adopterId:noah.id,petName:"Bella",kind:"consent",label:"面談日時の確認",detail:"候補日を確認",requestedBy:"Reviewer"});
+  await assert.rejects(requestStore.acknowledgeConsentRequest(consent.id,olivia.id));
+  assert.ok((await requestStore.acknowledgeConsentRequest(consent.id,noah.id)).acknowledgedAt);
 });

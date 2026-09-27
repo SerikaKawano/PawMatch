@@ -8,6 +8,7 @@ const MAX_DOCUMENTS_PER_USER = 5;
 const key = "adopter-documents-v1";
 export type AdopterDocument = {
   id: string; userId: DemoUserId; label: string; filename: string;
+  requestId?: string;
   mimeType: "application/pdf" | "image/png" | "image/jpeg"; size: number; uploadedAt: string; base64: string;
 };
 export type AdopterDocumentSummary = Omit<AdopterDocument, "base64">;
@@ -54,7 +55,7 @@ export async function listAdopterDocuments(userId: DemoUserId) {
 export async function getAdopterDocument(id: string) {
   return (await readStore<AdopterDocument[]>(key, () => [])).find(item => item.id === id) ?? sampleDocuments.find(item => item.id === id) ?? null;
 }
-export async function addAdopterDocument(userId: DemoUserId, label: string, filename: string, bytes: Buffer) {
+export async function addAdopterDocument(userId: DemoUserId, label: string, filename: string, bytes: Buffer, requestId?: string) {
   const mimeType = detectDocumentType(bytes);
   if (!mimeType || bytes.length === 0 || bytes.length > MAX_DOCUMENT_BYTES) throw new Error("PDF・PNG・JPEGの2MB以下のファイルを選んでください。");
   const cleanLabel = label.trim().slice(0, 80);
@@ -62,7 +63,7 @@ export async function addAdopterDocument(userId: DemoUserId, label: string, file
   const cleanFilename = filename.split(/[\\/]/).pop()?.replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 120) || "document";
   return mutateStore<AdopterDocument[], AdopterDocumentSummary>(key, () => [], records => {
     if (records.filter(item => item.userId === userId).length + sampleDocuments.filter(item => item.userId === userId).length >= MAX_DOCUMENTS_PER_USER) throw new Error("登録できる書類は5件までです。");
-    const record: AdopterDocument = { id: randomUUID(), userId, label: cleanLabel, filename: cleanFilename, mimeType, size: bytes.length, uploadedAt: new Date().toISOString(), base64: bytes.toString("base64") };
+    const record: AdopterDocument = { id: randomUUID(), userId, label: cleanLabel, filename: cleanFilename, requestId, mimeType, size: bytes.length, uploadedAt: new Date().toISOString(), base64: bytes.toString("base64") };
     records.push(record);
     return publicDocument(record);
   });

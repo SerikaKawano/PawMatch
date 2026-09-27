@@ -94,6 +94,7 @@ export interface ReviewRecord {
   verification: VerificationStatus;
   meetingChecks: boolean[];
   trialChecks: boolean[];
+  trial?: { periodFrom: string; periodTo: string; transportFrom: string; transportTo: string; transportMethod: string; result: "pending" | "ok" | "ng"; memo: string };
   note: string;
   decision: "approve" | "hold" | "decline";
   decisionRecorded: boolean;

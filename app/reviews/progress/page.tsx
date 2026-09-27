@@ -7,7 +7,7 @@ import type { ReviewStage } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 const stages: { id: ReviewStage; short: string }[] = [
-  { id: "screening", short: "受付" }, { id: "risk_review", short: "適合性" }, { id: "verification", short: "確認状況" },
+  { id: "screening", short: "受付" }, { id: "risk_review", short: "適合性" }, { id: "verification", short: "書類確認" },
   { id: "meeting", short: "面談" }, { id: "trial", short: "トライアル" }, { id: "final_review", short: "最終判断" },
 ];
 
@@ -27,7 +27,7 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
     <details className="pipeline-help"><summary>各工程で確認すること</summary><div className="pipeline-help-grid">
       <p><strong>受付</strong>申込みの内容と生活計画を受け付け、不足する回答を整理します。</p>
       <p><strong>適合性</strong>ペットに必要なケアと希望者の計画を照らし、重要な不一致や質問を整理します。</p>
-      <p><strong>確認状況</strong>本人確認、住居の飼育許可、同居者の同意など、確認項目の状態を記録します。</p>
+      <p><strong>書類確認</strong>提出済み書類と本人確認、住居の飼育許可、同居者の同意などの状態を記録します。</p>
       <p><strong>面談</strong>会話や住環境を通して、実際のお世話の体制を確かめます。</p>
       <p><strong>トライアル</strong>一定期間一緒に暮らし、ケアの継続や相性を確認します。</p>
       <p><strong>最終判断</strong>残る確認事項と双方の合意を踏まえ、担当者が理由を記録します。</p>
