@@ -23,7 +23,7 @@ export default async function DashboardPage() {
     return <AdopterHome initialProfile={profile} initialDocuments={documents} initialRequests={requests} consultations={consultations} applications={applications.filter(application => application.userId === user.id)} petNames={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} />;
   }
   if (user.role === "rehomer") return <div className="rehomer-home page-wrap">
-    <header className="rehomer-home-intro"><span className="section-kicker">譲渡者のホーム</span><h1>{user.name}さん</h1><p>掲載、審査、相談を確認できます。</p></header>
+    <header className="rehomer-home-intro"><h2>{user.name}さん</h2><p>掲載、審査、相談を確認できます。</p></header>
     <nav className="rehomer-home-menu" aria-label="譲渡者のメニュー">
       <Link href="/rehoming" className="listing"><span className="rehomer-menu-icon"><PawPrint /></span><span><strong>掲載中のペット一覧</strong><small>自分が掲載しているペットと届いた申込みを見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
       <Link href="/reviews/progress" className="progress"><span className="rehomer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>受付から最終判断までの現在地を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
@@ -44,7 +44,7 @@ export default async function DashboardPage() {
   }[user.role];
 
   return <div className="dashboard-page role-dashboard">
-    <div className="dashboard-welcome"><div><span className="section-kicker">{user.roleLabel}としてログイン中</span><h1>{navigation.title}</h1><p>{user.name}{user.kind === "organization" ? "の担当者へ。" : "さん、"}{navigation.purpose}</p></div><div className="dashboard-user"><span className={`demo-avatar ${user.color}`}>{user.initials}</span><div><strong>{user.organization}</strong><small>{user.email}</small></div><Link href="/login">ユーザーを切り替える</Link></div></div>
+    <div className="dashboard-welcome"><div><span className="section-kicker">{user.roleLabel}としてログイン中</span><h2>{user.name}{user.kind === "organization" ? "" : "さん"}</h2><p>{navigation.purpose}</p></div><div className="dashboard-user"><span className={`demo-avatar ${user.color}`}>{user.initials}</span><div><strong>{user.organization}</strong><small>{user.email}</small></div><Link href="/login">ユーザーを切り替える</Link></div></div>
     <section className="next-task-panel"><span className="role-hero-art" aria-hidden="true"><RoleIcon size={100} strokeWidth={1.35} /></span><div><span className="task-eyebrow">まずは、ここから</span><h2>{primary.label}</h2><p>{primary.description}</p></div><Link className="task-primary" href={primary.href}>{primary.label}<ArrowRight size={22} /></Link></section>
     <section className="other-tasks"><h2>目的に合わせて選ぶ</h2><div>{navigation.tasks.slice(1).map(task => <Link href={task.href} key={task.href}><h3>{task.label}<ArrowRight size={21} /></h3><p>{task.description}</p></Link>)}</div></section>
     <section className="dashboard-main"><h2>状況から確認する</h2><p>数字を押すと、該当する一覧が開きます。</p><div className="dashboard-stats">{stats.map(stat => <Link href={stat.href} key={stat.label} aria-label={`${stat.label} ${stat.value}件の内容を見る`}><strong>{stat.value}</strong><span>{stat.label}</span><span className="stat-action">一覧を見る <ArrowRight size={20} /></span></Link>)}</div></section>

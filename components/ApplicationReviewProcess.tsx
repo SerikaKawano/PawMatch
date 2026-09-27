@@ -69,7 +69,7 @@ export function ApplicationReviewProcess({application,pet,canInspectAdopter=fals
   function updateTrial(patch:Partial<typeof trial>){update({trial:{...trial,...patch}});}
   return <div className="research-page">
     <Link href={"/reviews?pet="+pet.id} className="back-link"><ArrowLeft />申込み比較へ戻る</Link>
-    <header className="research-heading review-case-heading"><h1>申込みの確認</h1><p>{pet.summary}</p></header>
+    <header className="research-heading review-case-heading"><p>{pet.summary}</p></header>
     <nav className="review-stepper" aria-label="審査工程">{stages.map((s,i)=><button type="button" key={s.id} disabled={i>current} className={(i===current?"active ":"")+(i<current?"done ":"")+(i>current?"upcoming ":"")} onClick={()=>{if(i<=current)setView(s.id);}} aria-current={view===s.id?"step":undefined}><span>{i<current?<CheckCircle2 size={20}/>:i+1}</span><strong>{s.label}</strong><small>{i<current?"完了":i===current&&finalState?"判断済み":i===current?"進行中":"未着手"}</small></button>)}</nav>
     <div className={`review-state-banner ${stateTone}`} role="status"><div>{stateTone==="positive"?<CheckCircle2 />:stateTone==="negative"?<AlertCircle />:<PauseCircle />}<span><small>現在の状態 · {stages[current].label}</small><strong>{stateLabel}</strong></span></div><p>{finalState?"担当者の判断と理由が記録されています。":highRisks.length>0?`重要な確認 ${highRisks.length}件。詳細を確認の上、進行可否を判断してください。`:pending>0?`確認待ち ${pending}件。未確認を「適合」と扱わず、次の対応を記録してください。`:"確認した内容と判断理由を記録してから次へ進みます。"}</p></div>
     <div className="review-process-layout"><section className="research-card">

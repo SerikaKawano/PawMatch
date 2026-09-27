@@ -5,7 +5,7 @@ import { uiCopy } from "@/lib/ui-copy";
 
 export default function GuidePage() {
   return <div className="guide-page">
-    <section className="guide-hero"><span className="hero-label"><PawPrint size={21} /> はじめての方へ</span><h1>{uiCopy.adoptionFlow}</h1><p>焦らず、確かめながら。ペットと家族の双方が安心できる譲渡を進めるための手順です。</p></section>
+    <section className="guide-hero"><span className="hero-label"><PawPrint size={21} /> はじめての方へ</span><p>焦らず、確かめながら。ペットと家族の双方が安心できる譲渡を進めるための手順です。</p></section>
     <main className="guide-main">
       <section className="guide-process"><h2>相談から正式譲渡まで</h2><div className="guide-step-list">{adoptionSteps.map((step, index) => { const Icon = step.icon; return <article key={step.title}><span className="guide-step-number">{index + 1}</span><span className="guide-step-art" aria-hidden="true"><Icon size={68} strokeWidth={1.65} /></span><div><h3>{step.title}</h3><p>{step.text}</p></div></article>; })}</div></section>
 

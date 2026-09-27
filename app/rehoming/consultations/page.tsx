@@ -16,7 +16,7 @@ export default async function RehomerConsultationsPage() {
   const consultations = allConsultations.filter(item => petNames.has(item.petId));
 
   return <div className="page-wrap rehomer-consultations-page">
-    <header className="role-page-heading"><span className="section-kicker">譲渡者の相談一覧</span><h1>届いた相談</h1><p>掲載ペットに届いた相談の内容と、その後の対応状況を確認できます。</p></header>
+    <header className="role-page-heading"><p>掲載ペットに届いた相談の内容と、その後の対応状況を確認できます。</p></header>
     <div className="rehomer-consultation-list">{consultations.map(item => {
       const applicant = demoUsers.find(account => account.id === item.userId);
       return <Link key={item.id} href={`/consultations/${item.id}`} className="rehomer-consultation-row">

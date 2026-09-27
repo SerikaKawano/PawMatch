@@ -24,7 +24,7 @@ export default async function ApplicantCaseProfilePage({ params }: { params: Pro
   ];
   return <div className="page-wrap applicant-case-profile">
     <Link className="back-link" href={`/reviews/${application.id}`}>← 審査ケースに戻る</Link>
-    <span className="section-kicker">申込者のプロフィール</span><h1>{application.name}</h1>
+    <h2>{application.name}</h2>
     <p>{pet?.name ?? "ペット"}への申込み時に記録された内容です。</p>
     <dl>{fields.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value || "情報なし"}</dd></div>)}</dl>
   </div>;

@@ -91,7 +91,7 @@ export function AdopterHome({ initialProfile, initialDocuments, initialRequests=
     catch(error){setNotice(error instanceof Error?error.message:"記録できませんでした。");}finally{setBusy(false);}
   }
   return <div className="dashboard-page adopter-home">
-    <header className="adopter-home-header"><div><span className="section-kicker">マイページ</span><h1>{profile.fullName}</h1></div></header>
+    <header className="adopter-home-header"><div><h2>{profile.fullName}</h2></div></header>
     <p className="adopter-home-status" role="status" aria-live="polite">{notice}</p>
     <div className="adopter-home-grid">
       <section className="adopter-profile-card"><div className="adopter-card-heading"><h2>自分のプロフィール</h2><button type="button" className="task-secondary" onClick={() => { setEditing(value => !value); setNotice(""); }}>{editing ? "表示に戻る" : "編集する"}</button></div>

@@ -9,5 +9,5 @@ import { pageContext } from "@/lib/page-context";
 export function PageContextBar({ role }: { role: DemoUser["role"] | null }) {
   const context = pageContext(usePathname(), role);
   if (!context) return null;
-  return <nav className="page-context-bar" aria-label="ページの位置"><div className="page-context-inner"><Link href={context.backHref} className="page-context-back"><ArrowLeft size={19} />{context.backLabel}</Link><span className="page-context-title">{context.title}</span></div></nav>;
+  return <nav className="page-context-bar" aria-label="ページの位置"><div className="page-context-inner"><Link href={context.backHref} className="page-context-back"><ArrowLeft size={19} />{context.backLabel}</Link><h1 className="page-context-title">{context.title}</h1></div></nav>;
 }
