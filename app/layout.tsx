@@ -10,6 +10,7 @@ import "./navigation.css";
 import "./roles.css";
 import "./global-theme.css";
 import { SiteFooter } from "@/components/SiteFooter";
+import { PageContextBar } from "@/components/PageContextBar";
 
 
 export const metadata: Metadata = {
@@ -24,7 +25,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body data-role={user?.role ?? "guest"}>
         <PublicHeader user={user} />
 
-        <main className="main-shell"><RoleNavigation user={user} />{children}</main>
+        <main className="main-shell"><RoleNavigation user={user} /><PageContextBar role={user?.role ?? null} />{children}</main>
         <SiteFooter />
       </body>
     </html>
