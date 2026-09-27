@@ -487,3 +487,54 @@ small { font-size: 17px; }
 .guide-hero .hero-label { padding: 9px 16px; background: rgba(255, 255, 255, .95); color: #47352f; font-size: 20px; font-weight: 850; }
 .guide-hero p { max-width: 620px; margin: 0; color: #fff; font-size: clamp(25px, 2.5vw, 33px); font-weight: 850; line-height: 1.55; text-shadow: 0 2px 8px rgba(0, 0, 0, .35); }
 @media (max-width: 760px) { .guide-hero { min-height: 370px; padding: 42px 24px; background-position: 64% center; background-image: linear-gradient(90deg, rgba(35, 28, 27, .92), rgba(35, 28, 27, .62)), url('/guide-hero-pets.png'); } .guide-hero p { font-size: clamp(25px, 6vw, 31px); } }
+
+/* Keep the case summary, confirmations and linked people in one readable band. */
+.review-state-banner { display: block; padding: 0; overflow: hidden; }
+.review-state-banner > .review-state-top { display: flex; justify-content: space-between; align-items: center; gap: 22px; padding: 18px 22px 12px; }
+.review-state-banner .review-state-title { display: flex; align-items: center; gap: 12px; }
+.review-state-banner .review-state-title > span { display: grid; }
+.review-state-banner .review-state-top p { max-width: 620px; }
+.review-state-banner .review-actor-status { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 0; padding: 0 22px 14px; }
+.review-state-banner .review-state-top .review-actor-status { padding: 0; }
+.review-state-banner .review-actor-status > span { display: flex; align-items: center; gap: 8px; padding: 0; border: 0; border-radius: 0; background: none; color: inherit; font-size: 17px; }
+.review-state-banner .review-actor-status strong { font-size: 17px; }
+.review-state-banner .review-case-participants { display: flex; gap: 10px 24px; margin: 0 22px; padding: 14px 0 18px; border: 0; border-top: 1px solid currentColor; border-radius: 0; background: none; color: inherit; }
+.review-state-banner .review-case-participants a { color: inherit; }
+
+/* The current step is the main action area; the trial form reads as one sheet. */
+.review-stage-heading { align-items: center; margin: -24px -24px 24px; padding: 18px 24px; border: 0; border-radius: 10px 10px 0 0; background: #086b78; color: #fff; }
+.review-stage-heading span, .review-stage-heading h2, .review-stage-heading p { color: #fff !important; }
+.review-stage-heading .task-secondary { background: #fff; color: #075d69; }
+.review-trial-form { display: grid; gap: 0; margin: 18px 0; border: 1px solid #bfd7d8; border-radius: 12px; background: #f0f7f6; overflow: hidden; }
+.review-trial-form .trial-section { padding: 22px; border-top: 1px solid #c9dddc; }
+.review-trial-form .trial-section:first-child { border-top: 0; }
+.review-trial-form h3 { margin: 0 0 14px; color: #155360; font-size: 21px; }
+.review-trial-form .trial-section > p { margin: 0 0 16px; font-size: 17px; }
+.review-trial-form .trial-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.review-trial-form .trial-fields label:last-child:nth-child(3) { grid-column: 1 / -1; }
+.review-trial-form .trial-criterion { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-top: 1px solid #ccdddc; background: #fff; }
+.review-trial-form .trial-criterion:first-of-type { border-top: 0; }
+.review-trial-form .trial-criterion.ok { background: #e9f5ed; }
+.review-trial-form .trial-criterion.ng { background: #fff0f0; }
+.review-trial-form .trial-criterion > div:first-child { display: grid; gap: 4px; }
+.review-trial-form .trial-criterion strong { font-size: 18px; }
+.review-trial-form .trial-criterion small { font-size: 17px; color: #4e6266; }
+.review-trial-form .trial-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.review-trial-form .trial-options label { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 7px; background: #f1f4f4; white-space: nowrap; font-size: 17px; }
+.review-trial-form .trial-options input { width: 20px; min-height: 20px; accent-color: #086b78; }
+.review-trial-form .trial-overall { margin: 16px 0 0 !important; font-weight: 850; }
+.review-trial-form .trial-overall.ok { color: #14623f; }
+.review-trial-form .trial-overall.ng { color: #a2323a; }
+
+/* A single profile sheet replaces disconnected cards. */
+.applicant-case-profile dl { display: block; overflow: hidden; border: 1px solid #cbdce2; border-radius: 10px; }
+.applicant-case-profile dl > div { border: 0; border-top: 1px solid #cbdce2; border-radius: 0; }
+.applicant-case-profile dl > div:first-child { border-top: 0; }
+.adopter-review-detail .adopter-review-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; margin: 18px 0 22px; }
+.adopter-review-detail .adopter-review-heading h2 { margin: 0; font-size: clamp(34px,4vw,48px); }
+.adopter-review-detail .adopter-review-surface { overflow: hidden; border: 1px solid #c8d9db; border-radius: 12px; background: #fff; }
+.adopter-review-detail .adopter-review-surface > section { padding: 24px; border-top: 1px solid #c8d9db; }
+.adopter-review-detail .adopter-review-surface > section:first-child { border-top: 0; }
+.adopter-review-detail .adopter-review-surface h3 { margin: 0 0 16px; padding-bottom: 10px; border-bottom: 3px solid #6eabb2; color: #164f5b; font-size: 23px; }
+.adopter-review-detail .adopter-review-surface p { font-size: 17px; }
+@media (max-width: 760px) { .review-state-banner > .review-state-top, .review-trial-form .trial-criterion { align-items: flex-start; flex-direction: column; } .review-trial-form .trial-fields { grid-template-columns: 1fr; } .review-trial-form .trial-fields label:last-child:nth-child(3) { grid-column: auto; } }

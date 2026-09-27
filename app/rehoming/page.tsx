@@ -4,7 +4,6 @@ import Image from "next/image";
 import { getApplicants, getPets } from "@/lib/repository";
 import { requirePageAccess } from "@/lib/access-control";
 import { visibleApplications, visiblePets } from "@/lib/ownership";
-import { TaskGuide } from "@/components/TaskGuide";
 import { demoUsers } from "@/lib/demoUsers";
 
 export default async function RehomingPage() {
@@ -13,8 +12,7 @@ export default async function RehomingPage() {
   const pets = visiblePets(user, allPets);
   const applications = visibleApplications(user, allApplications, allPets);
   return <div className="page-wrap">
-    <header className="role-page-heading"><p>{user.role === "admin" ? `全譲渡元の掲載ペットは${pets.length}頭です。` : `${user.name}の掲載ペットは${pets.length}頭です。`}掲載内容と、ペットごとの審査進捗を確認できます。</p></header>
-    <TaskGuide title="この画面で行うこと" steps={["掲載中のペットを選ぶ", "掲載内容を見る", "審査進捗を見る"]} />
+    <header className="role-page-heading"><p>掲載内容と、ペットごとの審査進捗を確認できます。</p></header>
     <div className="rehoming-list">{pets.map(pet => <article key={pet.id}>
       {pet.imageUrl && <Image src={pet.imageUrl} alt={pet.name + "の写真"} width={160} height={160} unoptimized />}
       <div><span className="listing-status">募集中</span><h2>{pet.name}</h2><p>{pet.breed} · {pet.age}</p><p>掲載元：{demoUsers.find(account => account.id === pet.ownerId)?.name}</p><p>届いた里親申込み <strong>{applications.filter(item => item.petId === pet.id).length}件</strong></p></div>

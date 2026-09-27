@@ -9,12 +9,15 @@ const jointStages = ["meeting", "trial", "final_review"] as const;
 type JointStage = typeof jointStages[number];
 const isJointStage = (stage: ReviewStage): stage is JointStage => jointStages.includes(stage as JointStage);
 const state=z.enum(["verified","pending","not_provided"]);
+const trialFinding=z.enum(["pending","ok","ng"]);
+const trialCriteria=z.object({housing:trialFinding,compatibility:trialFinding,dailyCare:trialFinding,contingency:trialFinding}).strict();
+const emptyTrialCriteria={housing:"pending",compatibility:"pending",dailyCare:"pending",contingency:"pending"} as const;
 export const reviewInput = z.object({
   revision:z.number().int().nonnegative(),
   stage:z.enum(["screening","risk_review","verification","meeting","trial","final_review"]),
   verification:z.object({identity:state,housing:state,cohabitantConsent:state,lifelongCare:state,followUp:state}).strict(),
   meetingChecks:z.array(z.boolean()).length(3),trialChecks:z.array(z.boolean()).length(3),
-  trial:z.object({periodFrom:z.string().max(10),periodTo:z.string().max(10),transportFrom:z.string().max(200),transportTo:z.string().max(200),transportMethod:z.string().max(200),result:z.enum(["pending","ok","ng"]),memo:z.string().max(3000)}).optional(),
+  trial:z.object({periodFrom:z.string().max(10),periodTo:z.string().max(10),transportFrom:z.string().max(200),transportTo:z.string().max(200),transportMethod:z.string().max(200),result:trialFinding,criteria:trialCriteria.optional(),memo:z.string().max(3000)}).optional(),
   note:z.string().trim().min(1,"確認の根拠を記録してください").max(5000),
   decision:z.enum(["approve","hold","decline"]), decisionRecorded:z.boolean(), riskAcknowledged:z.boolean(),
   action:z.enum(["save","advance","confirm","decline","decide"]).optional(),
@@ -27,7 +30,7 @@ export async function getReviewRecords():Promise<ReviewStore> {
   return Object.fromEntries(Object.entries(records).map(([id,record])=>[id,normalizeIntake(record)]));
 }
 export function initialReview(app:Applicant):ReviewRecord {
-  return {revision:0,stage:activeStage(app.stage),verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",memo:""},note:"",decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
+  return {revision:0,stage:activeStage(app.stage),verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",criteria:{...emptyTrialCriteria},memo:""},note:"",decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
 }
 export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {
   const data=reviewInput.parse(input);
@@ -49,7 +52,8 @@ export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {
     if(action==="decline"&&(!data.decisionRecorded||data.decision!=="decline"))throw new Error("見送りの判断を確認してください。");
     if(action!=="decline"&&data.decisionRecorded)throw new Error("双方の確認が完了する前に判断を確定できません。");
     if(data.trial?.periodFrom&&data.trial.periodTo&&data.trial.periodFrom>data.trial.periodTo)throw new Error("トライアルの終了日は開始日以降にしてください。");
-    if(previous.stage==="trial"&&action==="confirm"&&(!data.trial?.periodFrom||!data.trial.periodTo||!data.trial.transportFrom.trim()||!data.trial.transportTo.trim()||!data.trial.transportMethod.trim()||data.trial.result==="pending"))throw new Error("トライアルの期間・輸送・結果を記録してください。");
+    if(previous.stage==="trial"&&action==="confirm"&&(!data.trial?.periodFrom||!data.trial.periodTo||!data.trial.transportFrom.trim()||!data.trial.transportTo.trim()||!data.trial.transportMethod.trim()||!data.trial.criteria||Object.values(data.trial.criteria).some(value=>value==="pending")||data.trial.result==="pending"))throw new Error("トライアルの期間・輸送・各確認項目の結果を記録してください。");
+    if(previous.stage==="trial"&&action==="confirm"&&data.trial?.criteria&&data.trial.result!==(Object.values(data.trial.criteria).some(value=>value==="ng")?"ng":"ok"))throw new Error("トライアルの総合結果と項目別の結果が一致しません。");
     if(previous.stage==="meeting"&&action==="confirm"&&data.meetingChecks.some(value=>!value))throw new Error("面談・住環境の確認項目を完了してください。");
     if(previous.stage==="final_review"&&action==="confirm"&&data.decision==="approve"){
       if(Object.values(data.verification).some(v=>v!=="verified")||data.meetingChecks.some(v=>!v)||data.trial?.result!=="ok")throw new Error("書類確認・面談・トライアルの結果を確認してください。");

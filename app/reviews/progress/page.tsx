@@ -20,8 +20,8 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
   const selectedPet = pets.find(pet => pet.id === filters.pet);
   const applications = selectedPet ? allApplications.filter(application => application.petId === selectedPet.id) : allApplications;
   return <div className="progress-board-page">
-    <header className="progress-board-header"><div><span className="section-kicker">REVIEW PIPELINE</span><p>受付から最終判断までの進捗を一目で確認できます。</p></div><span><ClipboardList />全 {applications.length}件</span></header>
-    <form className="pipeline-filter" action="/reviews/progress"><label htmlFor="progress-pet">対象のペット</label><select id="progress-pet" name="pet" defaultValue={selectedPet?.id ?? ""}><option value="">すべてのペット</option>{pets.map(pet => <option key={pet.id} value={pet.id}>{pet.name}</option>)}</select><button type="submit" className="task-secondary">この条件で表示</button>{selectedPet && <Link href="/reviews/progress">すべてに戻す</Link>}</form>
+    <header className="progress-board-header"><div><p>受付から最終判断までの進捗を一目で確認できます。</p></div><span><ClipboardList />全 {applications.length}件</span></header>
+    <form className="pipeline-filter" action="/reviews/progress"><label htmlFor="progress-pet">対象のペット</label><select id="progress-pet" name="pet" defaultValue={selectedPet?.id ?? ""}><option value="">すべてのペット</option>{pets.map(pet => <option key={pet.id} value={pet.id}>{pet.name}</option>)}</select><button type="submit" className="task-secondary">この条件で表示</button></form>
     <div className="pipeline-legend"><span><i className="complete" />完了</span><span><i className="current" />現在地</span><span><i className="upcoming" />未着手</span><p>各行を選択すると審査ワークフローを開きます。</p></div>
     <details className="pipeline-help"><summary>各工程で確認すること</summary><div className="pipeline-help-grid">
       <p><strong>受付</strong>申込者のプロフィールを表示します。ここでの操作はありません。</p>
@@ -46,6 +46,5 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
         </Link>;
       })}
     </section>
-    <p className="privacy-note">進捗・人物・ペットはすべて研究評価用の合成データです。</p>
   </div>;
 }

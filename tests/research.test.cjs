@@ -186,7 +186,9 @@ test("proposal research invariants and persistence", async t => {
     const trialApp=applicants.find(a=>a.stage==="trial");
     const {history:trialHistory,...trialBody}=initialReview(trialApp);void trialHistory;
     await assert.rejects(saveReview(trialApp,{...trialBody,stage:"final_review",note:"結果未記録"},reviewer));
-    const trialInput={...trialBody,action:"confirm",note:"トライアルを記録",trial:{periodFrom:"2026-09-01",periodTo:"2026-09-07",transportFrom:"保護施設",transportTo:"希望者宅",transportMethod:"車で対面受け渡し",result:"ok",memo:"食事とケアを継続できた"}};
+    const trialInput={...trialBody,action:"confirm",note:"トライアルを記録",trial:{periodFrom:"2026-09-01",periodTo:"2026-09-07",transportFrom:"保護施設",transportTo:"希望者宅",transportMethod:"車で対面受け渡し",result:"ok",criteria:{housing:"ok",compatibility:"ok",dailyCare:"ok",contingency:"ok"},memo:"食事とケアを継続できた"}};
+    await assert.rejects(saveReview(trialApp,{...trialInput,trial:{...trialInput.trial,criteria:{...trialInput.trial.criteria,compatibility:"pending"},result:"pending"}},reviewer));
+    await assert.rejects(saveReview(trialApp,{...trialInput,trial:{...trialInput.trial,criteria:{...trialInput.trial.criteria,compatibility:"ng"}}},reviewer));
     const trialFirst=await saveReview(trialApp,trialInput,reviewer);
     assert.equal(trialFirst.stage,"trial");
     const advanced=await saveReview(trialApp,{...trialInput,revision:1},ownerFor(trialApp));
