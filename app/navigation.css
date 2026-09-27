@@ -1,13 +1,9 @@
 .role-navigation { background: #fffcf7; border-bottom: 1px solid #e2d3c4; }
 .role-navigation-inner { max-width: 1440px; margin: auto; padding: 16px 40px; }
-.location-trail { display: flex; flex-wrap: wrap; gap: 8px; color: #654d3d; font-size: 17px; line-height: 1.8; }
-.location-trail a { text-decoration: underline; text-underline-offset: 4px; }
-.location-trail [aria-current] { font-weight: 700; }
-.role-nav-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.role-nav-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .role-nav-links a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; min-height: 48px; border: 1px solid #dfcdbb; border-radius: 8px; background: white; color: #634634; font-size: 17px; font-weight: 700; }
 .role-nav-links a.current { background: #79543f; color: white; border-color: #79543f; }
 .role-nav-links a:hover { border-color: #79543f; box-shadow: 0 0 0 1px #79543f; }
-.role-back { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; font-size: 17px; }
 .role-page-heading p, .role-dashboard p { font-size: 18px; line-height: 1.85; }
 .next-task-panel { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 32px; background: #fbf0df; border: 1px solid #d8b99a; border-radius: 18px; margin: 24px 0 32px; }
 .task-eyebrow { display: inline-block; font-size: 17px; font-weight: 700; color: #885232; margin-bottom: 10px; }

@@ -3,6 +3,7 @@ const base = process.env.PAWMATCH_TEST_URL;
 if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAWMATCH_TEST_URL to an isolated QA server.");
 (async () => {
   const home = await (await fetch(base + "/")).text();
+  assert.ok(!home.includes('class="role-navigation"'));
   const footer = home.split('<footer class="site-footer">')[1]?.split("</footer>")[0];
   assert.ok(footer);
   assert.ok(!footer.includes('href="/guide"'));
@@ -97,7 +98,13 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];
       assert.ok(nextTask.includes('href="' + target + '"'));
     }
-    assert.ok(html.includes('aria-label="現在地"'));
+    assert.ok(!html.includes('aria-label="現在地"'));
+    if (role === "adopter") assert.ok(!html.includes('class="role-navigation"'));
+    else {
+      const shortcuts = html.split('class="role-nav-links"')[1]?.split("</nav>")[0];
+      assert.ok(shortcuts);
+      for (const repeated of ["/dashboard", "/pets", "/guide", "/rehoming"]) assert.ok(!shortcuts.includes(`href="${repeated}"`));
+    }
     assert.ok(!html.includes(">お気に入り<"));
     const screen = await fetch(base + target, { headers: { Cookie }, redirect: "manual" });
     assert.equal(screen.status, 200);

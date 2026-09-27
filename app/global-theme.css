@@ -24,7 +24,6 @@ h1, h2, h3, .public-brand strong, .pet-title h3, .guide-hero h1, .section-headin
 .session-account-menu { border-color: var(--line); }
 .login-button { background: #006b78; color: white; border-color: #006b78; }
 .role-navigation { background: #fff; border-color: var(--line); }
-.location-trail { color: #45606b; }
 .role-nav-links a { color: #244653; border: 1px solid #cbdce2; border-radius: 8px; }
 body, body[data-role="adopter"], body[data-role="rehomer"], body[data-role="reviewer"] {
   --role-accent: #006b78;
