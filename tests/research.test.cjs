@@ -158,6 +158,9 @@ test("proposal research invariants and persistence", async t => {
     assert.equal((await getReviewRecords())[app.id].note,"初回確認の根拠を記録");
     await assert.rejects(saveReview(app,{...body,note:"古い画面からの更新"}));
     await assert.rejects(saveReview(app,{...body,revision:1,stage:"final_review",note:"工程飛ばし"}));
+    const declined=await saveReview(app,{...body,revision:1,note:"必要なケアへの対応が難しいことを確認した",decision:"decline",decisionRecorded:true});
+    assert.equal(declined.stage,app.stage);assert.equal(declined.decision,"decline");assert.equal(declined.decisionRecorded,true);
+    await assert.rejects(saveReview(app,{...body,revision:2,note:"判断後の変更"}));
     const finalApp=applicants.find(a=>a.stage==="final_review");
     const {history:ignored,...final}=initialReview(finalApp);void ignored;
     await assert.rejects(saveReview(finalApp,{...final,note:"不足あり",decision:"approve",decisionRecorded:true,riskAcknowledged:true}));

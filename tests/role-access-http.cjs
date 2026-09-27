@@ -4,11 +4,13 @@ const base=process.env.PAWMATCH_TEST_URL;
 if(!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Isolated local QA URL required");
 const matrix=[
  ["/rehoming",["rehomer","admin"]],
+ ["/rehoming/consultations",["rehomer","admin"]],
  ["/reviews",["rehomer","reviewer","admin"]],
  ["/reviews/progress",["rehomer","reviewer","admin"]],
  ["/reviews/consultations",["reviewer","admin"]],
  ["/reviews/adopters",["reviewer","admin"]],
- ["/reviews/adopters/adopter",["reviewer","admin"]],
+ ["/reviews/adopters/adopter",["rehomer","reviewer","admin"]],
+ ["/reviews/applicants/app-ren",["rehomer","reviewer","admin"]],
  ["/reviews/app-aiko",["rehomer","reviewer","admin"]],
  ["/reviews/records?view=pending",["rehomer","reviewer","admin"]],
  ["/pets/momo/consult",["adopter","admin"]],
@@ -46,7 +48,7 @@ const apis=[
   }
   if(role!=="guest"){
    const html=await(await fetch(base+"/dashboard",{headers:{Cookie:cookie}})).text();
-   assert.ok(html.includes(role==="adopter"?'class="adopter-home-header"':'class="role-hero-art"'));
+   assert.ok(html.includes(role==="adopter"?'class="adopter-home-header"':role==="rehomer"?'class="rehomer-home-menu"':'class="role-hero-art"'));
    const anchors=[...html.matchAll(/href="([^"]+)"/g)].map(m=>m[1]);
    if(role==="adopter") assert.ok(!anchors.some(p=>/^\/(?:rehoming|reviews|admin|research|docs)(?:[/?#]|$)/.test(p)));
    if(["rehomer","reviewer"].includes(role)){assert.ok(!anchors.some(p=>/^\/(?:admin|research|docs)(?:[/?#]|$)/.test(p)));assert.ok(!anchors.includes("/dashboard#consultations"));}
@@ -59,6 +61,11 @@ const apis=[
    assert.ok((await chooser.text()).includes("ユーザーを選択してください"));
   }
  }
+ const anotherRehomerLogin=await fetch(base+"/api/demo-session",{method:"POST",headers:{"Content-Type":"application/json",Origin:base},body:JSON.stringify({userId:"rehomer-hana"})});
+ const anotherRehomerCookie=anotherRehomerLogin.headers.get("set-cookie").split(";")[0];
+ assert.equal((await fetch(base+"/reviews/adopters/adopter",{headers:{Cookie:anotherRehomerCookie}})).status,404);
+ assert.equal((await fetch(base+"/consultations/sample-consultation-1",{headers:{Cookie:anotherRehomerCookie}})).status,404);
+ assert.equal((await fetch(base+"/consultations/sample-consultation-5",{headers:{Cookie:anotherRehomerCookie}})).status,200);
  for(const cookie of ["pawmatch-demo-user=admin","pawmatch-demo-session=admin","pawmatch-demo-session="+"0".repeat(64)])assert.equal((await fetch(base+"/api/applications",{headers:{Cookie:cookie}})).status,401);
  const guide=await(await fetch(base+"/guide")).text();assert.equal((guide.match(/class="guide-step-art"/g)||[]).length,4);
  assert.ok(!guide.includes("/guide/search.webp"));

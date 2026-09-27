@@ -6,7 +6,7 @@ import { roleNavigation } from "@/lib/role-navigation";
 
 export function RoleNavigation({ user }: { user: DemoUser | null }) {
   const pathname = usePathname();
-  if (!user || pathname === "/login" || pathname.startsWith("/research/session/")) return null;
+  if (!user || pathname === "/login" || pathname.startsWith("/research/session/") || (user.role === "rehomer" && pathname === "/dashboard")) return null;
   const role = roleNavigation[user.role];
   const tasks = role.tasks.filter(task => !task.href.includes("#") && !["/pets", "/guide", "/rehoming"].includes(task.href));
   if (!tasks.length) return null;

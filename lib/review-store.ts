@@ -23,9 +23,11 @@ export async function saveReview(app:Applicant,input:unknown) {
   return mutateStore<ReviewStore,ReviewRecord>("review-v1",()=>({}),store=>{
     const previous=store[app.id]??initialReview(app);
     if(data.revision!==previous.revision)throw new Error("別の画面で更新されています。再読み込みして内容を確認してください。");
+    if(previous.decisionRecorded)throw new Error("判断が記録済みのため、この審査は更新できません。");
     const from=reviewStages.indexOf(previous.stage),to=reviewStages.indexOf(data.stage);
     if(to!==from&&to!==from+1)throw new Error("現在の工程を確認してから、次の工程へ進めてください。");
-    if(data.decisionRecorded&&data.stage!=="final_review")throw new Error("最終工程で判断を記録してください。");
+    if(data.decisionRecorded&&data.stage!=="final_review"&&data.decision!=="decline")throw new Error("最終工程で判断を記録してください。");
+    if(data.decisionRecorded&&to!==from)throw new Error("判断を記録する際は工程を進めないでください。");
     if(data.decisionRecorded&&data.decision==="approve"){
       if(Object.values(data.verification).some(v=>v!=="verified")||data.meetingChecks.some(v=>!v)||data.trialChecks.some(v=>!v))throw new Error("確認状況・面談・トライアルの確認を完了してください。");
       if(!data.riskAcknowledged)throw new Error("点数以外の根拠・残るリスクを確認し、判断理由を記録してください。");

@@ -15,7 +15,6 @@ import {
 import { PetShareActions } from "@/components/PetShareActions";
 import { currentDemoUser } from "@/lib/demo-session-server";
 import { getPets } from "@/lib/repository";
-import { getResearch } from "@/lib/research/store";
 import { criteria } from "@/lib/research/types";
 import { criterionLabels } from "@/lib/research/scoring";
 import { demoUsers } from "@/lib/demoUsers";
@@ -33,8 +32,6 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
   const owner = demoUsers.find(account => account.id === pet.ownerId);
   const species = pet.species === "Dog" ? "犬" : "猫";
   const sex = pet.sex === "Female" ? "女の子" : "男の子";
-  const isAdmin = user?.role === "admin";
-  const config = isAdmin ? (await getResearch()).config : null;
   const ageLabel = pet.birthDateApproximate ? `約${pet.age}` : pet.age;
   const factorText = {
     housing: pet.rehoming?.livingPoints?.housing ?? "飼育可能な住居と安全な生活空間を確認します。",
@@ -44,7 +41,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
     integration: pet.rehoming?.livingPoints?.integration ?? "同居者・先住動物との導入計画を確認します。",
     continuity: pet.rehoming?.livingPoints?.continuity ?? "終生飼養と緊急時の体制を確認します。",
   };
-  const factors = config ? [...criteria].sort((a, b) => config.weights[b] - config.weights[a]) : [...criteria];
+  const factors = [...criteria];
 
   return (
     <div className="page-wrap public-pet-detail">
@@ -73,7 +70,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
             </div>
           </section>
 
-          <section className="detail-section pet-factors"><span className="section-kicker">LIVING TOGETHER</span><h2>暮らしのポイント</h2><div className="pet-factor-grid">{factors.map((key, index) => <article key={key}><div><span>{String(index + 1).padStart(2, "0")}</span><strong>{criterionLabels[key]}</strong>{config && <b>重み {config.weights[key]}点</b>}</div><p>{factorText[key]}</p></article>)}</div></section>
+          <section className="detail-section pet-factors"><span className="section-kicker">LIVING TOGETHER</span><h2>暮らしのポイント</h2><div className="pet-factor-grid">{factors.map((key, index) => <article key={key}><div><span>{String(index + 1).padStart(2, "0")}</span><strong>{criterionLabels[key]}</strong></div><p>{factorText[key]}</p></article>)}</div></section>
 
           <section className="detail-section">
             <span className="section-kicker">CARE &amp; HEALTH</span><h2>健康状態と必要なケア</h2>

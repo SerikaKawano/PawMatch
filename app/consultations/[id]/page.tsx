@@ -18,11 +18,11 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
   const user = await currentDemoUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(`/consultations/${id}`)}`);
   const consultation = (await getAllConsultations()).find(item => item.id === id);
-  if (!consultation || (consultation.userId !== user.id && user.role !== "admin" && user.role !== "reviewer")) notFound();
-
   const [applications, pets] = await Promise.all([getApplicants(), getPets()]);
+  const pet = pets.find(item => item.id === consultation?.petId);
+  const maySeeAsRehomer = user.role === "rehomer" && pet?.ownerId === user.id;
+  if (!consultation || (!maySeeAsRehomer && consultation.userId !== user.id && user.role !== "admin" && user.role !== "reviewer")) notFound();
   const application = linkedApplication(consultation, applications);
-  const pet = pets.find(item => item.id === consultation.petId);
   const reviewer = demoUsers.find(item => item.id === consultation.reviewedBy);
   const response = consultation.replyMessage ?? (consultation.reviewedAt && consultation.status && consultation.status !== "received" ? consultationReply(consultation.status) : null);
   const outcome = application?.review?.decisionRecorded
@@ -30,7 +30,7 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
     : consultation.status === "closed" ? "審査前に終了" : "未判定";
 
   return <div className="page-wrap consultation-detail-page">
-    <Link href={user.role === "adopter" ? "/dashboard#consultations" : "/reviews/consultations"} className="back-link">← 相談一覧へ戻る</Link>
+    <Link href={user.role === "adopter" ? "/dashboard#consultations" : user.role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations"} className="back-link">← 相談一覧へ戻る</Link>
     <span className="section-kicker">相談・申込みの記録</span>
     <h1>{pet?.name ?? consultation.petId}への相談</h1>
     <p className={`journey-summary ${consultation.status === "closed" || outcome === "今回は見送り" ? "stopped" : application ? "active" : "waiting"}`}>{journeySummary(consultation, application)}</p>
@@ -45,7 +45,7 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
       {application?.review?.history.length ? <div className="journey-actions"><h3>担当者が記録した工程の変更</h3><ul>{application.review.history.map((entry, index) => <li key={`${entry.at}-${index}`}>{displayDate(entry.at)}：{entry.action}</li>)}</ul></div> : null}
     </section>
     <section className="journey-panel"><h2>連絡・メッセージ履歴</h2>
-      <article className="journey-message"><div><strong>あなたからの相談</strong><time dateTime={consultation.createdAt}>{displayDate(consultation.createdAt)}</time></div><p>{consultation.message}</p></article>
+      <article className="journey-message"><div><strong>{user.role === "adopter" ? "あなたからの相談" : `${demoUsers.find(item => item.id === consultation.userId)?.name ?? "里親希望者"}からの相談`}</strong><time dateTime={consultation.createdAt}>{displayDate(consultation.createdAt)}</time></div><p>{consultation.message}</p></article>
       {response && consultation.reviewedAt ? <article className="journey-message reviewer"><div><strong>{reviewer?.name ?? "審査担当者"}からの対応記録</strong><time dateTime={consultation.reviewedAt}>{displayDate(consultation.reviewedAt)}</time></div><p>{response}</p></article> : <p className="journey-no-reply">担当者からの連絡はまだありません。</p>}
     </section>
     {pet && <Link className="task-secondary" href={`/pets/${pet.id}`}>{pet.name}の詳細を見る</Link>}

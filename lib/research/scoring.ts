@@ -3,7 +3,7 @@ import { criteria, type Assessment, type ResearchCandidate, type Weights } from 
 export const RULE_VERSION = "care-evidence-1";
 export const defaultWeights: Weights = { housing: 25, time: 20, care: 15, medical: 15, integration: 15, continuity: 10 };
 export const criterionLabels = { housing: "住環境", time: "お世話の時間", care: "必要なケアへの理解", medical: "医療・費用への備え", integration: "家族・先住動物との生活", continuity: "継続飼育・緊急時対応" };
-export const evidenceLabels = { ready: "計画あり", partial: "一部不足", unknown: "情報不足", conflict: "必要条件と不一致" };
+export const evidenceLabels = { ready: "問題なし", partial: "要確認または情報不足", unknown: "情報不足", conflict: "必要条件と不一致" };
 export const verificationLabels = { identity: "本人確認", housing: "飼育可能な住居", cohabitantConsent: "同居者の同意", lifelongCare: "終生飼育への同意", followUp: "譲渡後の連絡への同意" };
 export const verificationStateLabels = { verified: "確認済み", pending: "確認待ち", not_provided: "情報なし" };
 const multiplier = { ready: 1, partial: 0.5, unknown: 0, conflict: 0 };

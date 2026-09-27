@@ -98,12 +98,17 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       assert.ok(!html.includes('class="role-nav-links"'));
       assert.ok(!html.split('class="adopter-home-header"')[1].split('</header>')[0].includes('href="/pets"'));
       for (const old of ["里親希望者のホーム", "里親希望者としてログイン中", "目的に合わせて選ぶ", "あなたの利用状況", 'class="dashboard-user"']) assert.ok(!html.includes(old));
+    } else if (role === "rehomer") {
+      const menu = html.split('class="rehomer-home-menu"')[1]?.split('</nav>')[0];
+      assert.ok(menu);
+      for (const href of ["/rehoming", "/reviews/progress", "/rehoming/consultations"]) assert.ok(menu.includes(`href="${href}"`));
+      assert.equal((menu.match(/href="/g) || []).length, 3);
     } else {
       const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];
       assert.ok(nextTask.includes('href="' + target + '"'));
     }
     assert.ok(!html.includes('aria-label="現在地"'));
-    if (role === "adopter") assert.ok(!html.includes('class="role-navigation"'));
+    if (role === "adopter" || role === "rehomer") assert.ok(!html.includes('class="role-navigation"'));
     else {
       const shortcuts = html.split('class="role-nav-links"')[1]?.split("</nav>")[0];
       assert.ok(shortcuts);
@@ -117,7 +122,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   }
   const progress = await (await fetch(base + "/reviews/progress?pet=momo", {headers:{Cookie:reviewCookie}})).text();
   assert.equal((progress.match(/class="pipeline-open"/g) || []).length, 4);
-  assert.ok(progress.includes("この審査を開く"));
+  assert.ok(progress.includes("審査進捗ボード") && progress.includes("各工程で確認すること"));
   assert.ok(!progress.includes("ここから審査を進めます"));
   const comparisons = await (await fetch(base + "/reviews?pet=momo", {headers:{Cookie:reviewCookie}})).text();
   assert.ok(comparisons.includes("この申込みの確認・記録へ"));
@@ -125,8 +130,9 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   const workflow = await (await fetch(base + "/reviews/app-aiko", {headers:{Cookie:reviewCookie}})).text();
   assert.ok(workflow.includes("内容を保存（工程は進めない）"));
   assert.ok(workflow.includes("review-state-banner"));
+  assert.ok(workflow.includes("次の工程へ進める") && workflow.includes("今回は見送る"));
   const adminPet = await (await fetch(base + "/pets/momo", { headers: { Cookie: adminCookie } })).text();
-  assert.ok(adminPet.includes(">重み "));
+  assert.ok(!adminPet.includes(">重み "));
   const reviewerPet = await (await fetch(base + "/pets/momo", { headers: { Cookie: reviewCookie } })).text();
   assert.ok(!reviewerPet.includes(">重み "));
   const guest = await fetch(base + "/rehoming", { redirect: "manual" });

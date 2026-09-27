@@ -1,7 +1,7 @@
 import { canAccess } from "@/lib/permissions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, BarChart3, ClipboardList, PawPrint, ShieldCheck } from "lucide-react";
+import { ArrowRight, BarChart3, ClipboardList, MessageCircle, PawPrint, ShieldCheck } from "lucide-react";
 import { currentDemoUser } from "@/lib/demo-session-server";
 import { getConsultations } from "@/lib/consultations";
 import { ConsultationHistory } from "@/components/ConsultationHistory";
@@ -21,6 +21,14 @@ export default async function DashboardPage() {
     const [profile, documents, consultations, applications, pets] = await Promise.all([getAdopterProfile(user), listAdopterDocuments(user.id), getConsultations(user.id), getApplicants(), getPets()]);
     return <AdopterHome initialProfile={profile} initialDocuments={documents} consultations={consultations} applications={applications.filter(application => application.userId === user.id)} petNames={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} />;
   }
+  if (user.role === "rehomer") return <div className="rehomer-home page-wrap">
+    <header className="rehomer-home-intro"><span className="section-kicker">譲渡者のホーム</span><h1>{user.name}さん</h1><p>掲載、審査、相談を確認できます。</p></header>
+    <nav className="rehomer-home-menu" aria-label="譲渡者のメニュー">
+      <Link href="/rehoming" className="listing"><span className="rehomer-menu-icon"><PawPrint /></span><span><strong>掲載中のペット一覧</strong><small>自分が掲載しているペットと届いた申込みを見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
+      <Link href="/reviews/progress" className="progress"><span className="rehomer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>受付から最終判断までの現在地を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
+      <Link href="/rehoming/consultations" className="enquiries"><span className="rehomer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>掲載ペットについて届いた相談と対応状況を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
+    </nav>
+  </div>;
   const [allApplications, allPets, consultations] = await Promise.all([canAccess(user, "review") ? getApplicants() : Promise.resolve([]), getPets(), canAccess(user, "consult") ? getConsultations(user.id) : Promise.resolve([])]);
   const applications = visibleApplications(user, allApplications, allPets);
   const pets = visiblePets(user, allPets);

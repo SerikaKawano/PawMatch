@@ -741,6 +741,52 @@ const english: Record<string, string> = {
   "送信後は変更できません。未送信の入力は再読み込みで失われます。": "You cannot change a submitted answer. Unsaved input is lost on reload.",
   "回答を削除して参加を中止": "Delete answers and withdraw",
   "このセッションの回答を削除して参加を中止しますか？": "Delete this session's answers and withdraw?",
+  "掲載、審査、相談を確認できます。": "Review listings, applications and enquiries.",
+  "掲載中のペット一覧": "Listed pets",
+  "自分が掲載しているペットと届いた申込みを見る": "View your listed pets and their applications",
+  "受付から最終判断までの現在地を見る": "See each application's stage from receipt to decision",
+  "届いた相談を見る": "Incoming enquiries",
+  "掲載ペットについて届いた相談と対応状況を見る": "View enquiries and responses for your pets",
+  "譲渡者の相談一覧": "Rehomer enquiries",
+  "掲載ペットに届いた相談の内容と、その後の対応状況を確認できます。": "Review enquiries about your pets and what happened next.",
+  "相談終了": "Enquiry closed",
+  "事前情報を依頼済み": "Profile requested",
+  "受付済み": "Received",
+  "届いた相談はまだありません。": "No enquiries have arrived yet.",
+  "受付から最終判断までの進捗を一目で確認できます。": "See progress from receipt to final decision at a glance.",
+  "各工程で確認すること": "What each stage checks",
+  "申込みの内容と生活計画を受け付け、不足する回答を整理します。": "Receive the application and living plan; note missing answers.",
+  "ペットに必要なケアと希望者の計画を照らし、重要な不一致や質問を整理します。": "Compare the pet's needs with the applicant's plan and identify key questions.",
+  "本人確認、住居の飼育許可、同居者の同意など、確認項目の状態を記録します。": "Record identity, housing permission, household consent and other checks.",
+  "会話や住環境を通して、実際のお世話の体制を確かめます。": "Use the meeting and home check to examine the practical care plan.",
+  "一定期間一緒に暮らし、ケアの継続や相性を確認します。": "Use the trial period to assess ongoing care and compatibility.",
+  "残る確認事項と双方の合意を踏まえ、担当者が理由を記録します。": "The reviewer records a reasoned decision after outstanding checks and mutual agreement.",
+  "申込者": "Applicant",
+  "開く": "Open",
+  "申込みの確認": "Application review",
+  "申込者のプロフィール": "Applicant profile",
+  "← 審査ケースに戻る": "← Back to review case",
+  "家族・支援体制": "Household and support",
+  "お世話に使える時間": "Time available for care",
+  "飼育経験・必要なケア": "Experience and care needs",
+  "先住動物との生活": "Existing pets",
+  "通院と健康管理": "Veterinary care and health",
+  "飼育費・医療費の備え": "Care and medical costs",
+  "現在のフェーズ": "Current stage",
+  "暮らしの計画": "Living plan",
+  "ペットの条件と応募者の計画を照らし、要確認事項を整理する": "Compare the pet's needs with the applicant's plan and list outstanding checks.",
+  "詳細を確認の上、進行可否を判断してください。": "Review the details before deciding whether to proceed.",
+  "確認項目と要確認事項": "Review criteria and outstanding checks",
+  "要確認事項": "Items to check",
+  "確認済みの情報": "Information reviewed",
+  "点数だけで譲渡の可否は決めません。各項目の内容と要確認事項を確認してください。": "The score does not decide adoption. Review each criterion and outstanding item.",
+  "現時点で記録された要確認事項はありません。面談などの確認は続けます。": "No outstanding item is currently recorded. Continue with the meeting and other checks.",
+  "問題なし": "No issue identified",
+  "要確認または情報不足": "Check needed or information missing",
+  "次の工程へ進める": "Move to next stage",
+  "この審査の判断は記録済みです。": "A decision has been recorded for this case.",
+  "見送りを記録しました。": "The decision to decline was recorded.",
+  "判断が記録済みのため、この審査は更新できません。": "This case cannot be changed after a decision is recorded.",
 };
 
 const exact = Object.freeze({ ...english, ...petCaseTranslations, ...researchCaseTranslations, ...researchResultsTranslations, ...adopterCopyTranslations });
@@ -758,6 +804,10 @@ export function translateText(value: string): string {
   if ((match = source.match(/^申込みを受け付け、現在は「(.+)」です。最終判断はまだ記録されていません。$/))) return left + `Application received. Current stage: ${translateText(match[1])}. No final decision has been recorded.` + right;
   if ((match = source.match(/^(.+)に受付$/))) return left + `Received on ${match[1]}` + right;
   if ((match = source.match(/^(.+)からの対応記録$/))) return left + `Response record from ${match[1]}` + right;
+  if ((match = source.match(/^(.+)からの相談$/))) return left + `Enquiry from ${match[1]}` + right;
+  if ((match = source.match(/^(.+)への申込み時に記録された内容です。$/))) return left + `Information recorded with the application for ${match[1]}.` + right;
+  if ((match = source.match(/^相談者：(.+) · (.+)$/))) return left + `Applicant: ${match[1]} · ${match[2]}` + right;
+  if ((match = source.match(/^重要な確認 (\d+)件。詳細を確認の上、進行可否を判断してください。$/))) return left + `${match[1]} important item(s) to check. Review the details before deciding whether to proceed.` + right;
   if ((match = source.match(/^(.+) (\d+)件の内容を見る$/))) return left + `View ${match[2]} ${translateText(match[1]).toLowerCase()}` + right;
   if ((match = source.match(/^重み (\d+)点 · (\d+)点取得$/))) return left + `Weight ${match[1]} points · Earned ${match[2]} points` + right;
   if ((match = source.match(/^保存して「(.+)」へ進む$/))) return left + `Save and move to ${translateText(match[1])}` + right;
