@@ -38,10 +38,11 @@ const adopterCases: Record<string, { userId: DemoUserId; stage: Applicant["stage
   "pending-b": { userId: "adopter-ethan", stage: "risk_review" },
   "multi-c": { userId: "adopter-grace", stage: "verification" },
   "preference-a": { userId: "adopter-oliver", stage: "trial" },
-  "emergency-a": { userId: "adopter-ava", stage: "screening" },
-  "equivalent-c": { userId: "adopter-liam", stage: "final_review" },
-  "senior-c": { userId: "adopter-mia", stage: "risk_review" },
-  "active-d": { userId: "adopter-jack", stage: "trial" },
+  "active-d": { userId: "adopter-jack", stage: "final_review" },
+};
+const adopterSubmittedDates: Partial<Record<DemoUserId, string>> = {
+  adopter: "2026-09-03", "adopter-olivia": "2026-09-07", "adopter-amelia": "2026-09-07",
+  "adopter-ethan": "2026-09-11", "adopter-grace": "2026-09-15", "adopter-oliver": "2026-09-16", "adopter-jack": "2026-09-13",
 };
 export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario.candidates.map((candidate,i)=>{
   const assessment=assess(candidate);
@@ -49,7 +50,7 @@ export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario
   return {
     id:aliases[candidate.id]??"app-"+candidate.id,petId:scenario.petId,
     name: linked ? demoUsers.find(user => user.id === linked.userId)!.name : candidate.name,
-    userId: linked?.userId, submittedAt:"2026-09-"+String(index*3+i+1).padStart(2,"0"),
+    userId: linked?.userId, submittedAt:linked ? adopterSubmittedDates[linked.userId]! : "2026-09-"+String(index*3+i+1).padStart(2,"0"),
     household:candidate.household,housing:candidate.evidence.housing.detail,experience:candidate.evidence.care.detail,
     availability:candidate.evidence.time.detail,existingPets:candidate.evidence.integration.detail,
     veterinaryAccess:candidate.evidence.medical.detail,financialReadiness:candidate.evidence.medical.detail,

@@ -58,6 +58,10 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     assert.ok(detail.includes("pet-primary-actions"));
     assert.ok(detail.includes("健康状態と必要なケア"));
     assert.ok(detail.includes("暮らしのポイント"));
+    assert.ok(!detail.includes("ペットのプロファイルを里親希望者のプロファイルと照らし合わせて確認・審査を行います。"));
+    assert.ok(!detail.includes('class="detail-meta"'));
+    assert.ok(detail.includes("トライアル期間と費用"));
+    assert.ok(detail.includes("性別"));
     assert.ok(detail.includes("LIVING TOGETHER"));
     assert.ok(detail.includes("譲渡に至った経緯とお迎えの条件"));
     assert.ok(!detail.includes("これまでの経緯とお迎えの条件"));

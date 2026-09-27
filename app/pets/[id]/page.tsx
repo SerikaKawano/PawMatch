@@ -9,6 +9,7 @@ import {
   MessageCircle,
   PawPrint,
   Stethoscope,
+  UserRound,
   UserRoundCheck,
 } from "lucide-react";
 import { PetShareActions } from "@/components/PetShareActions";
@@ -58,13 +59,13 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
             <div className="pet-profile-copy">
               <div className="detail-label-row"><span className="listing-status">里親募集中</span><span>掲載番号 {pet.listingNumber}</span></div>
               <div className="detail-title"><h1>{pet.name}</h1></div>
-              <p className="detail-meta">{pet.breed} ・ {ageLabel} ・ {sex}</p>
               <p className="location"><MapPin size={20} />{pet.location}</p>
               <div className="pet-primary-actions">{canConsult && <Link href={`/pets/${pet.id}/consult`} className="task-primary">{uiCopy.contactPet(pet.name)} <MessageCircle size={22} /></Link>}{canReview && <Link href={`/reviews?pet=${pet.id}`} className="task-secondary">担当者向け：この子への申込みを確認</Link>}{!canConsult && !canReview && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
               <div className="tag-row">{pet.temperament.map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div>
               <div className="profile-facts">
-                <div><PawPrint /><span>種類</span><strong>{species}</strong></div>
+                <div><PawPrint /><span>種類</span><strong>{species}・{pet.breed}</strong></div>
                 <div><CalendarDays /><span>出生年月日</span><strong>{pet.birthDate}（{ageLabel}）</strong></div>
+                <div><UserRound /><span>性別</span><strong>{sex}</strong></div>
                 <div><Home /><span>募集地域</span><strong>{pet.location.split(" ")[0]}</strong></div>
                 <div><PawPrint /><span>血統書</span><strong>{pet.rehoming?.pedigree ?? "未確認"}</strong></div>
               </div>
@@ -72,7 +73,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
             </div>
           </section>
 
-          <section className="detail-section pet-factors"><span className="section-kicker">LIVING TOGETHER</span><h2>暮らしのポイント</h2><p>ペットのプロファイルを里親希望者のプロファイルと照らし合わせて確認・審査を行います。</p><div className="pet-factor-grid">{factors.map((key, index) => <article key={key}><div><span>{String(index + 1).padStart(2, "0")}</span><strong>{criterionLabels[key]}</strong>{config && <b>重み {config.weights[key]}点</b>}</div><p>{factorText[key]}</p></article>)}</div></section>
+          <section className="detail-section pet-factors"><span className="section-kicker">LIVING TOGETHER</span><h2>暮らしのポイント</h2><div className="pet-factor-grid">{factors.map((key, index) => <article key={key}><div><span>{String(index + 1).padStart(2, "0")}</span><strong>{criterionLabels[key]}</strong>{config && <b>重み {config.weights[key]}点</b>}</div><p>{factorText[key]}</p></article>)}</div></section>
 
           <section className="detail-section">
             <span className="section-kicker">CARE &amp; HEALTH</span><h2>健康状態と必要なケア</h2>
@@ -96,7 +97,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
             <h3 className="detail-subheading">譲渡者からのメッセージ</h3>
             <p className="rehomer-message">{pet.rehoming?.conditionsMessage}</p>
             <h3 className="detail-subheading">その他</h3>
-            <p className="rehomer-message">{pet.rehoming?.trial} {pet.rehoming?.fees}</p>
+            <div className="rehomer-message"><h4 className="detail-minor-heading">トライアル期間と費用</h4><p>{pet.rehoming?.trial}</p><p>{pet.rehoming?.fees}</p></div>
           </section>
 
           <section className="detail-section provider-section">

@@ -8,6 +8,8 @@ const { uiCopy } = load("lib/ui-copy.ts");
 const { initialAdopterProfile } = load("lib/adopter-profile.ts");
 const { demoUsers } = load("lib/demoUsers.ts");
 const { sampleConsultations } = load("lib/consultations.ts");
+const { applicants } = load("lib/seed.ts");
+const { linkedApplication, journeySummary } = load("lib/consultation-journey.ts");
 
 test("shared Japanese actions have consistent English labels", () => {
   assert.equal(translateText(uiCopy.findPets), "Find a pet to adopt");
@@ -65,4 +67,9 @@ test("prepared adopter profiles and consultation messages have English copy", ()
     }
   }
   for (const consultation of sampleConsultations) assert.doesNotMatch(translateText(consultation.message), /[ぁ-んァ-ン一-龯]/);
+  for (const consultation of sampleConsultations) {
+    assert.doesNotMatch(translateText(journeySummary(consultation, linkedApplication(consultation, applicants))), /[ぁ-んァ-ン一-龯]/);
+    if (consultation.replyMessage) assert.doesNotMatch(translateText(consultation.replyMessage), /[ぁ-んァ-ン一-龯]/);
+  }
+  assert.equal(translateText("犬・ゴールデン・レトリバー"), "Dog · Golden Retriever");
 });

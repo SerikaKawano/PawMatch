@@ -39,6 +39,19 @@ async function cookieFor(userId) {
   assert.ok(reviewerProfile.includes("Noah Williams"));
   assert.ok(reviewerProfile.includes("住居の飼育許可"));
   assert.equal((await fetch(base + "/reviews/adopters/adopter", { headers: { Cookie: rehomer }, redirect: "manual" })).status, 307);
+  const myDashboard = await (await fetch(base + "/dashboard", { headers: { Cookie: adopter } })).text();
+  assert.ok(myDashboard.includes("基本プロフィール"));
+  assert.ok(myDashboard.includes("詳細"));
+  assert.ok(myDashboard.includes('href="/consultations/sample-consultation-1"'));
+  const journey = await (await fetch(base + "/consultations/sample-consultation-1", { headers: { Cookie: adopter } })).text();
+  for (const label of ["進捗タイムライン", "連絡・メッセージ履歴", "申込み受付", "最終判断", "2026/09/03"]) assert.ok(journey.includes(label), label);
+  assert.equal((await fetch(base + "/consultations/sample-consultation-1", { headers: { Cookie: otherAdopter } })).status, 404);
+  assert.equal((await fetch(base + "/consultations/sample-consultation-1", { headers: { Cookie: reviewer } })).status, 200);
+  assert.equal((await fetch(base + "/consultations/sample-consultation-1", { headers: { Cookie: rehomer } })).status, 404);
+  const liam = await cookieFor("adopter-liam");
+  const ended = await (await fetch(base + "/consultations/sample-consultation-8", { headers: { Cookie: liam } })).text();
+  assert.ok(ended.includes("この相談は審査フェーズには進まず終了しました。"));
+  assert.ok(ended.includes("審査前に終了"));
   assert.equal((await fetch(base + `/api/adopter-documents/${document.id}`, { method: "DELETE", headers: { Cookie: otherAdopter, Origin: base } })).status, 404);
 
   const identity = await fetch(base + "/api/adopter-profile/identity", { method: "POST", headers: { Cookie: adopter, Origin: base } });

@@ -26,7 +26,7 @@ test("every persona has an actionable primary destination", () => {
   assert.equal(demoUsers.find(user => user.id === "admin").name, "Serika Kawano");
   for (const role of ["reviewer", "rehomer", "adopter"]) assert.ok(demoUsers.filter(user => user.role === role).length >= 2);
   assert.equal(demoUsers.filter(user => user.role === "adopter").length, 10);
-  assert.equal(applicants.filter(application => application.userId?.startsWith("adopter")).length, 10);
+  assert.equal(applicants.filter(application => application.userId?.startsWith("adopter")).length, 7);
   assert.equal(new Set(applicants.filter(application => application.userId).map(application => application.stage)).size, 6);
   assert.equal(demoUsers.filter(user => user.role === "rehomer" && user.kind === "individual").length, 4);
   assert.equal(roleNavigation.adopter.tasks[0].href, "/pets");

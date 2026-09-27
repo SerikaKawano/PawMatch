@@ -324,6 +324,10 @@ small { font-size: 17px; }
 .public-pet-detail .pet-data-grid .pet-data-wide { grid-column: 1 / -1; }
 .rehomer-message { margin: 0 0 18px; padding: 20px 22px; border-left: 5px solid #dfbac5; border-radius: 8px; background: #fff8f4; font-size: 18px; line-height: 1.8; }
 .pet-profile-copy .profile-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pet-profile-copy .profile-facts > div:last-child { grid-column: 1 / -1; }
+.detail-minor-heading { margin: 0 0 8px; font-size: 20px; }
+.rehomer-message p { margin: 0 0 8px; }
+.rehomer-message p:last-child { margin-bottom: 0; }
 @media (max-width: 760px) { .pet-profile-copy .profile-facts { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .public-hero-photo { background-position: 65% center; } }
 

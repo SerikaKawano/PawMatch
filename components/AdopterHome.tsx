@@ -20,6 +20,9 @@ const profileFields: { key: keyof AdopterProfileFields; label: string; multiline
   { key: "veterinaryPlan", label: "通院・健康管理の計画", multiline: true }, { key: "careBudget", label: "飼育費・医療費への備え", multiline: true },
   { key: "adoptionReason", label: "お迎えを希望する理由", multiline: true }, { key: "emergencyPlan", label: "緊急時の対応", multiline: true },
 ];
+const basicProfileFields = profileFields.slice(0, 6);
+const detailProfileFields = profileFields.slice(6);
+const detailLimit = (key: keyof AdopterProfileFields) => ["careExperience", "dailyCare", "veterinaryPlan", "careBudget", "adoptionReason", "emergencyPlan"].includes(key) ? 500 : 300;
 
 export function AdopterHome({ initialProfile, initialDocuments, consultations, applications, petNames }: { initialProfile: AdopterProfile; initialDocuments: AdopterDocumentSummary[]; consultations: Consultation[]; applications: Applicant[]; petNames: Record<string, string> }) {
   const router = useRouter();
@@ -83,12 +86,23 @@ export function AdopterHome({ initialProfile, initialDocuments, consultations, a
     <p className="adopter-home-status" role="status" aria-live="polite">{notice}</p>
     <div className="adopter-home-grid">
       <section className="adopter-profile-card"><div className="adopter-card-heading"><h2>自分のプロフィール</h2><button type="button" className="task-secondary" onClick={() => { setEditing(value => !value); setNotice(""); }}>{editing ? "表示に戻る" : "編集する"}</button></div>
-        {editing ? <form className="adopter-profile-form" onSubmit={saveProfile}>{profileFields.map(field => <label key={field.key}>{field.label}{field.multiline ? <textarea required maxLength={500} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} /> : <input required maxLength={field.key === "fullName" ? 80 : field.key === "contact" ? 254 : field.key === "employment" ? 200 : 50} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} />}</label>)}<button className="task-primary" disabled={busy}>プロフィールを保存</button></form> : <dl className="adopter-profile-facts">{profileFields.map(field => <div key={field.key}><dt>{field.label}</dt><dd>{profile[field.key] || "未入力"}</dd></div>)}</dl>}
+        {editing ? <form className="adopter-profile-form" onSubmit={saveProfile}>
+          <h3>基本プロフィール <small>すべて必須</small></h3>
+          {basicProfileFields.map(field => <label key={field.key}>{field.label}<input required maxLength={field.key === "fullName" ? 80 : field.key === "contact" ? 254 : field.key === "employment" ? 200 : 50} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} /></label>)}
+          <h3>詳細 <small>任意</small></h3>
+          {detailProfileFields.map(field => <label key={field.key}>{field.label}<textarea maxLength={detailLimit(field.key)} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} /></label>)}
+          <button className="task-primary" disabled={busy}>プロフィールを保存</button>
+        </form> : <div className="adopter-profile-tables">
+          <h3>基本プロフィール</h3>
+          <table className="adopter-profile-table"><tbody>{basicProfileFields.map(field => <tr key={field.key}><th scope="row">{field.label}</th><td>{profile[field.key] || "未入力"}</td></tr>)}</tbody></table>
+          <h3>詳細 <small>任意</small></h3>
+          <table className="adopter-profile-table"><tbody>{detailProfileFields.map(field => <tr key={field.key}><th scope="row">{field.label}</th><td>{profile[field.key] || "未入力"}</td></tr>)}</tbody></table>
+        </div>}
       </section>
       <div className="adopter-home-side"><section className="adopter-documents-card"><div className="adopter-card-heading"><h2><FileText size={23} />書類</h2><span>{`${documents.length}/5件`}</span></div><p>登録済み書類は管理者・審査担当者が閲覧できます。飼育計画などの一般書類のみ登録してください。本人確認書類、顔写真、住所や収入の分かる書類は登録しないでください。</p><form onSubmit={upload} className="adopter-upload-form"><label>書類名<input required maxLength={80} value={label} onChange={event => setLabel(event.target.value)} placeholder="例：お世話の計画" /></label><label>ファイル（PDF・PNG・JPEG、2MB以下）<input id="adopter-document-file" type="file" required accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" onChange={event => setFile(event.target.files?.[0] ?? null)} /></label><button type="submit" className="task-primary" disabled={busy || !file || documents.length >= 5}><Upload size={20} />書類を登録</button></form>{!documents.length ? <p className="adopter-empty">登録した書類はありません。</p> : <ul className="adopter-document-list">{documents.map(item => <li key={item.id}><div><strong>{item.label}</strong><a href={`/api/adopter-documents/${item.id}`}>{item.filename}</a><small>{Math.ceil(item.size / 1024)} KB · {new Date(item.uploadedAt).toLocaleDateString("ja-JP")}</small></div>{!item.id.startsWith("sample-") && <button type="button" className="decision-button outline" disabled={busy} onClick={() => remove(item.id)}>削除</button>}</li>)}</ul>}</section>
       <section className="adopter-identity-card"><div className="adopter-card-heading"><h2><ShieldCheck size={23} />本人確認</h2><span className={`identity-state ${profile.identityStatus}`}>{profile.identityStatus === "verified" ? "確認済み" : profile.identityStatus === "pending" ? "担当者の確認待ち" : "未申請"}</span></div><p>登録情報を確認後、担当者に本人確認を依頼できます。実物の確認は対面等で行い、ここには結果だけを記録します。</p>{profile.identityStatus === "not_requested" && <button type="button" className="task-secondary" disabled={busy} onClick={requestIdentity}>本人確認を申請する</button>}{profile.identityStatus === "verified" && <p className="adopter-verified">担当者が確認結果を記録しました。</p>}</section></div>
     </div>
-    <ConsultationHistory records={consultations} names={petNames} title="相談、申込履歴" />
+    <ConsultationHistory records={consultations} names={petNames} applications={applications} title="相談、申込履歴" />
     <section className="adopter-application-history"><h2>審査の進捗</h2>{applications.length ? <ul>{applications.map(application => <li key={application.id}><strong>{petNames[application.petId] ?? application.petId}</strong><span className={`application-stage ${application.review?.decisionRecorded && application.review.decision === "decline" ? "stopped" : application.review?.decisionRecorded && application.review.decision === "approve" ? "done" : "active"}`}>{application.review?.decisionRecorded ? application.review.decision === "approve" ? "譲渡へ進める判断" : application.review.decision === "decline" ? "今回は見送り" : "追加確認中" : stageLabels[application.stage]}</span><small>{`申込日：${application.submittedAt}`}</small></li>)}</ul> : <p>審査中の申込みはありません。</p>}</section>
   </div>;
 }

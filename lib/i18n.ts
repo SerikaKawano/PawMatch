@@ -458,6 +458,23 @@ const english: Record<string, string> = {
   "属性だけで譲渡の可否を判断しないでください。": "Do not decide adoption from personal characteristics alone.",
   "登録情報、確認状況、提出書類を確認します。属性だけで譲渡の可否を判断しないでください。": "Review registered information, verification status and submitted documents. Do not decide from personal characteristics alone.",
   "プロフィール": "Profile", "登録済み書類": "Registered documents", "審査の進捗": "Review progress", "審査中の申込みはありません。": "No applications are under review.",
+  "基本プロフィール": "Basic profile", "すべて必須": "All required", "詳細": "Additional details", "任意": "Optional",
+  "トライアル期間と費用": "Trial period and fees",
+  "相談・申込みの記録": "Enquiry and application record", "← 相談一覧へ戻る": "← Back to enquiries",
+  "進捗タイムライン": "Progress timeline", "連絡・メッセージ履歴": "Contact and message history",
+  "審査担当者の確認": "Reviewer check", "申込みの受付": "Application received", "申込み前": "Not yet applied", "未判定": "No decision yet",
+  "審査前に終了": "Ended before review", "審査に進まず終了": "Ended before review", "審査前終了": "Ended before review",
+  "日時未記録": "Date not recorded", "更新日時の記録なし": "Update date not recorded",
+  "担当者が記録した工程の変更": "Stage changes recorded by the reviewer",
+  "あなたからの相談": "Your enquiry", "担当者からの連絡はまだありません。": "There is no response from the reviewer yet.",
+  "この相談は審査フェーズには進まず終了しました。": "This enquiry ended before the application review stage.",
+  "事前情報の提出待ちです。審査はまだ始まっていません。": "Profile information is awaited. Application review has not started.",
+  "担当者の確認待ちです。審査はまだ始まっていません。": "The reviewer has not yet checked this enquiry. Application review has not started.",
+  "担当者が譲渡へ進める判断を記録しました。": "The reviewer recorded a decision to proceed towards adoption.",
+  "担当者が今回は見送りと判断しました。": "The reviewer recorded a decision not to proceed.",
+  "担当者が追加確認・保留を記録しました。": "The reviewer recorded a hold for further checks.",
+  "ご相談ありがとうございました。今回は相談段階で終了し、審査には進んでいません。": "Thank you for your enquiry. It ended at the enquiry stage and did not proceed to application review.",
+  "ご相談を確認しました。プロフィールと必要な情報をご提出ください。内容を確認して審査の手続きへ進みます。": "We have reviewed your enquiry. Please submit your profile and the requested information so the application can be considered for review.",
   "相談の進捗": "Enquiry progress",
   "審査担当者が次の手続きへ進めました。事前情報の提出が済むまで、適合性の審査は始まりません。": "The reviewer has moved this enquiry to the next step. Suitability review will not begin until the requested profile information is submitted.",
   "この相談は終了しました。必要な場合は新しくお問い合わせください。": "This enquiry is closed. Please make a new enquiry if needed.",
@@ -737,6 +754,10 @@ export function translateText(value: string): string {
   if (direct !== undefined) return left + direct + right;
   let match: RegExpMatchArray | null;
   if ((match = source.match(/^(.+?)について問い合わせる$/))) return left + `Enquire about ${match[1]}` + right;
+  if ((match = source.match(/^([犬猫])・(.+)$/))) return left + `${match[1] === "犬" ? "Dog" : "Cat"} · ${translateText(match[2])}` + right;
+  if ((match = source.match(/^申込みを受け付け、現在は「(.+)」です。最終判断はまだ記録されていません。$/))) return left + `Application received. Current stage: ${translateText(match[1])}. No final decision has been recorded.` + right;
+  if ((match = source.match(/^(.+)に受付$/))) return left + `Received on ${match[1]}` + right;
+  if ((match = source.match(/^(.+)からの対応記録$/))) return left + `Response record from ${match[1]}` + right;
   if ((match = source.match(/^(.+) (\d+)件の内容を見る$/))) return left + `View ${match[2]} ${translateText(match[1]).toLowerCase()}` + right;
   if ((match = source.match(/^重み (\d+)点 · (\d+)点取得$/))) return left + `Weight ${match[1]} points · Earned ${match[2]} points` + right;
   if ((match = source.match(/^保存して「(.+)」へ進む$/))) return left + `Save and move to ${translateText(match[1])}` + right;

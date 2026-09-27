@@ -18,6 +18,9 @@ test("adopter profiles remain separate and identity requires a reviewer record",
   assert.equal(original.identityStatus, "not_requested");
   const updated = await profileStore.saveAdopterProfile(noah, { fullName: "Noah Williams", region: "東京都", household: "大人2名", housing: "ペット可住宅", careExperience: "犬の飼育経験あり", dailyCare: "朝夕に世話", emergencyPlan: "家族が支援" });
   assert.equal(updated.housing, "ペット可住宅");
+  assert.equal((await profileStore.saveAdopterProfile(noah, { household: "", housing: "", careExperience: "" })).household, "");
+  await assert.rejects(profileStore.saveAdopterProfile(noah, { fullName: "" }));
+  await assert.rejects(profileStore.saveAdopterProfile(noah, { region: "" }));
   assert.equal((await profileStore.getAdopterProfile(olivia)).fullName, "Olivia Parker");
   assert.equal((await profileStore.requestIdentityReview(noah)).identityStatus, "pending");
   assert.equal((await profileStore.getPendingIdentityProfiles()).length, 1);
