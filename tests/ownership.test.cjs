@@ -19,8 +19,14 @@ test("each synthetic pet belongs to one demo rehomer, with realistic account siz
 
 test("pet profiles contain useful health details with explicit record status", () => {
   assert.equal(pets.filter(pet => pet.health?.evidenceStatus === "確認済").length, 6);
+  assert.equal(pets.filter(pet => pet.birthDateApproximate).length, 4);
+  assert.equal(new Set(pets.map(pet => pet.listingNumber)).size, pets.length);
   for (const pet of pets) {
+    assert.match(pet.listingNumber, /^[A-Z0-9]{8}$/);
+    assert.match(pet.birthDate, /^20\d{2}年\d{1,2}月(?:\d{1,2}日|頃)$/);
     assert.ok(pet.health?.medicalHistory);
+    assert.ok(pet.health?.vaccinationHistory?.length >= 4);
+    assert.ok(pet.health?.recordEvidence?.length >= 4);
     assert.ok(pet.health?.medicalRecords?.length);
     assert.ok(pet.health?.vaccinations);
     assert.match(pet.health.evidenceStatus, /^(確認済|未確認)$/);
@@ -29,6 +35,10 @@ test("pet profiles contain useful health details with explicit record status", (
     assert.ok(pet.rehoming?.pedigree);
     assert.ok(pet.rehoming?.compatibility);
     assert.ok(pet.rehoming?.requirements?.length);
+    assert.ok(pet.rehoming?.story?.length > 60);
+    assert.ok(pet.rehoming?.conditionsMessage?.length > 50);
+    assert.equal(Object.keys(pet.rehoming?.livingPoints ?? {}).length, 6);
+    for (const text of Object.values(pet.rehoming?.livingPoints ?? {})) assert.ok(text.length > 28);
   }
 });
 

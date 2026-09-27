@@ -31,8 +31,8 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   assert.ok(!guide.includes("図はSVGアイコンです。"));
   const listings = await (await fetch(base + "/pets")).text();
   assert.ok(listings.includes("里親募集中のペットたち"));
-  assert.ok(listings.includes("・「写真・条件を見る」ボタンから詳細を確認できます"));
-  assert.ok(!listings.includes("写真・名前・「写真・条件を見る」ボタンから詳細へ。"));
+  assert.ok(listings.includes("・「詳細を見る」ボタンから募集内容を確認できます"));
+  assert.ok(!listings.includes("写真・条件を見る"));
   const login = await (await fetch(base + "/login")).text();
   for (const name of ["Serika Kawano", "Sophie Bennett", "Alex Morgan", "Noah Williams", "Olivia Parker"]) assert.ok(login.includes(name));
   const { data: pets } = await (await fetch(base + "/api/pets")).json();
@@ -46,7 +46,10 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     assert.ok(detail.includes(pet.name));
     assert.ok(detail.includes("pet-primary-actions"));
     assert.ok(detail.includes("健康状態と必要なケア"));
-    assert.ok(detail.includes("暮らしとケアのポイント"));
+    assert.ok(detail.includes("暮らしのポイント"));
+    assert.ok(detail.includes(pet.listingNumber));
+    assert.ok(detail.includes("譲渡に出すことになった経緯"));
+    assert.ok(!detail.includes("お迎え前に確認する条件"));
     assert.ok(!detail.includes(">重み "));
     assert.ok(!detail.includes("この画像はモック用に生成した"));
     assert.ok(!detail.includes('class="favorite-button"'));

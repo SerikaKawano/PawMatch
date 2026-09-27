@@ -3,6 +3,7 @@ import { scenarios } from "./research/scenarios";
 import { assess } from "./research/scoring";
 import { reviewStages } from "./review-store";
 import { petProfiles } from "./pet-profiles";
+import { petEditorial } from "./pet-editorial";
 
 const petOwners: Record<string, Pet["ownerId"]> = {
   momo: "rehomer", yuki: "rehomer", sora: "rehomer", kai: "rehomer",
@@ -22,6 +23,11 @@ export const pets: Pet[] = scenarios.map((scenario,index)=>({
   imageUrl:"/pets/"+scenario.petId+".webp",
   accent:index%2?"peach":"sage",applications:scenario.candidates.length,
   ...petProfiles[scenario.petId],
+  listingNumber: petEditorial[scenario.petId].listingNumber,
+  birthDate: petEditorial[scenario.petId].birthDate,
+  birthDateApproximate: petEditorial[scenario.petId].birthDateApproximate,
+  health: { ...petProfiles[scenario.petId].health!, vaccinationHistory: petEditorial[scenario.petId].vaccinationHistory, recordEvidence: petEditorial[scenario.petId].recordEvidence },
+  rehoming: { ...petProfiles[scenario.petId].rehoming!, story: petEditorial[scenario.petId].story, conditionsMessage: petEditorial[scenario.petId].conditionsMessage, livingPoints: petEditorial[scenario.petId].livingPoints, pedigree: petEditorial[scenario.petId].pedigree, trial: petEditorial[scenario.petId].trial, fees: petEditorial[scenario.petId].fees },
 }));
 const aliases:Record<string,string>={"senior-a":"app-aiko","senior-b":"app-ren","senior-c":"app-mai","active-a":"app-daichi"};
 export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario.candidates.map((candidate,i)=>{

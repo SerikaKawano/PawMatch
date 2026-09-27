@@ -6,6 +6,9 @@ export type ReviewStage = "screening" | "risk_review" | "verification" | "meetin
 
 export interface Pet {
   id: string;
+  listingNumber: string;
+  birthDate: string;
+  birthDateApproximate: boolean;
   ownerId: DemoUserId;
   name: string;
   species: "Dog" | "Cat";
@@ -25,6 +28,8 @@ export interface Pet {
     medicalHistory: string;
     medicalRecords: string[];
     vaccinations: string;
+    vaccinationHistory?: string[];
+    recordEvidence?: string[];
     medication: string;
     spayNeuter: string;
     microchip: string;
@@ -38,6 +43,16 @@ export interface Pet {
     requirements: string[];
     trial: string;
     fees: string;
+    story?: string;
+    conditionsMessage?: string;
+    livingPoints?: {
+      housing: string;
+      time: string;
+      care: string;
+      medical: string;
+      integration: string;
+      continuity: string;
+    };
   };
 }
 

@@ -314,3 +314,15 @@ small { font-size: 17px; }
 .provider-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 13px; }
 .provider-links a { display: inline-flex; align-items: center; gap: 5px; min-height: 42px; padding: 6px 12px; border: 1px solid #a9d1d9; border-radius: 7px; color: #075f6c; font-size: 17px; font-weight: 750; }
 .provider-links a:hover { background: #e9f4f7; }
+
+/* Public hero and the denser, case-specific pet records. */
+.public-hero-photo { background-image: url('/hero-uk-pets.png'); background-position: center 46%; }
+.hero-entry { background: #fff; border-color: #fff; box-shadow: 0 12px 28px rgba(43, 30, 24, .18); }
+.hero-entry > span { color: #151515; }
+.pet-card-facts { margin: 10px 0; padding: 10px 12px; border-radius: 8px; background: #fff8ed; color: #4e403a; font-size: 17px; line-height: 1.6; }
+.public-pet-detail .health-card { width: 100%; }
+.public-pet-detail .health-card > div { min-width: 0; width: 100%; }
+.public-pet-detail .health-card .detail-evidence-list { margin: 10px 0 0; }
+.public-pet-detail .pet-data-grid .pet-data-wide { grid-column: 1 / -1; }
+.rehomer-message { margin: 0 0 18px; padding: 20px 22px; border-left: 5px solid #dfbac5; border-radius: 8px; background: #fff8f4; font-size: 18px; line-height: 1.8; }
+@media (max-width: 760px) { .public-hero-photo { background-position: 65% center; } }
