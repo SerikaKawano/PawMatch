@@ -3,7 +3,7 @@ export type RoleTask = { label: string; href: string; description: string };
 export const roleNavigation: Record<DemoRole, { title: string; purpose: string; tasks: RoleTask[] }> = {
   adopter: { title: "里親希望者のホーム", purpose: "気になる子を探し、お世話の条件を読んでから相談しましょう。", tasks: [
     { label: "家族になる子を探す", href: "/pets", description: "写真と地域で探す → 詳細を読む → その子について相談する" },
-    { label: "保存した相談を確認する", href: "/dashboard#consultations", description: "相談したペットと内容を振り返ります。実際の返信はないモックです。" },
+    { label: "保存した相談を確認する", href: "/dashboard#consultations", description: "相談したペットと内容を振り返ります。譲渡者への送信・返信はありません。" },
     { label: "お迎えまでの流れを読む", href: "/guide", description: "条件確認・面談・トライアル・正式譲渡の順番を確認します。" },
   ] },
   rehomer: { title: "譲渡者のホーム", purpose: "自分が掲載するペットを選び、届いた里親申込みを確認しましょう。", tasks: [

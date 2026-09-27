@@ -28,7 +28,7 @@ export function simulationSessions(): StudySession[] {
         trialId: trial.id, scenarioId: trial.scenarioId, mode: trial.mode, order,
         startedAt: start.toISOString(), submittedAt: new Date(start.getTime() + seconds * 1000).toISOString(), elapsedMs: seconds * 1000,
         interrupted: false, priorityId, decisions: Object.fromEntries(scenario.candidates.map(c => [c.id, c.id === priorityId ? "proceed" : "check"])),
-        identifiedRisks: "【集計動作確認用の架空回答】" + scenario.rubric.expectedRisks.filter(r => detected.includes(r.id)).map(r => r.label).join("、"),
+        identifiedRisks: "【集計動作確認用の練習回答】" + scenario.rubric.expectedRisks.filter(r => detected.includes(r.id)).map(r => r.label).join("、"),
         reasoning: "【合成回答】ケアの計画と未確認事項を比較した。実際の参加者の判断ではありません。",
         nextChecks: assessment.nextActions.join("、") || "面談で計画を確認する",
         ratings: { usefulness: 3 + index % 3, clarity: 3 + index % 3, confidence: 3, reliance: 2 + index % 4 },

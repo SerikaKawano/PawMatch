@@ -9,7 +9,7 @@ export const openApiSpec={
   openapi:"3.1.0",
   info:{title:"PawMatch Safe Rehome API",version:"0.3.0",description:"合成データによる審査と比較評価。ロール別のページ・API認可を実施。研究者APIは管理者のみ。明示的なテストロール選択は本番認証ではありません。"},
   servers:[{url:"/api"}],
-  components:{securitySchemes:{demoSession:{type:"apiKey",in:"cookie",name:"pawmatch-demo-session",description:"POST /demo-session で選択したデモロール。12時間で失効、ログアウト時にサーバーで無効化。"}}},
+  components:{securitySchemes:{demoSession:{type:"apiKey",in:"cookie",name:"pawmatch-demo-session",description:"POST /demo-session で選択したテストユーザー。12時間で失効、ログアウト時にサーバーで無効化。"}}},
   security:[{demoSession:[]}],
   paths:{
     "/demo-session":{
@@ -19,7 +19,7 @@ export const openApiSpec={
     },
     "/consultations":{
       get:{summary:"里親希望者・管理者：自分の相談履歴",parameters:[{name:"petId",in:"query",schema:{type:"string"}}],responses:{...success,"401":{description:"未ログイン"}}},
-      post:{summary:"里親希望者・管理者：相談をモック保存。外部送信なし。requestIdで再送の重複を防止",requestBody:jsonBody(z.toJSONSchema(consultationInput)),responses:{...success,"201":{description:"保存済み相談"},"401":{description:"未ログイン"},"403":{description:"別Originからの操作"},"500":{description:"保存失敗"}}},
+      post:{summary:"里親希望者・管理者：相談を保存。外部送信なし。requestIdで再送の重複を防止",requestBody:jsonBody(z.toJSONSchema(consultationInput)),responses:{...success,"201":{description:"保存済み相談"},"401":{description:"未ログイン"},"403":{description:"別Originからの操作"},"500":{description:"保存失敗"}}},
     },
     "/pets":{get:{security:[],summary:"合成の動物プロフィール",responses:success}},
     "/applications":{get:{summary:"譲渡者は自分の掲載分のみ、審査担当・管理者は全件：根拠付きスコア・リスク・審査記録",parameters:[{name:"petId",in:"query",schema:{type:"string"}}],responses:success}},

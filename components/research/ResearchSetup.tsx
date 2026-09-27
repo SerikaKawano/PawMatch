@@ -28,7 +28,7 @@ export function ResearchSetup({ initialConfig, scenarios }: { initialConfig: Stu
       <label className="research-field">設定・変更の理由<textarea value={config.researcherNotes} onChange={event => update({ researcherNotes: event.target.value })} maxLength={3000} placeholder="配点を変えた理由と、確認したい影響を記録してください。" /></label>
       <button className="primary-button" disabled={busy || !dirty || total !== 100} onClick={save}>{busy ? "保存中…" : "重みを保存"}</button><span className="research-inline-note">設定 v{config.version}{dirty ? " · 未保存" : ""}</span><p role="status">{message}</p>
     </section>
-    <section className="research-card"><h2>架空ケースの確認</h2><p>テスターに提示するケースは、住居の確認待ちや動物固有の医療・ケア条件など、異なる判断の難しさを含めます。これは想定された確認点であり、唯一の正解ではありません。</p>
+    <section className="research-card"><h2>評価ケースの確認</h2><p>テスターに提示するケースは、住居の確認待ちや動物固有の医療・ケア条件など、異なる判断の難しさを含めます。これは想定された確認点であり、唯一の正解ではありません。</p>
       {scenarios.map(scenario => <details className="research-scenario" key={scenario.id}><summary>{scenario.petName} · {scenario.title}</summary><p>{scenario.animalNeeds}</p><ul>{scenario.rubric.expectedRisks.map(risk => <li key={risk.id}>{risk.label} — {risk.rationale}</li>)}</ul></details>)}
     </section>
   </>;

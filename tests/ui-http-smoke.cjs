@@ -37,6 +37,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   for (const name of ["Serika Kawano", "Sophie Bennett", "Alex Morgan", "Noah Williams", "Olivia Parker"]) assert.ok(login.includes(name));
   const { data: pets } = await (await fetch(base + "/api/pets")).json();
   assert.equal(new Set(pets.map(p => p.imageUrl)).size, 8);
+  assert.equal(pets.filter(p => p.health?.evidenceStatus === "確認済").length, 6);
   for (const pet of pets) {
     const image = await fetch(base + pet.imageUrl);
     assert.equal(image.status, 200);
@@ -44,14 +45,25 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     const detail = await (await fetch(base + "/pets/" + pet.id)).text();
     assert.ok(detail.includes(pet.name));
     assert.ok(detail.includes("pet-primary-actions"));
+    assert.ok(detail.includes("健康状態と必要なケア"));
+    assert.ok(detail.includes("暮らしとケアのポイント"));
+    assert.ok(!detail.includes(">重み "));
+    assert.ok(!detail.includes("この画像はモック用に生成した"));
     assert.ok(!detail.includes('class="favorite-button"'));
+    if (pet.id === "momo") {
+      assert.ok(detail.includes('class="health-status pending"'));
+      assert.ok(detail.includes("Webサイト"));
+      assert.ok(detail.includes("本人確認済み"));
+      assert.ok(!detail.includes('class="detail-summary"'));
+    }
   }
   const primary = { adopter: "/pets", rehomer: "/rehoming", reviewer: "/reviews/progress", admin: "/admin/analytics" };
-  let reviewCookie;
+  let reviewCookie, adminCookie;
   for (const [role, target] of Object.entries(primary)) {
     const session = await fetch(base + "/api/demo-session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId: role }) });
     const Cookie = session.headers.get("set-cookie").split(";")[0];
     if (role === "reviewer") reviewCookie = Cookie;
+    if (role === "admin") adminCookie = Cookie;
     const html = await (await fetch(base + "/dashboard", { headers: { Cookie } })).text();
     const nextTask = html.split('class="next-task-panel"')[1].split("</section>")[0];
     assert.ok(nextTask.includes('href="' + target + '"'));
@@ -72,6 +84,10 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   const workflow = await (await fetch(base + "/reviews/app-aiko", {headers:{Cookie:reviewCookie}})).text();
   assert.ok(workflow.includes("内容を保存（工程は進めない）"));
   assert.ok(workflow.includes("review-state-banner"));
+  const adminPet = await (await fetch(base + "/pets/momo", { headers: { Cookie: adminCookie } })).text();
+  assert.ok(adminPet.includes(">重み "));
+  const reviewerPet = await (await fetch(base + "/pets/momo", { headers: { Cookie: reviewCookie } })).text();
+  assert.ok(!reviewerPet.includes(">重み "));
   const guest = await fetch(base + "/rehoming", { redirect: "manual" });
   assert.equal(guest.status, 307);
   assert.ok(guest.headers.get("location").includes("next=%2Frehoming"));

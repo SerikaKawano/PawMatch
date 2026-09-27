@@ -13,7 +13,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 
 
 export const metadata: Metadata = {
-  title: "PawMatch | あんしんペット譲渡",
+  title: "PawMatch DEMO | あんしんペット譲渡",
   description: "人による最終判断を支援する、ペット譲渡審査のプロトタイプです。",
 };
 

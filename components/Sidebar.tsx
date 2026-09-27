@@ -26,8 +26,8 @@ export function Sidebar() {
         })}
       </nav>
       <div className="sidebar-note">
-        <span className="eyebrow">デモ版について</span>
-        <p>表示される人物・動物はすべて架空です。最終判断は必ず担当者が行います。</p>
+        <span className="eyebrow">判断について</span>
+        <p>最終的な譲渡の判断は、必ず担当者が行います。</p>
       </div>
       <div className="reviewer-chip"><span className="avatar">SK</span><span><strong>河野 セリカ</strong><small>審査担当</small></span></div>
     </aside>

@@ -8,7 +8,7 @@ export function PetCard({ pet }: { pet: Pet }) {
   const owner = demoUsers.find(account => account.id === pet.ownerId);
   return <article className="pet-card">
     <Link href={`/pets/${pet.id}`} className={`pet-photo-link pet-visual ${pet.accent}`} aria-label={pet.name + "の写真・条件を見る"}>
-      {pet.imageUrl ? <Image src={pet.imageUrl} alt={pet.breed + "の" + pet.name + "（モック用画像）"} width={640} height={640} unoptimized /> : <span>{pet.emoji}</span>}
+      {pet.imageUrl ? <Image src={pet.imageUrl} alt={pet.breed + "の" + pet.name} width={640} height={640} unoptimized /> : <span>{pet.emoji}</span>}
       {pet.urgent && <b>優先して募集中</b>}
     </Link>
     <div className="pet-card-body">

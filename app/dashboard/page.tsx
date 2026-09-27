@@ -35,6 +35,6 @@ export default async function DashboardPage() {
     <section className="dashboard-main"><h2>{user.role === "adopter" ? "あなたの利用状況" : "状況から確認する"}</h2><p>数字を押すと、該当する一覧が開きます。</p><div className="dashboard-stats">{stats.map(stat => <Link href={stat.href} key={stat.label} aria-label={`${stat.label} ${stat.value}件の内容を見る`}><strong>{stat.value}</strong><span>{stat.label}</span><span className="stat-action">一覧を見る <ArrowRight size={20} /></span></Link>)}</div></section>
     {user.role === "admin" && <section className="admin-all-menus"><div className="admin-menu-heading"><div><span className="section-kicker">管理者はすべての画面を利用できます</span><h2>役割別の操作メニュー</h2></div><p>管理者のまま各画面を開きます。別ユーザーとして試す場合は、上の「ユーザーを切り替える」を使ってください。</p></div><div className="role-menu-grid">{Object.entries(roleNavigation).map(([id, group], index) => <article className={["pink", "yellow", "brown", "cream"][index]} key={id}><h3>{group.title}</h3>{group.tasks.map(task => <Link href={task.href} key={task.href}><strong>{task.label}</strong><ArrowRight /></Link>)}</article>)}</div></section>}
     {canAccess(user, "consult") && <ConsultationHistory records={consultations} names={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} />}
-    <div className="demo-notice"><ShieldCheck /><p><strong>デモ環境です。</strong>表示する人物・動物・審査は架空です。相談はモック保存、審査の確認内容と履歴は保存されます。実際の譲渡や外部送信は行いません。</p></div>
+    <div className="demo-notice"><ShieldCheck /><p><strong>操作上のご案内</strong>相談と審査の履歴はこのサイト内に保存されます。実際の譲渡や外部送信は行いません。</p></div>
   </div>;
 }

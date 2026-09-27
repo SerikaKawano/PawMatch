@@ -10,7 +10,7 @@ export function ResearchResults({initial,source}:{initial:StudySession[];source:
   const result=analyse(sessions,source);
   return <>
     <nav className="research-source" aria-label="集計対象"><Link aria-current={source==="participant"?"page":undefined} href="/research/results">参加者による評価</Link><Link aria-current={source==="simulation"?"page":undefined} href="/research/results?source=simulation">合成・練習データ</Link></nav>
-    <p className="research-notice">{source==="simulation"?"表示中のデータは集計テスト用の架空回答・練習回答です。研究の成果や有効性の根拠には使えません。":"この集計には合成・練習データと中止したセッションを含めません。自由記述の採点が未完了の項目は未集計です。"}</p>
+    <p className="research-notice">{source==="simulation"?"表示中のデータは集計動作確認用の練習回答です。研究の成果や有効性の根拠には使えません。":"この集計には合成・練習データと中止したセッションを含めません。自由記述の採点が未完了の項目は未集計です。"}</p>
     <div className="research-kpis"><article><strong>{result.included.length}</strong><span>セッション</span></article><article><strong>{result.rows.length}</strong><span>回答</span></article><article><strong>{result.pairs.length}</strong><span>同一ケースの比較ペア</span></article><article><strong>{result.rows.filter(r=>!r.response.coding).length}</strong><span>自由記述の未採点</span></article></div>
     {!result.rows.length && <section className="research-card"><h2>まだ評価結果はありません</h2><p>研究設定でリンクを発行し、参加者が両方の表示で回答すると比較できます。動作確認用の結果は「合成・練習データ」で確認できます。</p><Link className="primary-button" href="/research/setup">評価の準備へ →</Link></section>}
     <section className="research-card"><h2>表示ごとの記述統計</h2><div className="research-table-wrap"><table><thead><tr><th>指標</th>{result.modes.map(m=><th key={m.mode}>{modeLabel(m.mode)}</th>)}</tr></thead><tbody>

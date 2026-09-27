@@ -17,12 +17,15 @@ test("each synthetic pet belongs to one demo rehomer, with realistic account siz
   }
 });
 
-test("every synthetic listing exposes health and rehoming information without implying verified records", () => {
+test("pet profiles contain useful health details with explicit record status", () => {
+  assert.equal(pets.filter(pet => pet.health?.evidenceStatus === "確認済").length, 6);
   for (const pet of pets) {
     assert.ok(pet.health?.medicalHistory);
     assert.ok(pet.health?.medicalRecords?.length);
     assert.ok(pet.health?.vaccinations);
-    assert.match(pet.health.evidenceStatus, /未確認/);
+    assert.match(pet.health.evidenceStatus, /^(確認済|未確認)$/);
+    assert.ok(pet.health.medicalRecords.every(record => !record.includes("未提出")));
+    assert.match(pet.health.spayNeuter, pet.sex === "Female" ? /避妊/ : /去勢/);
     assert.ok(pet.rehoming?.pedigree);
     assert.ok(pet.rehoming?.compatibility);
     assert.ok(pet.rehoming?.requirements?.length);

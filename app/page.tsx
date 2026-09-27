@@ -15,6 +15,7 @@ export default async function HomePage() {
       <div className="public-hero-photo" aria-hidden="true" />
       <div className="public-hero-overlay" />
       <div className="public-hero-content">
+        <span className="hero-label">DEMO</span>
         <h1>ずっと一緒に暮らせる<br />家族を見つけよう。</h1>
         <p>PawMatchは、ペットを迎えたい方と、新しい飼い主を探している方をつなぐ里親マッチングサービスです。</p>
         <div className="hero-cta-row" aria-label="利用目的別の入口">
