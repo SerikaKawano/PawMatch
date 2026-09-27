@@ -30,8 +30,8 @@ export function PublicHeader({ user }: { user: DemoUser | null }) {
     <div className="public-header-inner">
       <Link href="/" className="public-brand"><span className="brand-mark"><HeartHandshake size={25} /></span><span><strong>PawMatch</strong><small>ペットと家族をつなぐ</small></span></Link>
       <nav className={mobile ? "public-nav mobile-open" : "public-nav"} aria-label="メインメニュー" onClick={event => { if ((event.target as HTMLElement).closest("a")) setMobile(false); }}>
-        {(!user || canAccess(user, "consult")) && <Link href="/pets">ペットを探す</Link>}
-        {(!user || canAccess(user, "rehome")) && <Link href={user ? "/rehoming" : "/login?intent=list&next=%2Frehoming"}>掲載・里親申込み管理</Link>}
+        {(!user || canAccess(user, "consult")) && <Link href="/pets">ペットを探す（里親希望者）</Link>}
+        {(!user || canAccess(user, "rehome")) && <Link href={user ? "/rehoming" : "/login?intent=list&next=%2Frehoming"}>掲載・申込み管理（譲渡者）</Link>}
         <Link href="/guide">譲渡までの流れ</Link>
       </nav>
       <div className="public-actions">

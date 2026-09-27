@@ -5,6 +5,11 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   const home = await (await fetch(base + "/")).text();
   assert.ok(!home.includes("団体・NPOの方"));
   assert.ok(!home.includes(">その他<"));
+  for (const text of ["里親希望者の方", "譲渡者の方", "募集の例", "譲渡までの流れ", "面談、トライアル", "両者の合意後に譲渡が成立します。"])
+    assert.ok(home.includes(text), `TOP should include: ${text}`);
+  assert.ok(!home.includes("犬や猫との、新しい家族のかたち"));
+  assert.ok(!home.includes("探す、確認する、迎える。"));
+  assert.ok(!home.includes("研究用の募集例"));
   const login = await (await fetch(base + "/login")).text();
   for (const name of ["Serika Kawano", "Sophie Bennett", "Alex Morgan", "Noah Williams", "Olivia Parker"]) assert.ok(login.includes(name));
   const { data: pets } = await (await fetch(base + "/api/pets")).json();
