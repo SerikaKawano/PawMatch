@@ -18,6 +18,7 @@ const english: Record<string, string> = {
   "詳細を見る": "View details",
   "マイページ": "My account",
   "ホーム": "Home",
+  "おかえりなさい、": "Welcome back, ",
   "里親希望者のホーム": "Adopter home",
   "プロフィールと書類": "Profile and documents",
   "相談・申込履歴": "Enquiries and applications",

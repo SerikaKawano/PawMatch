@@ -87,6 +87,8 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     if (role === "admin") adminCookie = Cookie;
     const html = await (await fetch(base + "/dashboard", { headers: { Cookie } })).text();
     assert.ok(html.includes('class="role-home-hero"'));
+    assert.ok(html.includes("おかえりなさい、"));
+    assert.ok(html.includes({adopter:"Noah Williams",rehomer:"Emma Wilson",reviewer:"Sophie Bennett",admin:"Serika Kawano"}[role]));
     assert.ok(!html.includes('class="page-context-back"'));
     if (role === "adopter") {
       const menu = html.split('class="role-home-menu"')[1]?.split('</nav>')[0];
