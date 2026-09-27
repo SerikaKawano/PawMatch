@@ -42,3 +42,8 @@ test("every persona has an actionable primary destination", () => {
   }
   assert.equal(safeLoginNext("/rehoming"), "/rehoming");
 });
+test("account menu requires logout before choosing another user", () => {
+  const header = readFileSync(path.join(__dirname, "../components/PublicHeader.tsx"), "utf8");
+  assert.ok(!header.includes("テストユーザーを切り替える"));
+  assert.ok(header.includes('window.location.assign("/login")'));
+});

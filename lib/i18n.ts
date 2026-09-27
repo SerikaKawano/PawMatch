@@ -19,7 +19,6 @@ const english: Record<string, string> = {
   "マイページ": "My account",
   "相談履歴": "Enquiry history",
   "相談、申込履歴": "Enquiries and applications",
-  "テストユーザーを切り替える": "Switch test user",
   "ログイン": "Log in",
   "ログアウト": "Log out",
   "ログアウト中…": "Logging out…",

@@ -24,7 +24,7 @@ export function PublicHeader({ user }: { user: DemoUser | null }) {
       try { sessionStorage.removeItem("pawmatch-demo-user"); } catch { /* No legacy session. */ }
       // Reload the root layout so every server component observes the cleared cookie.
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-      window.location.assign("/");
+      window.location.assign("/login");
     } catch { setError("ログアウトできませんでした。再試行してください。"); setBusy(false); }
   }
   if (pathname.startsWith("/research/session/")) return <header className="public-header"><div className="public-header-inner"><span className="public-brand"><span className="brand-mark"><HeartHandshake size={25} /></span><span><strong>PawMatch <b className="brand-demo">DEMO</b></strong><small>画面評価へのご協力ありがとうございます</small></span></span><div className="public-actions"><LanguageSwitch /></div></div></header>;
@@ -39,7 +39,7 @@ export function PublicHeader({ user }: { user: DemoUser | null }) {
       <div className="public-actions">
         <LanguageSwitch />
         {user ? <div className="session-account"><button type="button" className="session-account-toggle" onClick={() => setAccount(!account)} aria-expanded={account} aria-controls="session-account-menu"><UserRound size={22} /><span><small>{user.roleLabel} · ログイン中</small><strong>{user.name}{user.kind === "organization" ? "" : "さん"}</strong></span><ChevronDown size={18} /></button>
-          {account && <div id="session-account-menu" className="session-account-menu"><Link href="/dashboard" onClick={() => setAccount(false)}>マイページ</Link>{canAccess(user, "consult") && <Link href="/dashboard#consultations" onClick={() => setAccount(false)}>相談履歴</Link>}<Link href={`/login?next=${encodeURIComponent(safeLoginNext(pathname))}`} onClick={() => setAccount(false)}>テストユーザーを切り替える</Link><button type="button" disabled={busy} onClick={logout}>{busy ? "ログアウト中…" : "ログアウト"}</button>{error && <p role="alert">{error}</p>}</div>}
+          {account && <div id="session-account-menu" className="session-account-menu"><Link href="/dashboard" onClick={() => setAccount(false)}>マイページ</Link>{canAccess(user, "consult") && <Link href="/dashboard#consultations" onClick={() => setAccount(false)}>相談履歴</Link>}<button type="button" disabled={busy} onClick={logout}>{busy ? "ログアウト中…" : "ログアウト"}</button>{error && <p role="alert">{error}</p>}</div>}
         </div> : <Link href={`/login?next=${encodeURIComponent(safeLoginNext(pathname))}`} className="login-button"><UserRound size={20} />ログイン</Link>}
         <button className="mobile-menu-button" onClick={() => setMobile(!mobile)} aria-expanded={mobile} aria-label="メニューを開く"><Menu size={25} /></button>
       </div>

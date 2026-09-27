@@ -29,6 +29,14 @@ const apis=[
  for(const role of ["guest","adopter","rehomer","reviewer","admin"]){
   let cookie="";
   if(role!=="guest"){const login=await fetch(base+"/api/demo-session",{method:"POST",headers:{"Content-Type":"application/json",Origin:base},body:JSON.stringify({userId:role})});assert.equal(login.status,200);cookie=login.headers.get("set-cookie").split(";")[0];assert.match(cookie,/pawmatch-demo-session=[a-f0-9]{64}/);}
+  if(role!=="guest"){
+   const loginPage=await fetch(base+"/login",{headers:{Cookie:cookie},redirect:"manual"});
+   assert.equal(loginPage.status,307);
+   assert.equal(loginPage.headers.get("location"),"/dashboard");
+   const switchAttempt=await fetch(base+"/api/demo-session",{method:"POST",headers:{Cookie:cookie,Origin:base,"Content-Type":"application/json"},body:JSON.stringify({userId:"admin"})});
+   assert.equal(switchAttempt.status,409);
+   assert.equal((await(await fetch(base+"/api/demo-session",{headers:{Cookie:cookie}})).json()).user.id,role);
+  }
   for(const [path,roles]of matrix){const res=await fetch(base+path,{headers:{Cookie:cookie},redirect:"manual"});assert.equal(res.status,roles.includes(role)?200:307,role+" "+path);if(!roles.includes(role))assert.ok(role==="guest"?res.headers.get("location").startsWith("/login?"):res.headers.get("location")==="/access-denied");checks++;}
   for(const [method,path,roles]of apis){
    // Only negative mutation probes; positive persistence checks live in http-smoke.cjs.
@@ -46,6 +54,9 @@ const apis=[
    const denied=await fetch(base+"/api/applications/app-aiko",{method:"PATCH",headers:{Cookie:cookie,Origin:"https://example.com","Content-Type":"application/json"},body:"{}"});assert.equal(denied.status,403);
    await fetch(base+"/api/demo-session",{method:"DELETE",headers:{Cookie:cookie,Origin:base}});
    assert.equal((await fetch(base+"/api/applications",{headers:{Cookie:cookie}})).status,401);
+   const chooser=await fetch(base+"/login");
+   assert.equal(chooser.status,200);
+   assert.ok((await chooser.text()).includes("ユーザーを選択してください"));
   }
  }
  for(const cookie of ["pawmatch-demo-user=admin","pawmatch-demo-session=admin","pawmatch-demo-session="+"0".repeat(64)])assert.equal((await fetch(base+"/api/applications",{headers:{Cookie:cookie}})).status,401);
