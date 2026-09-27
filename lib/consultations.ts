@@ -21,7 +21,7 @@ export type Consultation = z.infer<typeof consultationInput> & {
 };
 export const consultationReply = (status: Exclude<ConsultationStatus, "received">) => status === "closed"
   ? "ご相談ありがとうございました。今回は相談段階で終了し、審査には進んでいません。"
-  : "ご相談を確認しました。プロフィールと必要な情報をご提出ください。内容を確認して審査の手続きへ進みます。";
+  : "ご相談を確認しました。プロファイルと必要な情報をご提出ください。内容を確認して審査の手続きへ進みます。";
 const key = "consultations-v1";
 const sampleRows: { userId: DemoUserId; petId: string; status: ConsultationStatus; message: string }[] = [
   { userId: "adopter", petId: "momo", status: "profile_requested", message: "投薬の時間と必要な通院について詳しく伺いたいです。" },

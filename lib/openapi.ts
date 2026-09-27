@@ -24,8 +24,8 @@ export const openApiSpec={
       post:{summary:"里親希望者・管理者：相談を保存。外部送信なし。requestIdで再送の重複を防止",requestBody:jsonBody(z.toJSONSchema(consultationInput)),responses:{...success,"201":{description:"保存済み相談"},"401":{description:"未ログイン"},"403":{description:"別Originからの操作"},"500":{description:"保存失敗"}}},
     },
     "/adopter-profile":{
-      get:{summary:"里親希望者・管理者：自分のプロフィールと本人確認状態",responses:success},
-      put:{summary:"里親希望者・管理者：自分のプロフィールを保存",requestBody:jsonBody(z.toJSONSchema(adopterProfileInput)),responses:success},
+      get:{summary:"里親希望者・管理者：自分のプロファイルと本人確認状態",responses:success},
+      put:{summary:"里親希望者・管理者：自分のプロファイルを保存",requestBody:jsonBody(z.toJSONSchema(adopterProfileInput)),responses:success},
     },
     "/adopter-documents":{
       get:{summary:"里親希望者・管理者：自分の一般書類の一覧",responses:success},
@@ -35,10 +35,10 @@ export const openApiSpec={
       get:{summary:"本人・審査担当・管理者：一般書類をダウンロード",parameters:idParameter,responses:success},
       delete:{summary:"本人：自分で登録した一般書類を削除。組み込みの例示資料は削除不可",parameters:idParameter,responses:success},
     },
-    "/pets":{get:{security:[],summary:"合成の動物プロフィール",responses:success}},
+    "/pets":{get:{security:[],summary:"合成の動物プロファイル",responses:success}},
     "/applications":{get:{summary:"譲渡者は自分の掲載分のみ、審査担当・管理者は全件：根拠付きスコア・リスク・審査記録",parameters:[{name:"petId",in:"query",schema:{type:"string"}}],responses:success}},
     "/applications/{id}":{patch:{summary:"譲渡者は自分の掲載分のみ、審査担当・管理者は全件：確認・進捗・判断と理由を保存（revisionで競合検出）",parameters:idParameter,requestBody:jsonBody(z.toJSONSchema(reviewInput)),responses:success}},
-    "/seed":{post:{summary:"合成プロフィールをMongoDBへ登録",responses:success}},
+    "/seed":{post:{summary:"合成プロファイルをMongoDBへ登録",responses:success}},
     "/research/config":{get:{summary:"研究設定を取得",responses:success},put:{summary:"研究設定を保存。発行済みセッションは変更しない",requestBody:jsonBody(z.toJSONSchema(configSchema)),responses:success}},
     "/research/sessions":{post:{summary:"評価セッションを発行し、ケース・基準・採点結果を固定",requestBody:jsonBody(z.toJSONSchema(createSessionSchema)),responses:{...success,"201":{description:"匿名コード・セッションID・表示順"}}}},
     "/research/sessions/{id}":{

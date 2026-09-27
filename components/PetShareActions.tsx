@@ -32,6 +32,6 @@ export function PetShareActions({ petId, petName }: { petId: string; petName: st
       <button type="button" onClick={() => openShare("line")} aria-label="LINEで共有">LINEで共有</button>
       <button type="button" onClick={copyUrl} aria-label="募集ページのURLをコピー"><Copy size={18} />{copied ? "コピーしました" : "URLをコピー"}</button>
     </div>
-    <small>公開プロフィールのURLのみを共有します。相談内容や応募者情報は含みません。</small>
+    <small>公開プロファイルのURLのみを共有します。相談内容や応募者情報は含みません。</small>
   </div>;
 }

@@ -11,13 +11,13 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
     "/login": { title: "ログイン", backHref: "/", backLabel: "トップへ戻る" },
     "/guide": { title: "譲渡までの流れ", backHref: "/", backLabel: "トップへ戻る" },
     "/pets": { title: "里親募集中のペットたち", backHref: "/", backLabel: "トップへ戻る" },
-    "/adopter/profile": { title: "プロフィールと書類", backHref: "/dashboard", backLabel: "ホームへ戻る" },
+    "/adopter/profile": { title: "プロファイルと書類", backHref: "/dashboard", backLabel: "ホームへ戻る" },
     "/adopter/history": { title: "相談・申込履歴", backHref: "/dashboard", backLabel: "ホームへ戻る" },
     "/rehoming": { title: "掲載中のペット一覧", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/rehoming/consultations": { title: "届いた相談", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/progress": { title: "審査進捗ボード", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/consultations": { title: "相談一覧", backHref: "/dashboard", backLabel: "マイページへ戻る" },
-    "/reviews/adopters": { title: "里親希望者のプロフィール", backHref: "/dashboard", backLabel: "マイページへ戻る" },
+    "/reviews/adopters": { title: "里親希望者のプロファイル", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/records": { title: "審査記録", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/admin/records": { title: "管理記録", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/admin/analytics": { title: "審査の履歴・累積分析", backHref: "/dashboard", backLabel: "マイページへ戻る" },
@@ -33,8 +33,8 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
   const parts = pathname.split("/").filter(Boolean);
   if (parts[0] === "pets" && parts.length === 3 && parts[2] === "consult") return { title: "相談内容を入力", backHref: `/pets/${parts[1]}`, backLabel: "ペットの詳細へ戻る" };
   if (parts[0] === "pets" && parts.length === 2) return { title: "ペットの詳細", backHref: "/pets", backLabel: "ペット一覧へ戻る" };
-  if (parts[0] === "reviews" && parts[1] === "applicants" && parts.length === 3) return { title: "申込者のプロフィール", backHref: `/reviews/${parts[2]}`, backLabel: "審査ケースへ戻る" };
-  if (parts[0] === "reviews" && parts[1] === "adopters" && parts.length === 3) return { title: "里親希望者のプロフィール", backHref: role === "rehomer" ? "/reviews/progress" : "/reviews/adopters", backLabel: role === "rehomer" ? "審査進捗へ戻る" : "里親希望者一覧へ戻る" };
+  if (parts[0] === "reviews" && parts[1] === "applicants" && parts.length === 3) return { title: "申込者のプロファイル", backHref: `/reviews/${parts[2]}`, backLabel: "審査ケースへ戻る" };
+  if (parts[0] === "reviews" && parts[1] === "adopters" && parts.length === 3) return { title: "里親希望者のプロファイル", backHref: role === "rehomer" ? "/reviews/progress" : "/reviews/adopters", backLabel: role === "rehomer" ? "審査進捗へ戻る" : "里親希望者一覧へ戻る" };
   if (parts[0] === "reviews" && parts.length === 2) return { title: "審査ケース", backHref: "/reviews/progress", backLabel: "審査進捗へ戻る" };
   if (parts[0] === "consultations" && parts.length === 2) return { title: "相談の詳細", backHref: role === "adopter" ? "/adopter/history" : role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations", backLabel: "相談一覧へ戻る" };
   if (parts[0] === "research" && parts[1] === "session" && parts.length === 3) return { title: "研究評価セッション", backHref: "/research", backLabel: "研究評価へ戻る" };

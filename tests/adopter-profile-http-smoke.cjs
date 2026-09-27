@@ -54,7 +54,7 @@ async function cookieFor(userId) {
   assert.equal(acknowledged.status, 200);
   assert.ok((await acknowledged.json()).request.acknowledgedAt);
   const myProfile = await (await fetch(base + "/adopter/profile", { headers: { Cookie: adopter } })).text();
-  assert.ok(myProfile.includes("基本プロフィール"));
+  assert.ok(myProfile.includes("基本プロファイル"));
   assert.ok(myProfile.includes("詳細"));
   const myHistory = await (await fetch(base + "/adopter/history", { headers: { Cookie: adopter } })).text();
   assert.ok(myHistory.includes('href="/consultations/sample-consultation-1"'));

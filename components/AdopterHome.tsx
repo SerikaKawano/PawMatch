@@ -40,7 +40,7 @@ export function AdopterHome({ initialProfile, initialDocuments, initialRequests=
       const response = await fetch("/api/adopter-profile", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(draft) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error);
-      setProfile(result.profile); setEditing(false); setNotice("プロフィールを更新しました。"); router.refresh();
+      setProfile(result.profile); setEditing(false); setNotice("プロファイルを更新しました。"); router.refresh();
     } catch (error) { setNotice(error instanceof Error ? error.message : "保存できませんでした。"); }
     finally { setBusy(false); }
   }
@@ -90,15 +90,15 @@ export function AdopterHome({ initialProfile, initialDocuments, initialRequests=
     <header className="adopter-home-header"><div><h2>{profile.fullName}</h2></div></header>
     <p className="adopter-home-status" role="status" aria-live="polite">{notice}</p>
     <div className="adopter-home-grid">
-      <section className="adopter-profile-card"><div className="adopter-card-heading"><h2>自分のプロフィール</h2><button type="button" className="task-secondary" onClick={() => { setEditing(value => !value); setNotice(""); }}>{editing ? "表示に戻る" : "編集する"}</button></div>
+      <section className="adopter-profile-card"><div className="adopter-card-heading"><h2>自分のプロファイル</h2><button type="button" className="task-secondary" onClick={() => { setEditing(value => !value); setNotice(""); }}>{editing ? "表示に戻る" : "編集する"}</button></div>
         {editing ? <form className="adopter-profile-form" onSubmit={saveProfile}>
-          <h3>基本プロフィール <small>すべて必須</small></h3>
+          <h3>基本プロファイル <small>すべて必須</small></h3>
           {basicProfileFields.map(field => <label key={field.key}>{field.label}<input required maxLength={field.key === "fullName" ? 80 : field.key === "contact" ? 254 : field.key === "employment" ? 200 : 50} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} /></label>)}
           <h3>詳細 <small>任意</small></h3>
           {detailProfileFields.map(field => <label key={field.key}>{field.label}<textarea maxLength={detailLimit(field.key)} value={draft[field.key]} onChange={event => setDraft({ ...draft, [field.key]: event.target.value })} /></label>)}
-          <button className="task-primary" disabled={busy}>プロフィールを保存</button>
+          <button className="task-primary" disabled={busy}>プロファイルを保存</button>
         </form> : <div className="adopter-profile-tables">
-          <h3>基本プロフィール</h3>
+          <h3>基本プロファイル</h3>
           <table className="adopter-profile-table"><tbody>{basicProfileFields.map(field => <tr key={field.key}><th scope="row">{field.label}</th><td>{profile[field.key] || "未入力"}</td></tr>)}</tbody></table>
           <h3>詳細 <small>任意</small></h3>
           <table className="adopter-profile-table"><tbody>{detailProfileFields.map(field => <tr key={field.key}><th scope="row">{field.label}</th><td>{profile[field.key] || "未入力"}</td></tr>)}</tbody></table>

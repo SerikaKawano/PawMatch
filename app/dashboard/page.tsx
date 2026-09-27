@@ -18,8 +18,8 @@ export default async function DashboardPage() {
   if (user.role === "adopter") return <div className="role-menu-home page-wrap">
     <RoleHomeHero name={user.name} description="気になる子を探し、相談や申込みの状況を確認できます。" />
     <nav className="role-home-menu" aria-label="里親希望者のメニュー">
-      <Link href="/pets"><span><strong>里親募集中のペットを探す</strong><small>写真とプロフィールから、気になる子の詳細を見る</small></span><ArrowRight /></Link>
-      <Link href="/adopter/profile"><span><strong>プロフィールと書類</strong><small>ご自身の情報、本人確認、提出書類を確認・編集する</small></span><ArrowRight /></Link>
+      <Link href="/pets"><span><strong>里親募集中のペットを探す</strong><small>写真とプロファイルから、気になる子の詳細を見る</small></span><ArrowRight /></Link>
+      <Link href="/adopter/profile"><span><strong>プロファイルと書類</strong><small>ご自身の情報、本人確認、提出書類を確認・編集する</small></span><ArrowRight /></Link>
       <Link href="/adopter/history"><span><strong>相談・申込履歴</strong><small>相談内容と審査の進捗を確認する</small></span><ArrowRight /></Link>
     </nav>
   </div>;
