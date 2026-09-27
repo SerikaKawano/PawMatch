@@ -41,8 +41,6 @@ const english: Record<string, string> = {
   "譲渡者（団体）": "Rehomer (organisation)",
   "譲渡者（個人）": "Rehomer (individual)",
   "個人利用": "Individual account",
-  "ペットと次の家族をつなぐ。": "Connecting pets with their next family.",
-  "申込みの確認と譲渡の判断を支援します。": "Supporting application review and human adoption decisions.",
   "メニューを開く": "Open menu",
   "メインメニュー": "Main menu",
   "ペット検索": "Pet search",

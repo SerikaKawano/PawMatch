@@ -3,6 +3,11 @@ const base = process.env.PAWMATCH_TEST_URL;
 if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAWMATCH_TEST_URL to an isolated QA server.");
 (async () => {
   const home = await (await fetch(base + "/")).text();
+  const footer = home.split('<footer class="site-footer">')[1]?.split("</footer>")[0];
+  assert.ok(footer);
+  assert.ok(!footer.includes('href="/guide"'));
+  assert.ok(!footer.includes("ペットと次の家族をつなぐ。"));
+  assert.ok(!footer.includes("申込みの確認と譲渡の判断を支援します。"));
   assert.ok(!home.includes("団体・NPOの方"));
   assert.ok(!home.includes(">その他<"));
   for (const text of ["里親希望者の方", "譲渡者の方", "募集の例", "譲渡までの流れ", "面談、トライアル", "両者の合意後に譲渡が成立します。"])

@@ -96,7 +96,6 @@ body, body[data-role="adopter"], body[data-role="rehomer"], body[data-role="revi
 .site-footer { margin-top: 64px; color: #fff; background: #143b4b; }
 .site-footer-inner { max-width: 1360px; margin: auto; padding: 54px 44px; display: flex; align-items: start; justify-content: space-between; gap: 42px; }
 .site-footer strong { font-size: 29px; }
-.site-footer p, .site-footer small { color: #d5e7ec; font-size: 17px; }
 .site-footer nav { display: grid; gap: 16px; min-width: 240px; }
 .site-footer a { color: white; font-size: 17px; text-decoration: underline; text-underline-offset: 5px; }
 .site-footer a:hover { color: #a9e4ed; }
