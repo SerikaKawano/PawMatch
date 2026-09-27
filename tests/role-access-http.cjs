@@ -3,6 +3,8 @@ const assert=require("node:assert/strict");
 const base=process.env.PAWMATCH_TEST_URL;
 if(!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Isolated local QA URL required");
 const matrix=[
+ ["/adopter/profile",["adopter","admin"]],
+ ["/adopter/history",["adopter","admin"]],
  ["/rehoming",["rehomer","admin"]],
  ["/rehoming/consultations",["rehomer","admin"]],
  ["/reviews",["rehomer","reviewer","admin"]],
@@ -48,7 +50,8 @@ const apis=[
   }
   if(role!=="guest"){
    const html=await(await fetch(base+"/dashboard",{headers:{Cookie:cookie}})).text();
-   assert.ok(html.includes(role==="adopter"?'class="adopter-home-header"':role==="rehomer"?'class="rehomer-home-menu"':'class="role-hero-art"'));
+   assert.ok(html.includes('class="role-home-hero"'));
+   assert.ok(html.includes(role==="adopter"?'class="role-home-menu"':role==="rehomer"?'class="rehomer-home-menu"':role==="reviewer"?'class="reviewer-home-menu"':'class="next-task-panel"'));
    const anchors=[...html.matchAll(/href="([^"]+)"/g)].map(m=>m[1]);
    if(role==="adopter") assert.ok(!anchors.some(p=>/^\/(?:rehoming|reviews|admin|research|docs)(?:[/?#]|$)/.test(p)));
    if(["rehomer","reviewer"].includes(role)){assert.ok(!anchors.some(p=>/^\/(?:admin|research|docs)(?:[/?#]|$)/.test(p)));assert.ok(!anchors.includes("/dashboard#consultations"));}

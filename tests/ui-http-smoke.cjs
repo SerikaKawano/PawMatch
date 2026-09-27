@@ -86,18 +86,17 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     if (role === "reviewer") reviewCookie = Cookie;
     if (role === "admin") adminCookie = Cookie;
     const html = await (await fetch(base + "/dashboard", { headers: { Cookie } })).text();
+    assert.ok(html.includes('class="role-home-hero"'));
+    assert.ok(!html.includes('class="page-context-back"'));
     if (role === "adopter") {
-      assert.ok(html.includes('class="adopter-home-header"'));
+      const menu = html.split('class="role-home-menu"')[1]?.split('</nav>')[0];
+      assert.ok(menu);
+      for (const href of ["/pets", "/adopter/profile", "/adopter/history"]) assert.ok(menu.includes(`href="${href}"`));
+      assert.equal((menu.match(/href="/g) || []).length, 3);
       assert.ok(html.includes("Noah Williams"));
-      assert.ok(html.includes("自分のプロフィール"));
-      assert.ok(html.includes("本人確認"));
-      assert.ok(html.includes("相談、申込履歴"));
-      assert.ok(html.includes("審査の進捗"));
-      assert.ok(html.includes("仕事の状況"));
-      assert.ok(html.includes("管理者・審査担当者が閲覧できます"));
+      assert.ok(html.includes("里親希望者のホーム"));
       assert.ok(!html.includes('class="role-nav-links"'));
-      assert.ok(!html.split('class="adopter-home-header"')[1].split('</header>')[0].includes('href="/pets"'));
-      for (const old of ["里親希望者のホーム", "里親希望者としてログイン中", "目的に合わせて選ぶ", "あなたの利用状況", 'class="dashboard-user"']) assert.ok(!html.includes(old));
+      for (const old of ["里親希望者としてログイン中", "目的に合わせて選ぶ", "あなたの利用状況", 'class="dashboard-user"']) assert.ok(!html.includes(old));
     } else if (role === "rehomer") {
       const menu = html.split('class="rehomer-home-menu"')[1]?.split('</nav>')[0];
       assert.ok(menu);
@@ -115,12 +114,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       assert.ok(nextTask.includes('href="' + target + '"'));
     }
     assert.ok(!html.includes('aria-label="現在地"'));
-    if (role === "adopter" || role === "rehomer") assert.ok(!html.includes('class="role-navigation"'));
-    else {
-      const shortcuts = html.split('class="role-nav-links"')[1]?.split("</nav>")[0];
-      assert.ok(shortcuts);
-      for (const repeated of ["/dashboard", "/pets", "/guide", "/rehoming"]) assert.ok(!shortcuts.includes(`href="${repeated}"`));
-    }
+    assert.ok(!html.includes('class="role-navigation"'));
     assert.ok(!html.includes(">お気に入り<"));
     const screen = await fetch(base + target, { headers: { Cookie }, redirect: "manual" });
     assert.equal(screen.status, 200);

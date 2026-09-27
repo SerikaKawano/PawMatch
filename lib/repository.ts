@@ -4,6 +4,7 @@ import type { Applicant, Pet } from "./types";
 import { ApplicationModel } from "@/models/Application";
 import { PetModel } from "@/models/Pet";
 import { getReviewRecords, initialReview, saveReview } from "./review-store";
+import type { DemoUser } from "./demoUsers";
 import { assess } from "./research/scoring";
 import { getResearch } from "./research/store";
 
@@ -54,9 +55,9 @@ export async function seedDatabase() {
   ]);
   return {pets:pets.length,applications:applicants.length};
 }
-export async function updateApplicationReview(id:string,input:unknown) {
+export async function updateApplicationReview(id:string,input:unknown,actor:DemoUser) {
   const app=(await getApplicants()).find(a=>a.id===id);
   if(!app)return null;
-  await saveReview(app,input);
+  await saveReview(app,input,actor);
   return (await getApplicants()).find(a=>a.id===id)!;
 }

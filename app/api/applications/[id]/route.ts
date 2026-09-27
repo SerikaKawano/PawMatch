@@ -13,7 +13,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const [applications, pets] = await Promise.all([getApplicants(), getPets()]);
     if (!visibleApplications(access.user!, applications, pets).some(application => application.id === id))
       return NextResponse.json({ error: "Application not found" }, { status: 404 });
-    const result = await updateApplicationReview(id, await readJson(request));
+    const result = await updateApplicationReview(id, await readJson(request), access.user!);
     return result ? NextResponse.json({ data: result }) : NextResponse.json({ error: "Application not found" }, { status: 404 });
   } catch(error) { return errorResponse(error); }
 }

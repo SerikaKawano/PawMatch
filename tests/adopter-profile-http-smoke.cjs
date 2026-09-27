@@ -53,10 +53,11 @@ async function cookieFor(userId) {
   const acknowledged = await fetch(base + `/api/adopter-document-requests/${consentRequest.id}`, { method: "PATCH", headers: { Cookie: adopter, Origin: base } });
   assert.equal(acknowledged.status, 200);
   assert.ok((await acknowledged.json()).request.acknowledgedAt);
-  const myDashboard = await (await fetch(base + "/dashboard", { headers: { Cookie: adopter } })).text();
-  assert.ok(myDashboard.includes("基本プロフィール"));
-  assert.ok(myDashboard.includes("詳細"));
-  assert.ok(myDashboard.includes('href="/consultations/sample-consultation-1"'));
+  const myProfile = await (await fetch(base + "/adopter/profile", { headers: { Cookie: adopter } })).text();
+  assert.ok(myProfile.includes("基本プロフィール"));
+  assert.ok(myProfile.includes("詳細"));
+  const myHistory = await (await fetch(base + "/adopter/history", { headers: { Cookie: adopter } })).text();
+  assert.ok(myHistory.includes('href="/consultations/sample-consultation-1"'));
   const journey = await (await fetch(base + "/consultations/sample-consultation-1", { headers: { Cookie: adopter } })).text();
   for (const label of ["進捗タイムライン", "連絡・メッセージ履歴", "申込み受付", "最終判断", "2026/09/03"]) assert.ok(journey.includes(label), label);
   assert.equal((await fetch(base + "/consultations/sample-consultation-1", { headers: { Cookie: otherAdopter } })).status, 404);

@@ -30,7 +30,7 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
     : consultation.status === "closed" ? "審査前に終了" : "未判定";
 
   return <div className="page-wrap consultation-detail-page">
-    <Link href={user.role === "adopter" ? "/dashboard#consultations" : user.role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations"} className="back-link">← 相談一覧へ戻る</Link>
+    <Link href={user.role === "adopter" ? "/adopter/history" : user.role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations"} className="back-link">← 相談一覧へ戻る</Link>
     <h1>{pet?.name ?? consultation.petId}への相談</h1>
     <p className={`journey-summary ${consultation.status === "closed" || outcome === "今回は見送り" ? "stopped" : application ? "active" : "waiting"}`}>{journeySummary(consultation, application)}</p>
     <dl className="journey-facts">

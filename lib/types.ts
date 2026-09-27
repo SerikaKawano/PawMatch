@@ -99,5 +99,6 @@ export interface ReviewRecord {
   decision: "approve" | "hold" | "decline";
   decisionRecorded: boolean;
   riskAcknowledged: boolean;
-  history: { at: string; action: string; note: string; stage: ReviewStage }[];
+  signoffs?: Partial<Record<"meeting" | "trial" | "final_review", { reviewer?: { userId: string; name: string; at: string }; rehomer?: { userId: string; name: string; at: string } }>>;
+  history: { at: string; action: string; note: string; stage: ReviewStage; actorName?: string; actorRole?: "reviewer" | "rehomer" }[];
 }

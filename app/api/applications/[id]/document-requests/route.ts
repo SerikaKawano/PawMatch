@@ -12,6 +12,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const application = visibleApplications(user, applications, pets).find(item => item.id === id);
   const pet = pets.find(item => item.id === application?.petId);
   if (!application || !application.userId || !pet) return NextResponse.json({ error: "対象の申込みが見つかりません。" }, { status: 404 });
+  if (user.role === "rehomer") return NextResponse.json({ error: "書類の依頼は審査担当者が行います。" }, { status: 403 });
   if (application.review?.decisionRecorded) return NextResponse.json({ error: "判断済みの審査には依頼できません。" }, { status: 409 });
   try {
     const body = await request.json();

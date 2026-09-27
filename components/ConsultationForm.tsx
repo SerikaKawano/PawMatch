@@ -36,7 +36,7 @@ export function ConsultationForm({ petId, userEmail }: { petId: string; userEmai
     <p className="consultation-process-note">相談の送信だけでは審査は始まりません。審査担当者が内容を確認し、必要な情報の提出を案内します。</p>
     <button className="session-primary" disabled={busy || !message.trim() || !contactEmail.trim()}>{busy ? "送信中…" : "相談を送信する"}</button>
     <p role="status" aria-live="polite">{notice}</p>
-    {notice.startsWith("相談を受け付けました") && <Link className="task-secondary" href="/dashboard#consultations">マイページで相談の進捗を見る →</Link>}
+    {notice.startsWith("相談を受け付けました") && <Link className="task-secondary" href="/adopter/history">相談・申込履歴で進捗を見る →</Link>}
     {expired && <Link href={`/login?next=${encodeURIComponent("/pets/" + petId + "/consult")}`}>再ログインしてこの相談画面へ戻る</Link>}
   </form>;
 }

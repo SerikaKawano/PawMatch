@@ -20,6 +20,6 @@ export default async function ConsultationPage({ params }: { params: Promise<{ i
     <p>{pet.breed} · {pet.age} · {pet.location}</p>
     <ConsultationForm petId={id} userEmail={user.email} />
     <ConsultationHistory records={records} names={{ [id]: pet.name }} applications={applications.filter(application => application.userId === user.id)} />
-    <Link href="/dashboard#consultations">マイページですべての相談を見る →</Link>
+    <Link href="/adopter/history">相談・申込履歴ですべての相談を見る →</Link>
   </div>;
 }

@@ -5,6 +5,7 @@ import { getApplicants, getPets } from "@/lib/repository";
 import { visibleApplications } from "@/lib/ownership";
 import { listAdopterDocuments } from "@/lib/adopter-documents";
 import { requestsForApplication } from "@/lib/document-requests";
+import { demoUsers } from "@/lib/demoUsers";
 export const dynamic = "force-dynamic";
 
 export default async function ApplicationReviewPage({ params }: { params: Promise<{ id: string }> }) {
@@ -17,5 +18,6 @@ export default async function ApplicationReviewPage({ params }: { params: Promis
   const pet = pets.find(item => item.id === application.petId);
   if (!pet) notFound();
   const [documents, requests] = await Promise.all([application.userId ? listAdopterDocuments(application.userId) : [], requestsForApplication(id)]);
-  return <div className="page-wrap review-process-page"><ApplicationReviewProcess application={application} pet={pet} canInspectAdopter={Boolean(application.userId)} initialDocuments={documents} initialRequests={requests} /></div>;
+  const owner=demoUsers.find(person=>person.id===pet.ownerId);
+  return <div className="page-wrap review-process-page"><ApplicationReviewProcess application={application} pet={pet} role={user.role} ownerName={owner?.name??"未登録"} canInspectAdopter={Boolean(application.userId)} initialDocuments={documents} initialRequests={requests} /></div>;
 }

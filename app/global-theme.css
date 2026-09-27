@@ -449,3 +449,25 @@ small { font-size: 17px; }
 .language-switch button:focus-visible { outline: 3px solid #a82e4d; outline-offset: 2px; }
 @media (max-width: 1000px) { .quick-search { margin-left: 60px; margin-right: 60px; grid-template-columns: repeat(2, minmax(0, 1fr)); } .public-header-inner { gap: 14px; } }
 @media (max-width: 760px) { .quick-search { width: auto; margin: 22px 23px 0; grid-template-columns: 1fr; } .brand-demo { font-size: 17px; } .language-switch button { min-width: 43px; } .public-brand small, .public-brand .brand-mark { display: none; } .public-header-inner { gap: 8px; } }
+.role-menu-home { max-width: 1120px; }
+.role-home-hero { display: flex; align-items: center; min-height: 270px; padding: 38px 46px; border-radius: 20px; color: #fff; background: linear-gradient(90deg, rgba(12,43,55,.96) 0%, rgba(12,43,55,.78) 48%, rgba(12,43,55,.05) 100%), url('/hero-uk-pets.png') center 46% / cover; }
+.role-home-hero > div { max-width: 590px; }
+.role-home-hero h2 { margin: 0 0 14px; color: #fff; font-size: clamp(34px, 4vw, 48px); line-height: 1.2; }
+.role-home-hero p { margin: 0; color: #fff; font-size: 20px; line-height: 1.6; font-weight: 700; }
+.role-home-menu { display: grid; gap: 18px; margin-top: 22px; }
+.role-home-menu a { display: grid; grid-template-columns: minmax(0,1fr) 32px; align-items: center; gap: 22px; min-height: 144px; padding: 26px 32px; border: 2px solid #77b6bf; border-radius: 18px; background: #dff1f2; color: #164f5b; box-shadow: 0 10px 24px #28424d14; }
+.role-home-menu a:hover, .rehomer-home-menu a:hover, .reviewer-home-menu a:hover { background: #cae9eb; border-color: #087080; transform: translateY(-2px); }
+.role-home-menu a > span { display: grid; gap: 6px; }
+.role-home-menu strong { font-size: clamp(24px, 2.8vw, 30px); }
+.role-home-menu small { font-size: 18px; line-height: 1.5; }
+.role-home-menu svg { width: 28px; height: 28px; }
+.rehomer-home-menu a.listing, .rehomer-home-menu a.progress, .rehomer-home-menu a.enquiries, .reviewer-home-menu a.progress, .reviewer-home-menu a.enquiries, .reviewer-home-menu a.documents { background: #dff1f2; border-color: #77b6bf; color: #164f5b; }
+.role-dashboard .next-task-panel, .role-dashboard .other-tasks a, .role-dashboard .dashboard-stats > a, .role-menu-grid article { background: #dff1f2 !important; border-color: #77b6bf !important; color: #164f5b; }
+.review-case-participants { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 20px 0 12px; padding: 20px 24px; border: 1px solid #9acbd0; border-radius: 12px; background: #eaf6f6; font-size: 18px; }
+.review-case-participants a { color: #075d6b; font-weight: 850; text-decoration: underline; text-underline-offset: 3px; }
+.review-actor-status { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-bottom: 20px; }
+.review-actor-status span { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 16px 20px; border: 1px solid #9acbd0; border-radius: 10px; background: #eaf6f6; color: #124c55; font-size: 18px; }
+.review-actor-status strong { font-weight: 850; }
+.review-readonly-note { padding: 15px 18px; border-radius: 10px; background: #fff4d7; color: #564328; font-size: 18px; }
+.review-trial-form { min-width: 0; border: 0; padding: 0; }
+@media (max-width: 650px) { .role-home-hero { min-height: 250px; padding: 28px; background-position: 62% center; } .role-home-menu a { min-height: 120px; padding: 20px; } .review-actor-status { grid-template-columns: 1fr; } }
