@@ -91,3 +91,16 @@ test("review progress uses icon-only automated check states", () => {
   assert.ok(!progress.includes("確認 {application.risks.length}"));
   assert.ok(!progress.includes("<CheckCircle2 />確認済み"));
 });
+
+test("review case participant icons follow the role colour system", () => {
+  const process = readFileSync(path.join(__dirname, "../components/ApplicationReviewProcess.tsx"), "utf8");
+  const theme = readFileSync(path.join(__dirname, "../app/global-theme.css"), "utf8");
+  for (const role of ["pet", "rehomer", "adopter", "reviewer"]) {
+    assert.ok(process.includes(`className="review-person ${role}"`));
+    assert.ok(theme.includes(`.review-state-banner .review-person.${role}`));
+  }
+  assert.match(theme, /review-person\.pet \{ --participant-accent: #19769a; --participant-avatar: #dff2fa; \}/);
+  assert.match(theme, /review-person\.rehomer \{ --participant-accent: #a83f68; --participant-avatar: #f5d5e1; \}/);
+  assert.match(theme, /review-person\.adopter \{ --participant-accent: #7c5d08; --participant-avatar: #f4e6a9; \}/);
+  assert.match(theme, /review-person\.reviewer \{ --participant-accent: #2f7958; --participant-avatar: #d5ecde; \}/);
+});

@@ -622,7 +622,11 @@ small { font-size: 17px; }
 .review-state-banner .review-case-participants { position: relative; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 15px; margin: 0; padding: 18px 24px 19px; border: 0; border-radius: 0; background: #fff; color: #1d414c; }
 .review-state-banner .review-case-participants::before { content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 1px; background: #dbe6e8; }
 .review-state-banner .review-person { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.review-state-banner .review-person > svg { width: 24px; height: 24px; flex: none; color: #087486; }
+.review-state-banner .review-person > svg { width: 36px; height: 36px; flex: none; padding: 7px; border-radius: 50%; color: var(--participant-accent); background: var(--participant-avatar); }
+.review-state-banner .review-person.pet { --participant-accent: #19769a; --participant-avatar: #dff2fa; }
+.review-state-banner .review-person.rehomer { --participant-accent: #a83f68; --participant-avatar: #f5d5e1; }
+.review-state-banner .review-person.adopter { --participant-accent: #7c5d08; --participant-avatar: #f4e6a9; }
+.review-state-banner .review-person.reviewer { --participant-accent: #2f7958; --participant-avatar: #d5ecde; }
 .review-state-banner .review-person > span { display: grid; gap: 2px; min-width: 0; }
 .review-state-banner .review-person small { color: #526c75; font-size: 17px; }
 .review-state-banner .review-person strong, .review-state-banner .review-person a { overflow-wrap: anywhere; color: #174b5a; font-size: 18px; font-weight: 800; }

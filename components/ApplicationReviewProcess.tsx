@@ -105,10 +105,10 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
         <span className={`review-actor-pill ${confirmations?.rehomer?"confirmed":jointStage?"waiting":role==="rehomer"?"neutral no-action":"neutral"}`}>{confirmations?.rehomer?<CheckCircle2 aria-hidden="true"/>:jointStage?<Clock3 aria-hidden="true"/>:<MinusCircle aria-hidden="true"/>}<span><strong>譲渡者</strong><small>{jointStage?confirmations?.rehomer?`確認済み · ${confirmations.rehomer.name}`:"確認待ち":"この工程の操作は不要"}</small></span></span>
       </div>}
       <div className="review-case-participants" aria-label="審査対象と担当者">
-        <span className="review-person"><PawPrint aria-hidden="true"/><span><small>ペット</small><Link href={`/pets/${pet.id}`}>{pet.name}</Link></span></span>
-        <span className="review-person"><HeartHandshake aria-hidden="true"/><span><small>譲渡者</small><strong>{ownerName}</strong></span></span>
-        <span className="review-person"><UserRound aria-hidden="true"/><span><small>申込者</small><Link href={adopterHref}>{record.name}</Link></span></span>
-        <span className="review-person"><ClipboardCheck aria-hidden="true"/><span><small>審査担当者</small><strong>{reviewerName}</strong></span></span>
+        <span className="review-person pet"><PawPrint aria-hidden="true"/><span><small>ペット</small><Link href={`/pets/${pet.id}`}>{pet.name}</Link></span></span>
+        <span className="review-person rehomer"><HeartHandshake aria-hidden="true"/><span><small>譲渡者</small><strong>{ownerName}</strong></span></span>
+        <span className="review-person adopter"><UserRound aria-hidden="true"/><span><small>申込者</small><Link href={adopterHref}>{record.name}</Link></span></span>
+        <span className="review-person reviewer"><ClipboardCheck aria-hidden="true"/><span><small>審査担当者</small><strong>{reviewerName}</strong></span></span>
       </div>
     </div>
     <div className="review-process-layout"><section className="research-card">
