@@ -202,7 +202,14 @@ function withSamples(records: Consultation[]) {
     // Refresh canonical synthetic messages while preserving replies added in the running demo.
     const canonicalIds = new Set((sample.messages ?? []).map(message => message.id));
     const addedReplies = stored.messages.filter(message => !canonicalIds.has(message.id));
-    return { ...sample, messages: [...(sample.messages ?? []), ...addedReplies] };
+    return {
+      ...sample,
+      status: stored.status ?? sample.status,
+      reviewedAt: stored.reviewedAt ?? sample.reviewedAt,
+      reviewedBy: stored.reviewedBy ?? sample.reviewedBy,
+      replyMessage: stored.replyMessage ?? sample.replyMessage,
+      messages: [...(sample.messages ?? []), ...addedReplies],
+    };
   });
   return [...regular, ...samples];
 }

@@ -69,10 +69,15 @@ test("every function page uses the shared title and description bar without acce
 });
 test("consultation history presents one unambiguous progress indicator", () => {
   const history = readFileSync(path.join(__dirname, "../components/ConsultationHistory.tsx"), "utf8");
+  const triage = readFileSync(path.join(__dirname, "../components/ConsultationTriage.tsx"), "utf8");
+  const detail = readFileSync(path.join(__dirname, "../app/consultations/[id]/page.tsx"), "utf8");
   assert.ok(history.includes("担当者が確認中"));
   assert.ok(history.includes("申込み前情報の提出"));
   assert.ok(!history.includes('className={`consultation-status'));
   assert.ok(!history.includes('className={`consultation-path'));
   assert.ok(!history.includes('"相談のみ"'));
   assert.ok(!history.includes('"審査担当者の確認待ち"'));
+  assert.match(triage, /href=\{`\/consultations\/\$\{record\.id\}`\}/);
+  assert.match(triage, /メッセージ履歴・返信を開く/);
+  assert.match(detail, /<ConsultationReplyForm/);
 });

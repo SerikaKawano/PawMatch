@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
+import { MessageCircle } from "lucide-react";
 import type { Consultation, ConsultationStatus } from "@/lib/consultations";
 
 export function ConsultationTriage({ initialRecords, names, applicants }: { initialRecords: Consultation[]; names: Record<string, string>; applicants: Record<string, string> }) {
@@ -26,11 +28,11 @@ export function ConsultationTriage({ initialRecords, names, applicants }: { init
     <p role="status" aria-live="polite">{notice}</p>
     {!pending.length && <p className="consultation-empty">確認待ちの相談はありません。</p>}
     {pending.map(record => <article className="consultation-triage-card" key={record.id}>
-      <div className="consultation-triage-heading"><h2>{names[record.petId] ?? record.petId}への相談</h2><span className="consultation-status received">確認待ち</span></div>
+      <div className="consultation-triage-heading"><h2><Link href={`/consultations/${record.id}`}>{names[record.petId] ?? record.petId}への相談</Link></h2><span className="consultation-status received">確認待ち</span></div>
       <p><strong>相談者：</strong>{applicants[record.userId] ?? "里親希望者"}　<strong>連絡先：</strong>{record.contactEmail ?? "未登録"}</p>
       <p className="consultation-message">{record.message}</p>
-      <div className="consultation-triage-actions"><button type="button" className="decision-button" disabled={busy !== null} onClick={() => update(record, "profile_requested")}>事前情報の提出へ進める</button><button type="button" className="decision-button outline" disabled={busy !== null} onClick={() => update(record, "closed")}>相談を終了する</button></div>
+      <div className="consultation-triage-actions"><Link href={`/consultations/${record.id}`} className="consultation-open-link"><MessageCircle size={20} />メッセージ履歴・返信を開く</Link><button type="button" className="decision-button" disabled={busy !== null} onClick={() => update(record, "profile_requested")}>事前情報の提出へ進める</button><button type="button" className="decision-button outline" disabled={busy !== null} onClick={() => update(record, "closed")}>相談を終了する</button></div>
     </article>)}
-    {handled.length > 0 && <details className="consultation-handled"><summary>対応済みの相談（{handled.length}件）</summary>{handled.map(record => <p key={record.id}>{names[record.petId] ?? record.petId} · {applicants[record.userId] ?? "里親希望者"} · {record.status === "profile_requested" ? "事前情報の提出待ち" : "対応終了"}</p>)}</details>}
+    {handled.length > 0 && <details className="consultation-handled"><summary>{`対応済みの相談（${handled.length}件）`}</summary><div className="consultation-handled-list">{handled.map(record => <Link key={record.id} href={`/consultations/${record.id}`}><span>{names[record.petId] ?? record.petId} · {applicants[record.userId] ?? "里親希望者"} · {record.status === "profile_requested" ? "事前情報の提出待ち" : "対応終了"}</span><strong>履歴を見る →</strong></Link>)}</div></details>}
   </div>;
 }

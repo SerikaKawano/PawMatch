@@ -14,7 +14,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const parsed = z.object({ status: z.enum(["profile_requested", "closed"]) }).safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "操作を確認してください。" }, { status: 400 });
   const { id } = await params;
-  if (!z.string().uuid().safeParse(id).success) return NextResponse.json({ error: "相談が見つかりません。" }, { status: 404 });
+  if (!z.union([z.string().uuid(), z.string().regex(/^sample-consultation-\d+$/)]).safeParse(id).success) return NextResponse.json({ error: "相談が見つかりません。" }, { status: 404 });
   const consultation = await updateConsultationStatus(id, parsed.data.status, user.id);
   if (!consultation) return NextResponse.json({ error: "相談が見つからないか、すでに対応済みです。" }, { status: 409 });
   return NextResponse.json({ consultation }, { headers: { "Cache-Control": "no-store" } });

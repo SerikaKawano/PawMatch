@@ -118,11 +118,19 @@
 .consultation-triage-card { margin: 16px 0; padding: 22px; border: 1px solid #cbdce2; border-radius: 10px; background: #fff; }
 .consultation-triage-heading { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
 .consultation-triage-heading h2 { margin: 0; font-size: 22px; }
+.consultation-triage-heading h2 a { color: #075f6c; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.consultation-triage-heading h2 a:hover { color: #004d57; }
 .consultation-triage-card p { font-size: 17px; line-height: 1.7; }
 .consultation-triage-card .consultation-message { padding: 15px; border-radius: 8px; background: #f6f9fb; }
 .consultation-triage-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.consultation-open-link { min-height: 48px; padding: 10px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 2px solid #087080; border-radius: 7px; background: #087080; color: #fff; font-size: 17px; font-weight: 850; white-space: nowrap; }
+.consultation-open-link:hover { border-color: #005d69; background: #005d69; color: #fff; }
 .consultation-handled { margin-top: 24px; padding: 15px 20px; border: 1px solid #cbdce2; border-radius: 10px; background: #fff; font-size: 17px; }
 .consultation-handled summary { cursor: pointer; font-weight: 800; }
+.consultation-handled-list { display: grid; gap: 8px; margin-top: 14px; }
+.consultation-handled-list a { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid #d8e3e7; border-radius: 7px; background: #f7fafb; }
+.consultation-handled-list a:hover { border-color: #87b7c0; background: #edf6f7; }
+.consultation-handled-list strong { flex: none; color: #075f6c; }
 .adopter-home { max-width: 1280px; margin: 0 auto; }
 .adopter-home-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; margin-bottom: 16px; }
 .adopter-home-header h2 { margin: 4px 0 0; font-size: clamp(38px, 4.5vw, 54px); line-height: 1.2; }
