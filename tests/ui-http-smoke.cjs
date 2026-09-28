@@ -167,6 +167,14 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   assert.ok(adminUsers.includes("主管理者（保護）"));
   const reviewerPet = await (await fetch(base + "/pets/momo", { headers: { Cookie: reviewCookie } })).text();
   assert.ok(!reviewerPet.includes(">重み "));
+  const waitingSession = await fetch(base + "/api/demo-session", { method: "POST", headers: { Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ userId: "adopter-ava" }) });
+  const waitingCookie = waitingSession.headers.get("set-cookie").split(";")[0];
+  const waitingConsultation = await (await fetch(base + "/pets/kai/consult", { headers: { Cookie: waitingCookie } })).text();
+  assert.ok(waitingConsultation.includes("相談受付済み"));
+  assert.ok(waitingConsultation.includes("担当者が確認中"));
+  assert.ok(waitingConsultation.includes("申込み前情報の提出"));
+  assert.ok(!waitingConsultation.includes("相談のみ"));
+  assert.ok(!waitingConsultation.includes("審査担当者の確認待ち"));
   const guest = await fetch(base + "/rehoming", { redirect: "manual" });
   assert.equal(guest.status, 307);
   assert.ok(guest.headers.get("location").includes("next=%2Frehoming"));

@@ -36,8 +36,9 @@
 .consultation-history-group > ul { padding: 0 20px; }
 .consultation-history > p, .consultation-history li p { font-size: 17px; line-height: 1.8; }
 .consultation-history ul { list-style: none; padding: 0; }
-.consultation-history li { padding: 22px 0; border-top: 1px solid #e5d8cc; }
-.consultation-history li > div { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 19px; font-weight: 700; }
+.consultation-history-group > ul > li { padding: 22px 0; border-top: 1px solid #e5d8cc; }
+.consultation-record-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 18px; font-size: 19px; font-weight: 700; }
+.consultation-record-heading time { color: #657579; font-size: 17px; font-weight: 500; }
 .consultation-history li span { padding: 4px 10px; border-radius: 5px; background: #faf0d3; color: #624b25; font-size: 17px; }
 .consultation-history li .consultation-path.review { background: #d8eef1; color: #0b5966; }
 .consultation-history li .consultation-path.enquiry { background: #f3e9de; color: #67462e; }
@@ -48,11 +49,14 @@
 .consultation-history li .consultation-status.received, .consultation-status.received { background: #fff0ce; color: #704d11; }
 .consultation-history li .consultation-status.profile_requested, .consultation-status.profile_requested { background: #ddf2e8; color: #14583c; }
 .consultation-history li .consultation-status.closed, .consultation-status.closed { background: #fbe6e8; color: #9c2d3e; }
-.consultation-mini-progress { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; padding: 0; list-style: none; }
-.consultation-mini-progress li { padding: 5px 10px; border: 1px solid #c9d8dd; border-radius: 6px; color: #506671; background: #fff; font-size: 17px; font-weight: 750; }
-.consultation-mini-progress li.done { background: #ddf2e8; color: #14583c; border-color: #a6d9bf; }
-.consultation-mini-progress li.active { background: #fff0ce; color: #704d11; border-color: #e3c675; }
+.consultation-mini-progress { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 8px; margin: 15px 0; padding: 0; list-style: none; }
+.consultation-mini-progress li { min-height: 58px; padding: 9px 11px; border: 1px solid #c9d8dd; border-radius: 9px; color: #506671; background: #f5f7f8; display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 750; }
+.consultation-mini-progress li.done { background: #e7f5ed; color: #14583c; border-color: #a6d9bf; }
+.consultation-mini-progress li.active { background: #fff4d8; color: #704d11; border: 2px solid #d5ad45; }
+.consultation-mini-progress li.pending { background: #f4f6f7; color: #657579; border-color: #d8e0e3; }
 .consultation-mini-progress li.stopped { background: #fbe6e8; color: #9c2d3e; border-color: #e4b1b9; }
+.consultation-step-marker { flex: 0 0 29px; width: 29px; height: 29px; padding: 0 !important; border-radius: 50% !important; display: grid; place-items: center; background: #fff !important; color: inherit !important; font-size: 17px !important; font-weight: 850; }
+.consultation-mini-progress li > span:not(.consultation-step-marker) { padding: 0; border-radius: 0; background: transparent; color: inherit; }
 .consultation-next-step { padding: 10px 13px; border-radius: 6px; background: #f1f7f8; }
 .consultation-detail-page { max-width: 1020px; }
 .consultation-detail-page h1 { margin: 10px 0 18px; font-size: clamp(32px, 4vw, 46px); }
