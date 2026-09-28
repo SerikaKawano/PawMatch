@@ -33,6 +33,8 @@ export function analyse(sessions: StudySession[], source: StudySession["source"]
       explanation: mean(subset.flatMap(r => r.response.coding ? [r.response.coding.explanationScore] : [])),
       usefulness: mean(subset.map(r => r.response.ratings.usefulness)),
       clarity: mean(subset.map(r => r.response.ratings.clarity)),
+      confidence: mean(subset.map(r => r.response.ratings.confidence)),
+      selfReportedReliance: mean(subset.map(r => r.response.ratings.reliance)),
       alignment: mean(subset.map(r => Number(r.metrics.alignment) * 100)),
       relianceCues: subset.filter(r => r.metrics.relianceCue).length,
     };
@@ -47,6 +49,10 @@ export function analyse(sessions: StudySession[], source: StudySession["source"]
       participant: session.participantCode, scenario: scenario.title, order: session.order,
       timeDifference: baseline.interrupted || risk.interrupted ? null : (risk.elapsedMs - baseline.elapsedMs) / 1000,
       recallDifference: baseMetrics.recall === null || riskMetrics.recall === null ? null : (riskMetrics.recall - baseMetrics.recall) * 100,
+      usefulnessDifference: risk.ratings.usefulness - baseline.ratings.usefulness,
+      clarityDifference: risk.ratings.clarity - baseline.ratings.clarity,
+      confidenceDifference: risk.ratings.confidence - baseline.ratings.confidence,
+      relianceDifference: risk.ratings.reliance - baseline.ratings.reliance,
       priorityChanged: baseline.priorityId !== risk.priorityId,
     }];
   }));

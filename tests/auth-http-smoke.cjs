@@ -24,8 +24,8 @@ async function json(path, method, body, cookie) {
     const html = await dashboard.text();
     assert.equal(dashboard.status, 200);
     assert.ok(html.includes(name));
-    assert.ok(html.split('class="dashboard-welcome"')[1].split('class="dashboard-user"')[0].includes(name));
-    assert.ok(html.includes("session-account-toggle"));
+    assert.ok(html.includes('class="role-home-hero"'));
+    assert.ok(html.includes(`<span>${name}</span>`));
     const consult = await fetch(base + "/pets/momo/consult", { redirect: "manual", headers: { Cookie: sessions[id] } });
     if (["adopter", "admin"].includes(id)) {
       assert.equal(consult.status, 200);
@@ -33,7 +33,12 @@ async function json(path, method, body, cookie) {
     } else { assert.equal(consult.status, 307); assert.equal(consult.headers.get("location"), "/access-denied"); }
   }
   const marker = "相談テスト-" + randomUUID();
-  const body = { petId: "momo", topic: "健康・お世話", message: marker, requestId: randomUUID(), userId: "admin" };
+    const body = {
+      petId: "momo",
+      message: marker,
+      contactEmail: "noah@pawmatch.test",
+      requestId: randomUUID(),
+    };
   const saved = await json("/api/consultations", "POST", body, sessions.adopter);
   assert.equal(saved.status, 201);
   const record = (await saved.json()).consultation;

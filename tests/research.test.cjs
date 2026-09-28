@@ -140,6 +140,11 @@ test("proposal research invariants and persistence", async t => {
     const result=analyse([sample],"simulation");
     assert.equal(result.pairs.length,2);
     assert.equal(result.pairs[0].timeDifference,null);
+    assert.ok(Number.isFinite(result.pairs[0].usefulnessDifference));
+    assert.ok(Number.isFinite(result.pairs[0].clarityDifference));
+    assert.ok(Number.isFinite(result.pairs[0].confidenceDifference));
+    assert.ok(Number.isFinite(result.pairs[0].relianceDifference));
+    assert.ok(result.modes.every(mode=>mode.confidence!==null&&mode.selfReportedReliance!==null));
     sample.responses.pop();
     assert.equal(analyse([sample],"simulation").pairs.length,1);
     assert.ok(csvCell("=HYPERLINK(x)").startsWith('"\''));

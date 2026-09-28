@@ -4,7 +4,7 @@ import Link from "next/link";
 import { analyse, mean } from "@/lib/research/analysis";
 import type { ResponseRecord, Scenario, StudySession } from "@/lib/research/types";
 const format = (value:number|null, suffix="") => value===null?"未集計":value.toFixed(1)+suffix;
-const modeLabel = (mode:string)=>mode==="baseline"?"基本表示":"確認支援表示";
+const modeLabel = (mode:string)=>mode==="baseline"?"申込情報のみ":"PawMatch確認支援付き";
 export function ResearchResults({initial,source}:{initial:StudySession[];source:StudySession["source"]}) {
   const [sessions,setSessions]=useState(initial);
   const result=analyse(sessions,source);
@@ -16,17 +16,19 @@ export function ResearchResults({initial,source}:{initial:StudySession[];source:
     <section className="research-card"><h2>表示ごとの記述統計</h2><div className="research-table-wrap"><table><thead><tr><th>指標</th>{result.modes.map(m=><th key={m.mode}>{modeLabel(m.mode)}</th>)}</tr></thead><tbody>
       {([
         ["回答数", (m:typeof result.modes[number])=>String(m.count)],
-        ["平均所要時間（中断ありを除外）", (m:typeof result.modes[number])=>format(m.time,"秒")+" / "+m.timed+"回答"],
         ["想定リスクの平均発見率", (m:typeof result.modes[number])=>format(m.recall,"%")],
         ["説明の明確さ（研究者採点0–3）", (m:typeof result.modes[number])=>format(m.explanation)+" / 採点済み "+m.coded+"回答"],
         ["有用性（自己評価1–5）", (m:typeof result.modes[number])=>format(m.usefulness)],
         ["情報の分かりやすさ（自己評価1–5）", (m:typeof result.modes[number])=>format(m.clarity)],
+        ["判断理由を説明できる自信（自己評価1–5）", (m:typeof result.modes[number])=>format(m.confidence)],
+        ["画面の結論・数値への依存（自己評価1–5、低いほど望ましい）", (m:typeof result.modes[number])=>format(m.selfReportedReliance)],
         ["仮基準の候補例との一致率", (m:typeof result.modes[number])=>format(m.alignment,"%")],
         ["高得点候補の重要リスク見落とし", (m:typeof result.modes[number])=>m.mode==="baseline"?"対象外":m.relianceCues+"回答"],
+        ["参考：平均経過時間（中断ありを除外）", (m:typeof result.modes[number])=>format(m.time,"秒")+" / "+m.timed+"回答"],
       ] as const).map(([label,render])=><tr key={label}><th>{label}</th>{result.modes.map(m=><td key={m.mode}>{render(m)}</td>)}</tr>)}
     </tbody></table></div><p>発見率は、各回答で「研究者が確認した想定リスク数 ÷ ケースの想定リスク数」を計算した平均です。想定リスク0件の対照ケースは分母に含めません。候補例との一致は判断の正しさではなく、仮基準との対応です。</p><p>高得点候補の重要リスク見落としは過度な依存を検討する手掛かりです。原因の断定には自由記述と本人への確認が必要です。採点未実施の回答では算出しません。</p></section>
-    <section className="research-card"><h2>同じ参加者・同じケースでの比較</h2><p>差は「確認支援表示 − 基本表示」。時間のマイナスは短縮、発見率のプラスは改善です。複数ケースを含むため、ペア数は参加者数ではありません。</p><div className="research-table-wrap"><table><thead><tr><th>匿名コード</th><th>ケース</th><th>順序</th><th>時間差</th><th>発見率差</th><th>優先候補</th></tr></thead><tbody>{result.pairs.map((pair,i)=><tr key={i}><th>{pair.participant}</th><td>{pair.scenario}</td><td>{pair.order}</td><td>{format(pair.timeDifference,"秒")}</td><td>{format(pair.recallDifference,"pt")}</td><td>{pair.priorityChanged?"変更あり":"同じ"}</td></tr>)}</tbody></table></div><p>両表示が未完了のケースはペア比較に含めません。時間には画面外の時間も含まれます。中断申告は時間差のみを除外します。</p></section>
-    <section className="research-card"><h2>順序・参加者区分と判断の一致</h2><div className="research-table-wrap"><table><thead><tr><th>表示順</th><th>セッション数</th><th>時間差の平均</th><th>発見率差の平均</th></tr></thead><tbody>{["AB","BA"].map(order=><tr key={order}><th>{order==="AB"?"基本 → 支援":"支援 → 基本"}</th><td>{result.included.filter(s=>s.order===order).length}</td><td>{format(mean(result.pairs.filter(p=>p.order===order).flatMap(p=>p.timeDifference===null?[]:[p.timeDifference])),"秒")}</td><td>{format(mean(result.pairs.filter(p=>p.order===order).flatMap(p=>p.recallDifference===null?[]:[p.recallDifference])),"pt")}</td></tr>)}</tbody></table></div>
+    <section className="research-card"><h2>同じ参加者・同じケースでの比較</h2><p>差は「PawMatch確認支援付き − 申込情報のみ」です。発見率・有用性・分かりやすさ・説明の自信のプラスは改善、依存のプラスは画面への依存が増えたことを示します。複数ケースを含むため、ペア数は参加者数ではありません。</p><div className="research-table-wrap"><table><thead><tr><th>匿名コード</th><th>ケース</th><th>順序</th><th>発見率</th><th>有用性</th><th>分かりやすさ</th><th>説明の自信</th><th>画面への依存</th><th>参考：経過時間</th><th>優先候補</th></tr></thead><tbody>{result.pairs.map((pair,i)=><tr key={i}><th>{pair.participant}</th><td>{pair.scenario}</td><td>{pair.order}</td><td>{format(pair.recallDifference,"pt")}</td><td>{format(pair.usefulnessDifference,"pt")}</td><td>{format(pair.clarityDifference,"pt")}</td><td>{format(pair.confidenceDifference,"pt")}</td><td>{format(pair.relianceDifference,"pt")}</td><td>{format(pair.timeDifference,"秒")}</td><td>{pair.priorityChanged?"変更あり":"同じ"}</td></tr>)}</tbody></table></div><p>両方の画面が未完了のケースは比較に含めません。経過時間は実際の審査時間ではなく参考値です。画面外の時間も含まれるため、中断申告のある回答は時間差だけを未集計にします。</p></section>
+    <section className="research-card"><h2>順序・参加者区分と判断の一致</h2><div className="research-table-wrap"><table><thead><tr><th>表示順</th><th>セッション数</th><th>発見率差の平均</th><th>有用性差の平均</th><th>分かりやすさ差の平均</th><th>参考：経過時間差</th></tr></thead><tbody>{["AB","BA"].map(order=><tr key={order}><th>{order==="AB"?"申込情報のみ → PawMatch確認支援付き":"PawMatch確認支援付き → 申込情報のみ"}</th><td>{result.included.filter(s=>s.order===order).length}</td><td>{format(mean(result.pairs.filter(p=>p.order===order).flatMap(p=>p.recallDifference===null?[]:[p.recallDifference])),"pt")}</td><td>{format(mean(result.pairs.filter(p=>p.order===order).map(p=>p.usefulnessDifference)),"pt")}</td><td>{format(mean(result.pairs.filter(p=>p.order===order).map(p=>p.clarityDifference)),"pt")}</td><td>{format(mean(result.pairs.filter(p=>p.order===order).flatMap(p=>p.timeDifference===null?[]:[p.timeDifference])),"秒")}</td></tr>)}</tbody></table></div>
       <p>参加者区分：{([["welfare","保護・譲渡経験"],["pet_owner","飼育経験"],["it","IT分野"],["other","その他"]] as const).map(([key,label])=>label+" "+result.included.filter(s=>s.group===key).length+"件").join(" / ")}</p>
       <details><summary>ケースごとの優先候補の一致度を見る</summary><p>最多選択候補の割合を表示します。回答者2人未満は未集計。同じ判断でも正しいとは限らず、妥当な複数候補のあるケースでは不一致が誤りとは限りません。</p><div className="research-table-wrap"><table><thead><tr><th>ケース</th><th>表示</th><th>回答数</th><th>最多選択の割合</th></tr></thead><tbody>{result.consistency.map((c,i)=><tr key={i}><th>{c.scenario}</th><td>{modeLabel(c.mode)}</td><td>{c.n}</td><td>{format(c.agreement,"%")}</td></tr>)}</tbody></table></div></details>
     </section>

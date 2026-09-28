@@ -13,7 +13,7 @@ async function request(route, method="GET", body) {
   assert.equal(login.response.status, 200);
   cookie = login.response.headers.get("set-cookie").split(";")[0];
   for(const route of ["/pets","/reviews","/reviews/progress","/reviews/app-aiko","/dashboard?user=admin","/admin/analytics","/research","/research/setup","/research/results","/research/results?source=simulation"]){
-    const response=await fetch(base+route, { headers: { Cookie: cookie }, redirect: "manual" });
+    const response=await fetch(base+route, { headers: { Cookie: cookie }, redirect: "follow" });
     assert.equal(response.status,200,route);
     assert.ok((await response.text()).includes("PawMatch"),route);
   }

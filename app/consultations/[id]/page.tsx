@@ -31,7 +31,6 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
     : consultation.status === "closed" ? "審査前に終了" : "未判定";
 
   return <div className="page-wrap consultation-detail-page">
-    <Link href={user.role === "adopter" ? "/adopter/history" : user.role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations"} className="back-link">← 相談一覧へ戻る</Link>
     <h1>{pet?.name ?? consultation.petId}への相談</h1>
     <section className="consultation-role-policy" aria-labelledby="consultation-participants-title">
       <div><h2 id="consultation-participants-title">この相談に参加する人</h2><p>ペットの暮らし・健康・性格は譲渡者が回答し、審査・書類・手続きはPawMatch運営が担当します。里親希望者は同じ履歴で双方と連絡できます。</p></div>

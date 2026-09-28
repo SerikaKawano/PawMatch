@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requirePageAccess } from "@/lib/access-control";
 import { visibleApplications } from "@/lib/ownership";
@@ -23,7 +22,6 @@ export default async function ApplicantCaseProfilePage({ params }: { params: Pro
     ["飼育費・医療費の備え", application.financialReadiness],
   ];
   return <div className="page-wrap applicant-case-profile">
-    <Link className="back-link" href={`/reviews/${application.id}`}>← 審査ケースに戻る</Link>
     <h2>{application.name}</h2>
     <p>{pet?.name ?? "ペット"}への申込み時に記録された内容です。</p>
     <dl>{fields.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value || "情報なし"}</dd></div>)}</dl>

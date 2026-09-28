@@ -66,9 +66,16 @@ test("every function page uses the shared title and description bar without acce
   assert.match(contextBar, /page-context-description/);
   assert.ok(!existsSync(path.join(__dirname, "../components/PageHeader.tsx")));
   assert.ok(!existsSync(path.join(__dirname, "../components/AccessibilityControls.tsx")));
+  for (const file of [
+    "app/consultations/[id]/page.tsx",
+    "app/pets/[id]/consult/page.tsx",
+    "app/reviews/applicants/[id]/page.tsx",
+    "app/reviews/adopters/[id]/page.tsx",
+  ]) assert.ok(!readFileSync(path.join(__dirname, "..", file), "utf8").includes('className="back-link"'), file);
 });
 test("consultation history presents one unambiguous progress indicator", () => {
   const history = readFileSync(path.join(__dirname, "../components/ConsultationHistory.tsx"), "utf8");
+  const adopterHistoryPage = readFileSync(path.join(__dirname, "../app/adopter/history/page.tsx"), "utf8");
   const triage = readFileSync(path.join(__dirname, "../components/ConsultationTriage.tsx"), "utf8");
   const detail = readFileSync(path.join(__dirname, "../app/consultations/[id]/page.tsx"), "utf8");
   assert.ok(history.includes("担当者が確認中"));
@@ -80,6 +87,8 @@ test("consultation history presents one unambiguous progress indicator", () => {
   assert.match(triage, /href=\{`\/consultations\/\$\{record\.id\}`\}/);
   assert.match(triage, /メッセージ履歴・返信を開く/);
   assert.match(detail, /<ConsultationReplyForm/);
+  assert.match(adopterHistoryPage, /title=\{null\}/);
+  assert.ok(!adopterHistoryPage.includes('title="相談・申込履歴"'));
 });
 
 test("review progress uses icon-only automated check states", () => {

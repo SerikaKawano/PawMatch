@@ -31,7 +31,7 @@ function compactProgress(record: Consultation, application: Applicant | null): C
   ];
 }
 
-export function ConsultationHistory({ records, names, applications = [], title = "あなたの相談履歴" }: { records: Consultation[]; names: Record<string, string>; applications?: Applicant[]; title?: string }) {
+export function ConsultationHistory({ records, names, applications = [], title = "あなたの相談履歴" }: { records: Consultation[]; names: Record<string, string>; applications?: Applicant[]; title?: string | null }) {
   const reviewRecords = records.filter(record => linkedApplication(record, applications));
   const enquiryRecords = records.filter(record => !linkedApplication(record, applications));
 
@@ -47,7 +47,7 @@ export function ConsultationHistory({ records, names, applications = [], title =
     })}</ul>;
   }
 
-  return <section className="consultation-history" id="consultations"><h2>{title}</h2>
+  return <section className="consultation-history" id="consultations">{title && <h2>{title}</h2>}
     {!records.length ? <p className="consultation-empty">まだ相談はありません。</p> : <div className="consultation-history-groups">
       {reviewRecords.length > 0 && <section className="consultation-history-group review"><h3>審査へ進んだ相談 <span>{reviewRecords.length}件</span></h3><p>申込みを受け付け、審査工程に進んでいる相談です。</p>{recordList(reviewRecords)}</section>}
       {enquiryRecords.length > 0 && <section className="consultation-history-group enquiry"><h3>審査前の相談 <span>{enquiryRecords.length}件</span></h3><p>審査に進む前の相談内容と対応経過です。</p>{recordList(enquiryRecords)}</section>}
