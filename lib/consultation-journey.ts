@@ -35,14 +35,27 @@ export function journeySteps(consultation: Consultation, application: Applicant 
   steps.push({ label: "事前情報の提出", state: application ? "done" : "active", at: application?.submittedAt });
   if (!application) return steps;
   const current = stages.indexOf(application.stage);
+  const history = [...(application.review?.history ?? [])].sort((a, b) => a.at.localeCompare(b.at));
   for (const [index, stage] of stages.entries()) {
     const finalDecision = stage === "final_review" && application.review?.decisionRecorded;
     const state = index < current ? "done"
       : index > current ? "pending"
         : finalDecision && application.review?.decision === "decline" ? "stopped"
           : finalDecision && application.review?.decision === "approve" ? "done" : "active";
-    const historyAt = application.review?.history.find(entry => entry.stage === stage)?.at;
-    steps.push({ label: stageLabels[stage], state, at: stage === "screening" ? application.submittedAt : historyAt });
+    const timeline = application.stageTimeline?.[stage];
+    const enteredAt = history.find(entry => entry.stage === stage)?.at ?? timeline?.startedAt;
+    const nextStage = stages[index + 1];
+    const completedAt = stage === "final_review"
+      ? [...history].reverse().find(entry => entry.stage === stage)?.at ?? timeline?.completedAt
+      : nextStage
+        ? history.find(entry => entry.stage === nextStage)?.at ?? timeline?.completedAt
+        : timeline?.completedAt;
+    const at = state === "done" || state === "stopped"
+      ? completedAt ?? enteredAt ?? (stage === "screening" ? application.submittedAt : undefined)
+      : state === "active"
+        ? enteredAt ?? (stage === "screening" ? application.submittedAt : undefined)
+        : undefined;
+    steps.push({ label: stageLabels[stage], state, at });
   }
   return steps;
 }

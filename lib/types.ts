@@ -86,6 +86,7 @@ export interface Applicant {
   nextActions: string[];
   verification: VerificationStatus;
   stage: ReviewStage;
+  stageTimeline?: Partial<Record<ReviewStage, { startedAt: string; completedAt?: string }>>;
 }
 
 export interface ReviewRecord {

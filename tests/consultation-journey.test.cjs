@@ -35,7 +35,29 @@ test("timeline distinguishes waiting, ended, review stage and recorded decisions
   assert.equal(ended.at(-1).state, "stopped");
   const review = sampleConsultations[5];
   const application = linkedApplication(review, applicants);
-  assert.equal(journeySteps(review, application).find(step => step.label === "トライアル").state, "active");
+  const reviewSteps = journeySteps(review, application);
+  assert.equal(reviewSteps.find(step => step.label === "トライアル").state, "active");
+  assert.ok(reviewSteps.filter(step => step.state === "done").every(step => step.at), "completed phases must have timestamps");
+  const recordedTimes = reviewSteps.filter(step => step.at).map(step => Date.parse(step.at));
+  assert.deepEqual(recordedTimes, [...recordedTimes].sort((a, b) => a - b), "timeline timestamps must remain chronological");
+  for (const applicant of applicants) {
+    const stages = ["screening", "risk_review", "verification", "meeting", "trial", "final_review"];
+    const activeStage = applicant.stage === "screening" ? "risk_review" : applicant.stage;
+    const current = stages.indexOf(activeStage);
+    const timeline = applicant.stageTimeline;
+    assert.ok(timeline, applicant.id);
+    for (const [index, stage] of stages.entries()) {
+      if (index < current) {
+        assert.ok(timeline[stage]?.startedAt, `${applicant.id}: ${stage} start`);
+        assert.ok(timeline[stage]?.completedAt, `${applicant.id}: ${stage} completion`);
+        assert.ok(timeline[stage].startedAt < timeline[stage].completedAt, `${applicant.id}: ${stage} order`);
+      } else if (index === current) {
+        assert.ok(timeline[stage]?.startedAt, `${applicant.id}: ${stage} active start`);
+      } else {
+        assert.equal(timeline[stage], undefined, `${applicant.id}: ${stage} must not be started`);
+      }
+    }
+  }
   const decided = { ...application, stage: "final_review", review: { ...application.review, decisionRecorded: true, decision: "decline", history: [] } };
   assert.equal(journeySteps(review, decided).at(-1).state, "stopped");
   assert.match(journeySummary(review, decided), /見送り/);
