@@ -2,10 +2,10 @@ import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { requirePageAccess } from "@/lib/access-control";
 import { getAllConsultations } from "@/lib/consultations";
-import { linkedApplication } from "@/lib/consultation-journey";
 import { demoUsers } from "@/lib/demoUsers";
 import { visiblePets } from "@/lib/ownership";
 import { getApplicants, getPets } from "@/lib/repository";
+import { groupConsultations } from "@/lib/consultation-groups";
 
 export const dynamic = "force-dynamic";
 
@@ -15,16 +15,16 @@ export default async function RehomerConsultationsPage() {
   const pets = visiblePets(user, allPets);
   const petNames = new Map(pets.map(pet => [pet.id, pet.name]));
   const consultations = allConsultations.filter(item => petNames.has(item.petId));
+  const consultationGroups = groupConsultations(consultations, applications);
 
-  const reviewConsultations = consultations.filter(item => linkedApplication(item, applications));
-  const enquiryConsultations = consultations.filter(item => !linkedApplication(item, applications));
-  const renderRows = (items: typeof consultations) => <div className="rehomer-consultation-list">{items.map(item => {
+  const reviewConsultations = consultationGroups.filter(item => item.application);
+  const enquiryConsultations = consultationGroups.filter(item => !item.application);
+  const renderRows = (items: typeof consultationGroups) => <div className="rehomer-consultation-list">{items.map(item => {
     const applicant = demoUsers.find(account => account.id === item.userId);
-    const application = linkedApplication(item, applications);
-    return <Link key={item.id} href={`/consultations/${item.id}`} className="rehomer-consultation-row">
+    return <Link key={item.key} href={`/consultations/${item.representative.id}`} className="rehomer-consultation-row">
       <MessageCircle aria-hidden="true" />
-      <span><strong>{petNames.get(item.petId)}への相談</strong><small>相談者：{applicant?.name ?? "里親希望者"} · {new Date(item.createdAt).toLocaleDateString("ja-JP")}</small></span>
-      <span className={`consultation-status ${item.status ?? "received"}`}>{application ? "審査中" : item.status === "closed" ? "相談終了" : item.status === "profile_requested" ? "審査準備中" : "相談対応中"}</span>
+      <span><strong>{petNames.get(item.petId)}への相談</strong><small>相談者：{applicant?.name ?? "里親希望者"} · 最終更新 {new Date(item.latestAt).toLocaleDateString("ja-JP")}{item.records.length > 1 ? ` · ${item.records.length}件を統合` : ""}</small></span>
+      <span className={`consultation-status ${item.status}`}>{item.application ? "審査中" : item.status === "closed" ? "相談終了" : item.status === "profile_requested" ? "審査準備中" : "相談対応中"}</span>
       <ArrowRight aria-hidden="true" />
     </Link>;
   })}</div>;
@@ -32,6 +32,6 @@ export default async function RehomerConsultationsPage() {
   return <div className="page-wrap rehomer-consultations-page">
     {reviewConsultations.length > 0 && <section className="rehomer-consultation-group"><h2>審査へ進んだ相談 <span>{reviewConsultations.length}件</span></h2>{renderRows(reviewConsultations)}</section>}
     {enquiryConsultations.length > 0 && <section className="rehomer-consultation-group"><h2>審査前の相談 <span>{enquiryConsultations.length}件</span></h2>{renderRows(enquiryConsultations)}</section>}
-    {!consultations.length && <p className="consultation-empty">届いた相談はまだありません。</p>}
+    {!consultationGroups.length && <p className="consultation-empty">届いた相談はまだありません。</p>}
   </div>;
 }

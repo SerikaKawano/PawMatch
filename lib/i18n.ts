@@ -1018,6 +1018,7 @@ export function translateText(value: string): string {
   if ((match = source.match(/^(.+)からの対応記録$/))) return left + `Response record from ${match[1]}` + right;
   if ((match = source.match(/^(.+)からの相談$/))) return left + `Enquiry from ${match[1]}` + right;
   if ((match = source.match(/^(.+)への申込み時に記録された内容です。$/))) return left + `Information recorded with the application for ${match[1]}.` + right;
+  if ((match = source.match(/^相談者：(.+) · 最終更新 (.+?)(?: · (\d+)件を統合)?$/))) return left + `Applicant: ${match[1]} · Last updated ${match[2]}${match[3] ? ` · ${match[3]} enquiries combined` : ""}` + right;
   if ((match = source.match(/^相談者：(.+) · (.+)$/))) return left + `Applicant: ${match[1]} · ${match[2]}` + right;
   if ((match = source.match(/^重要な確認 (\d+)件。詳細を確認の上、進行可否を判断してください。$/))) return left + `${match[1]} important item(s) to check. Review the details before deciding whether to proceed.` + right;
   if ((match = source.match(/^(.+) (\d+)件の内容を見る$/))) return left + `View ${match[2]} ${translateText(match[1]).toLowerCase()}` + right;

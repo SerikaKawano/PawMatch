@@ -29,6 +29,7 @@ test("shared Japanese actions have consistent English labels", () => {
   assert.equal(translateText("トライアル を進行中"), "Trial in progress");
   assert.equal(translateText("状況"), "Status");
   assert.equal(translateText("状況：要確認"), "Status: Attention required");
+  assert.equal(translateText("相談者：Noah Williams · 最終更新 2026/9/28 · 3件を統合"), "Applicant: Noah Williams · Last updated 2026/9/28 · 3 enquiries combined");
   for (const description of Object.values(reviewStageDescriptions)) {
     assert.doesNotMatch(translateText(description), /[ぁ-んァ-ン一-龯]/);
   }

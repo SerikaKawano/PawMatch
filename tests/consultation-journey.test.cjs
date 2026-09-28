@@ -4,6 +4,7 @@ const load = require("./load-ts.cjs");
 const { applicants } = load("lib/seed.ts");
 const { sampleConsultations } = load("lib/consultations.ts");
 const { linkedApplication, journeySteps, journeySummary } = load("lib/consultation-journey.ts");
+const { groupConsultations } = load("lib/consultation-groups.ts");
 
 test("sample enquiries only link to a later application for the same adopter and pet", () => {
   assert.equal(sampleConsultations.length, 13);
@@ -68,4 +69,27 @@ test("sample consultation threads include direct rehomer replies for pet-specifi
   const directReplies = sampleConsultations.flatMap(record => record.messages ?? []).filter(message => rehomerIds.has(message.authorId));
   assert.ok(directReplies.length >= 8);
   assert.ok(sampleConsultations.filter(record => record.status === "received").every(record => record.messages.some(message => rehomerIds.has(message.authorId))));
+});
+
+test("consultations from the same person about the same pet form one thread", () => {
+  const original = sampleConsultations[0];
+  const duplicate = {
+    ...original,
+    id: "duplicate-same-person-pet",
+    requestId: "00000000-0000-4000-8000-999999999999",
+    status: "received",
+    createdAt: "2026-09-28T09:00:00.000Z",
+    reviewedAt: undefined,
+    reviewedBy: undefined,
+    replyMessage: undefined,
+    message: "追加で投薬時の食事について確認したいです。",
+    messages: [],
+  };
+  const groups = groupConsultations([...sampleConsultations, duplicate], applicants);
+  assert.equal(groups.length, sampleConsultations.length);
+  const group = groups.find(item => item.userId === original.userId && item.petId === original.petId);
+  assert.equal(group.records.length, 2);
+  assert.equal(group.representative.id, original.id, "the record linked to the application remains the reply target");
+  assert.ok(group.application);
+  assert.equal(group.latestAt, duplicate.createdAt);
 });
