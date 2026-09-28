@@ -12,6 +12,7 @@ const state=z.enum(["verified","pending","not_provided"]);
 const trialFinding=z.enum(["pending","ok","ng"]);
 const trialCriteria=z.object({housing:trialFinding,compatibility:trialFinding,dailyCare:trialFinding,contingency:trialFinding}).strict();
 const emptyTrialCriteria={housing:"pending",compatibility:"pending",dailyCare:"pending",contingency:"pending"} as const;
+const verificationNames:Record<keyof Applicant["verification"],string>={identity:"本人確認",housing:"飼育可能な住居",cohabitantConsent:"同居者の同意",lifelongCare:"終生飼養への同意",followUp:"譲渡後の連絡への同意"};
 export const reviewInput = z.object({
   revision:z.number().int().nonnegative(),
   stage:z.enum(["screening","risk_review","verification","meeting","trial","final_review"]),
@@ -30,7 +31,14 @@ export async function getReviewRecords():Promise<ReviewStore> {
   return Object.fromEntries(Object.entries(records).map(([id,record])=>[id,normalizeIntake(record)]));
 }
 export function initialReview(app:Applicant):ReviewRecord {
-  return {revision:0,stage:activeStage(app.stage),verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",criteria:{...emptyTrialCriteria},memo:""},note:"",decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
+  const attention=[
+    ...app.risks.map(risk=>`${risk.label}：${risk.detail}`),
+    ...Object.entries(app.verification).filter(([,state])=>state!=="verified").map(([field,state])=>`${verificationNames[field as keyof Applicant["verification"]]}：${state==="pending"?"確認待ち":"未提出"}`),
+  ];
+  const note=app.stage==="final_review"&&attention.length
+    ? `要確認事項：${attention.join("／")}。確認後の対応：${app.nextActions.join("／")}`
+    : "";
+  return {revision:0,stage:activeStage(app.stage),verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",criteria:{...emptyTrialCriteria},memo:""},note,decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
 }
 export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {
   const data=reviewInput.parse(input);

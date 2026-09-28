@@ -98,6 +98,16 @@ test("proposal research invariants and persistence", async t => {
     assert.match(borderline.review.note,/日々のお世話は実施/);
     assert.ok(borderline.stageTimeline.trial.completedAt>`${borderline.review.trial.periodTo}T00:00:00.000Z`);
   });
+  await t.test("final-review cases with attention flags include an actionable initial comment", async () => {
+    const finalCases=(await getApplicants()).filter(application=>application.stage==="final_review"&&!application.review?.decisionRecorded);
+    const flagged=finalCases.filter(application=>application.risks.length||Object.values(application.verification).some(state=>state!=="verified"));
+    assert.ok(flagged.length>0);
+    for(const application of flagged){
+      assert.match(application.review.note,/要確認事項：/);
+      assert.match(application.review.note,/確認後の対応：/);
+      for(const risk of application.risks)assert.ok(application.review.note.includes(risk.label));
+    }
+  });
   await t.test("admin weights reach ordinary reviews while issued sessions retain their version", async () => {
     const beforeConfig=(await store.getResearch()).config;
     const before=await getApplicants();
