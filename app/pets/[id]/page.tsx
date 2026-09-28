@@ -48,15 +48,17 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
       <div className="pet-detail-layout">
         <div className="pet-detail-main">
           <section className="pet-profile-hero">
+            <header className="pet-profile-heading">
+              <div className="detail-label-row"><span className="listing-status">里親募集中</span><span>掲載番号 {pet.listingNumber}</span></div>
+              <div className="detail-title"><h1>{pet.name}</h1></div>
+              <p className="location"><MapPin size={20} />{pet.location}</p>
+            </header>
             <div className="pet-gallery">
               <div className={`detail-art ${pet.accent} ${pet.imageUrl ? "has-photo" : ""}`} style={pet.imageUrl ? { backgroundImage: `url(${pet.imageUrl})` } : undefined}>
                 <span>{pet.emoji}</span>{pet.urgent && <b className="urgent-ribbon">優先して募集中</b>}
               </div>
             </div>
             <div className="pet-profile-copy">
-              <div className="detail-label-row"><span className="listing-status">里親募集中</span><span>掲載番号 {pet.listingNumber}</span></div>
-              <div className="detail-title"><h1>{pet.name}</h1></div>
-              <p className="location"><MapPin size={20} />{pet.location}</p>
               <div className="pet-primary-actions">{canConsult && <Link href={`/pets/${pet.id}/consult`} className="task-primary">{uiCopy.contactPet(pet.name)} <MessageCircle size={22} /></Link>}{canReview && <Link href={`/reviews/progress?pet=${pet.id}`} className="task-secondary">この子の審査進捗を見る</Link>}{!canConsult && !canReview && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
               <div className="tag-row">{pet.temperament.map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div>
               <div className="profile-facts">

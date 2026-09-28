@@ -63,6 +63,7 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     const detail = await (await fetch(base + "/pets/" + pet.id)).text();
     assert.ok(detail.includes(pet.name));
     assert.ok(detail.includes("pet-primary-actions"));
+    assert.ok(detail.includes('class="pet-profile-heading"'));
     assert.ok(detail.includes("健康状態と必要なケア"));
     assert.ok(detail.includes("暮らしのポイント"));
     assert.ok(!detail.includes("ペットのプロファイルを里親希望者のプロファイルと照らし合わせて確認・審査を行います。"));
