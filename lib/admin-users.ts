@@ -14,6 +14,12 @@ const roleLabels: Record<DemoRole, string> = {
   rehomer: "譲渡者",
   adopter: "里親希望者",
 };
+const roleColors: Record<DemoRole, string> = {
+  admin: "green",
+  reviewer: "green",
+  rehomer: "pink",
+  adopter: "yellow",
+};
 
 function mergeUser(user: DemoUser, override?: UserOverride): ManagedUser {
   const role = override?.role ?? user.role;
@@ -21,6 +27,7 @@ function mergeUser(user: DemoUser, override?: UserOverride): ManagedUser {
     ...user,
     role,
     roleLabel: roleLabels[role],
+    color: roleColors[role],
     status: override?.status ?? "active",
     updatedAt: override?.updatedAt,
   };

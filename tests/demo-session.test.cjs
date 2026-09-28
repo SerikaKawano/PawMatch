@@ -48,6 +48,7 @@ test("administrators can change test-user roles and suspend access without locki
   const alex = resolveDemoUser("reviewer-alex");
   const changed = await updateManagedUser("reviewer-alex", { role: "adopter", status: "active" }, "admin");
   assert.equal(changed.role, "adopter");
+  assert.equal(changed.color, "yellow");
   assert.equal((await effectiveDemoUser(alex)).role, "adopter");
   await updateManagedUser("reviewer-alex", { role: "reviewer", status: "suspended" }, "admin");
   assert.equal(await effectiveDemoUser(alex), null);

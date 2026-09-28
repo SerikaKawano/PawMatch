@@ -81,11 +81,43 @@ body, body[data-role="adopter"], body[data-role="rehomer"], body[data-role="revi
 .login-layout-simple .login-panel > p { margin: 0; font-size: 18px; color: var(--muted); }
 .login-layout-simple .session-login-note { margin-bottom: 18px; }
 .demo-user-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
-.demo-user { min-height: 118px; border: 1px solid var(--line); border-radius: 9px; }
-.demo-user.selected { border: 3px solid #006b78; background: #e9f4f7; }
-.login-layout-simple .demo-user strong, .login-layout-simple .demo-user i { color: #006b78; }
-.login-layout-simple .demo-user:hover { border-color: #006b78; background: #f3f9fa; }
-.selected-login { margin: 24px 0 0; padding: 18px; border: 1px solid #a9d1d9; border-radius: 9px; background: #e9f4f7; }
+.demo-user {
+  --user-accent: #2f7958;
+  --user-border: #9ccab2;
+  --user-background: #eef8f2;
+  --user-hover: #e3f3e9;
+  --user-avatar: #d5ecde;
+  min-height: 118px;
+  border: 2px solid var(--user-border);
+  border-radius: 9px;
+  background: var(--user-background);
+}
+.demo-user.role-admin, .demo-user.role-reviewer, .selected-login.role-admin, .selected-login.role-reviewer {
+  --user-accent: #2f7958;
+  --user-border: #9ccab2;
+  --user-background: #eef8f2;
+  --user-hover: #e3f3e9;
+  --user-avatar: #d5ecde;
+}
+.demo-user.role-rehomer, .selected-login.role-rehomer {
+  --user-accent: #a83f68;
+  --user-border: #e2a3ba;
+  --user-background: #fff1f6;
+  --user-hover: #fbe4ed;
+  --user-avatar: #f5d5e1;
+}
+.demo-user.role-adopter, .selected-login.role-adopter {
+  --user-accent: #7c5d08;
+  --user-border: #dcc469;
+  --user-background: #fff9df;
+  --user-hover: #f9efbd;
+  --user-avatar: #f4e6a9;
+}
+.demo-user.selected { border: 3px solid var(--user-accent); background: var(--user-hover); }
+.login-layout-simple .demo-user strong, .login-layout-simple .demo-user i { color: var(--user-accent); }
+.login-layout-simple .demo-user:hover { border-color: var(--user-accent); background: var(--user-hover); }
+.login-layout-simple .demo-user .demo-avatar { background: var(--user-avatar); color: var(--user-accent); }
+.selected-login { margin: 24px 0 0; padding: 18px; border: 2px solid var(--user-border, #a9d1d9); border-radius: 9px; background: var(--user-background, #e9f4f7); }
 .login-layout-simple .selected-login > span { display: grid; grid-template-columns: 1fr; gap: 2px; }
 .login-layout-simple .selected-login strong { font-size: 20px; }
 .selected-login button { min-height: 54px; background: #006b78; color: white; border-radius: 7px; }
