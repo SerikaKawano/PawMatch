@@ -82,6 +82,22 @@ test("proposal research invariants and persistence", async t => {
     const issuedPair = await Promise.all([store.createSession({source:"simulation",group:"other",order:"alternate"}),store.createSession({source:"simulation",group:"other",order:"alternate"})]);
     assert.notEqual(issuedPair[0].order,issuedPair[1].order);
   });
+  await t.test("prepared decline cases cover a clear mismatch and a borderline trial outcome", async () => {
+    const declined=(await getApplicants()).filter(application=>application.review?.decisionRecorded&&application.review.decision==="decline");
+    assert.equal(declined.length,2);
+    const clear=declined.find(application=>application.id==="app-indoor-b");
+    assert.equal(clear.stage,"risk_review");
+    assert.match(clear.review.note,/ペット飼育不可/);
+    assert.ok(clear.stageTimeline.risk_review.completedAt);
+    const borderline=declined.find(application=>application.id==="app-active-c");
+    assert.equal(borderline.stage,"trial");
+    assert.equal(borderline.review.trial.result,"ng");
+    assert.deepEqual(borderline.review.trial.criteria,{housing:"ok",compatibility:"ng",dailyCare:"ok",contingency:"ok"});
+    assert.ok(borderline.review.signoffs.trial.reviewer);
+    assert.ok(borderline.review.signoffs.trial.rehomer);
+    assert.match(borderline.review.note,/日々のお世話は実施/);
+    assert.ok(borderline.stageTimeline.trial.completedAt>`${borderline.review.trial.periodTo}T00:00:00.000Z`);
+  });
   await t.test("admin weights reach ordinary reviews while issued sessions retain their version", async () => {
     const beforeConfig=(await store.getResearch()).config;
     const before=await getApplicants();

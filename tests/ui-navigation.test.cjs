@@ -115,6 +115,9 @@ test("review progress uses icon-only automated check states", () => {
   assert.ok(!progress.includes("未確認 {pending}"));
   assert.ok(!progress.includes("確認 {application.risks.length}"));
   assert.ok(!progress.includes("<CheckCircle2 />確認済み"));
+  assert.match(progress, /declined \? <XCircle \/>/);
+  const process = readFileSync(path.join(__dirname, "../components/ApplicationReviewProcess.tsx"), "utf8");
+  assert.match(process, /stopped\?<XCircle size=\{22\}\/>/);
 });
 
 test("review case participant icons follow the role colour system", () => {

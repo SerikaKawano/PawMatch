@@ -35,7 +35,7 @@ export async function getApplicants(petId?: string): Promise<Applicant[]> {
   return base.filter(app=>!petId||app.petId===petId).map(app=>{
     // Existing DB records are preserved; canonical synthetic evidence is attached when available.
     const fixture=applicants.find(a=>a.id===app.id);
-    const review=reviews[app.id]??initialReview(app);
+    const review=reviews[app.id]??app.review??initialReview(app);
     const source=fixture?.researchCandidate??app.researchCandidate;
     if(!source)return {...app,stage:review.stage,verification:review.verification,review};
     const researchCandidate={...source,verification:review.verification};

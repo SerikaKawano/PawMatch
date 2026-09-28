@@ -218,6 +218,8 @@ body, body[data-role="adopter"], body[data-role="rehomer"], body[data-role="revi
 .review-stepper button.upcoming>span { background: #e9eef0; color: #647b85; }
 .review-stepper button.active>span { background: #126b80; color: white; box-shadow: 0 0 0 4px #d9edf1; }
 .review-stepper button.active strong, .review-stepper button.active small { color: #08566a; }
+.review-stepper button.stopped>span { background: #bf243d; color: #fff; box-shadow: 0 0 0 4px #f8dce1; }
+.review-stepper button.stopped strong, .review-stepper button.stopped small { color: #982e43; }
 .review-state-banner { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 14px 0 20px; padding: 16px 20px; border: 2px solid; border-radius: 10px; }
 .review-state-banner>div { display: flex; align-items: center; gap: 12px; }
 .review-state-banner svg { width: 31px; height: 31px; flex-shrink: 0; }
@@ -380,6 +382,7 @@ body[data-role="rehomer"] .role-nav-links a.current:not(.role-nav-primary) { bac
 .pipeline-board .pipeline-pet { text-align: left; font-size: 20px; }
 .pipeline-board .pipeline-stage.stopped > i { background: #bf243d; color: #fff; }
 .pipeline-board .pipeline-stage.stopped > b { color: #982e43; }
+.pipeline-legend i.stopped { background: #bf243d; }
 body[data-role="rehomer"] .progress-board-page .pipeline-open, .progress-board-page .pipeline-open { background: #087080; border-color: #087080; color: #fff; }
 body[data-role="rehomer"] .progress-board-page .pipeline-open:hover, .progress-board-page .pipeline-open:hover { background: #075866; border-color: #075866; }
 .review-case-heading { padding: 24px 28px; border: 1px solid #cbdfe4; border-radius: 12px; background: #f1f8f9; }

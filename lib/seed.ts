@@ -1,4 +1,4 @@
-import type { Applicant, Pet } from "./types";
+import type { Applicant, Pet, ReviewRecord, ReviewStage, VerificationStatus } from "./types";
 import { scenarios } from "./research/scenarios";
 import { assess } from "./research/scoring";
 import { reviewStages } from "./review-store";
@@ -44,6 +44,18 @@ const adopterSubmittedDates: Partial<Record<DemoUserId, string>> = {
   adopter: "2026-09-03", "adopter-olivia": "2026-09-07", "adopter-amelia": "2026-09-07",
   "adopter-ethan": "2026-09-11", "adopter-grace": "2026-09-15", "adopter-oliver": "2026-09-16", "adopter-jack": "2026-09-13",
 };
+const declinedCases: Record<string, { stage: ReviewStage; kind: "clear" | "borderline"; reason: string }> = {
+  "indoor-b": {
+    stage: "risk_review",
+    kind: "clear",
+    reason: "現在の住居はペット飼育不可で、飼育可能な転居先も決まっていません。安全に迎えられる住環境を確認できないため、今回は見送ります。",
+  },
+  "active-c": {
+    stage: "trial",
+    kind: "borderline",
+    reason: "日々のお世話は実施できましたが、幼児との生活空間を安全に分ける運用が安定せず、トライアル中も双方の緊張が続きました。家族とペット双方の安全を優先し、今回は見送ります。",
+  },
+};
 const timelineOffsets: Record<Applicant["stage"], { start: number; complete?: number }> = {
   screening: { start: 0, complete: 2 },
   risk_review: { start: 2, complete: 26 },
@@ -65,11 +77,29 @@ function buildStageTimeline(submittedAt:string,currentStage:Applicant["stage"],v
     return [stage,completedAt?{startedAt,completedAt}:{startedAt}];
   }));
 }
+function buildDeclinedReview(candidateId:string,stage:ReviewStage,verification:VerificationStatus,submittedAt:string):ReviewRecord|undefined{
+  const declined=declinedCases[candidateId];
+  if(!declined)return undefined;
+  const borderline=declined.kind==="borderline";
+  const decidedAt=new Date(Date.parse(`${submittedAt}T00:00:00.000Z`)+(borderline?270:30)*60*60*1000).toISOString();
+  const reviewer={userId:"reviewer",name:"Sophie Bennett",at:decidedAt,note:declined.reason};
+  const rehomer={userId:"rehomer",name:"Emma Wilson",at:new Date(Date.parse(decidedAt)-60*60*1000).toISOString(),note:"トライアルの状況と安全面を確認しました。"};
+  return {
+    revision:1,stage,verification,meetingChecks:borderline?[true,true,true]:[false,false,false],trialChecks:borderline?[true,true,true]:[false,false,false],
+    trial:borderline?{periodFrom:"2026-09-13",periodTo:"2026-09-19",transportFrom:"譲渡者宅",transportTo:"申込者宅",transportMethod:"譲渡者が車で対面受け渡し",result:"ng",criteria:{housing:"ok",compatibility:"ng",dailyCare:"ok",contingency:"ok"},memo:"日常ケアは実施できた一方、幼児との安全な空間分離が安定しませんでした。"}:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",criteria:{housing:"pending",compatibility:"pending",dailyCare:"pending",contingency:"pending"},memo:""},
+    note:declined.reason,decision:"decline",decisionRecorded:true,riskAcknowledged:true,
+    signoffs:borderline?{trial:{reviewer,rehomer}}:undefined,
+    history:[{at:decidedAt,stage,note:declined.reason,actorName:"Sophie Bennett",actorRole:"reviewer",action:`Sophie Bennettが今回は見送りを記録（${declined.kind==="clear"?"明確な不一致":"境界ケース"}）`}],
+  };
+}
 export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario.candidates.map((candidate,i)=>{
   const assessment=assess(candidate);
   const linked = adopterCases[candidate.id];
   const submittedAt=linked ? adopterSubmittedDates[linked.userId]! : "2026-09-"+String(index*3+i+1).padStart(2,"0");
-  const stage=linked?.stage ?? reviewStages[(index*4+i)%reviewStages.length];
+  const stage=declinedCases[candidate.id]?.stage ?? linked?.stage ?? reviewStages[(index*4+i)%reviewStages.length];
+  const stageTimeline=buildStageTimeline(submittedAt,stage,index*4+i);
+  const review=buildDeclinedReview(candidate.id,stage,candidate.verification,submittedAt);
+  if(review)stageTimeline[stage]={...stageTimeline[stage]!,completedAt:review.history.at(-1)!.at};
   return {
     id:aliases[candidate.id]??"app-"+candidate.id,petId:scenario.petId,
     name: linked ? demoUsers.find(user => user.id === linked.userId)!.name : candidate.name,
@@ -79,7 +109,7 @@ export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario
     veterinaryAccess:candidate.evidence.medical.detail,financialReadiness:candidate.evidence.medical.detail,
     score:assessment.score,strengths:assessment.breakdown.filter(row=>row.state==="ready").map(row=>row.label+"の計画あり"),
     risks:assessment.risks,nextActions:assessment.nextActions.length?assessment.nextActions:["面談で具体的な計画と意思を確認する"],
-    verification:candidate.verification,stage,stageTimeline:buildStageTimeline(submittedAt,stage,index*4+i),
+    verification:candidate.verification,stage,stageTimeline,review,
     researchCandidate:candidate,assessment,
   };
 }));
