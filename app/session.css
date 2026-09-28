@@ -60,6 +60,14 @@
 .consultation-next-step { padding: 10px 13px; border-radius: 6px; background: #f1f7f8; }
 .consultation-detail-page { max-width: 1020px; }
 .consultation-detail-page h1 { margin: 10px 0 18px; font-size: clamp(32px, 4vw, 46px); }
+.consultation-role-policy { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr); gap: 22px; margin: 0 0 24px; padding: 22px; border: 1px solid #c8dce1; border-radius: 10px; background: #fff; }
+.consultation-role-policy h2 { margin: 0 0 8px; font-size: 24px; }
+.consultation-role-policy p { margin: 0; font-size: 18px; line-height: 1.7; }
+.consultation-role-policy ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.consultation-role-policy li { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center; padding: 10px 13px; border-left: 5px solid #bb3e68; background: #fff3f6; }
+.consultation-role-policy li.rehomer { border-left-color: #d69b16; background: #fff8e8; }
+.consultation-role-policy li.operations { border-left-color: #087080; background: #eef7f8; }
+.consultation-role-policy li strong, .consultation-role-policy li span { font-size: 17px; }
 .journey-summary { padding: 18px 22px; border: 2px solid #bed9df; border-radius: 10px; background: #edf7f8; color: #174f5d; font-size: 20px; font-weight: 800; line-height: 1.65; }
 .journey-summary.waiting { border-color: #e2c987; background: #fff8e7; color: #6d4d16; }
 .journey-summary.stopped { border-color: #dfabb5; background: #fff0f1; color: #872c3e; }
@@ -84,11 +92,25 @@
 .journey-actions h3 { margin: 0 0 8px; font-size: 20px; }
 .journey-actions li { font-size: 17px; line-height: 1.7; }
 .journey-message { margin: 13px 0; padding: 18px; border-left: 5px solid #bb3e68; border-radius: 8px; background: #fff3f6; }
-.journey-message.reviewer { border-left-color: #087080; background: #eef7f8; }
+.journey-message.operations { border-left-color: #087080; background: #eef7f8; }
+.journey-message.rehomer { border-left-color: #d69b16; background: #fff8e8; }
 .journey-message > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
 .journey-message strong { font-size: 19px; }
 .journey-message time, .journey-no-reply { font-size: 17px; color: #506671; }
 .journey-message p { margin: 10px 0 0; font-size: 18px; line-height: 1.75; white-space: pre-wrap; }
+.consultation-reply-form { display: grid; gap: 12px; margin-top: 24px; padding: 22px; border: 1px solid #c8dce1; border-top: 6px solid #087080; border-radius: 10px; background: #fff; }
+.consultation-reply-form.rehomer { border-top-color: #d69b16; }
+.consultation-reply-form.adopter { border-top-color: #bb3e68; }
+.consultation-reply-form h3 { margin: 0 0 4px; font-size: 23px; }
+.consultation-reply-form p { margin: 0; font-size: 17px; line-height: 1.6; }
+.consultation-reply-form label { font-size: 17px; font-weight: 800; }
+.consultation-reply-form textarea { width: 100%; min-height: 130px; padding: 14px; border: 1px solid #9fb8c0; border-radius: 7px; background: #fff; color: #173845; font: inherit; font-size: 18px; line-height: 1.6; resize: vertical; }
+.consultation-reply-form button { justify-self: start; min-height: 48px; padding: 10px 24px; border: 0; border-radius: 7px; background: #087080; color: #fff; font: inherit; font-size: 17px; font-weight: 850; }
+.consultation-reply-form.rehomer button { background: #e4ad2f; color: #302514; }
+.consultation-reply-form.adopter button { background: #bb3e68; }
+.consultation-reply-form button:disabled { opacity: .55; cursor: not-allowed; }
+.consultation-closed-note { margin: 22px 0 0; padding: 14px 16px; border-left: 5px solid #a94232; background: #fff2ef; color: #7d2c20; font-weight: 800; }
+@media (max-width: 760px) { .consultation-role-policy { grid-template-columns: 1fr; } .consultation-role-policy li { grid-template-columns: 1fr; gap: 2px; } }
 @media (max-width: 640px) { .journey-facts { grid-template-columns: 1fr; } .journey-panel { padding: 20px 16px; } }
 .consultation-triage-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 25px 0; padding: 18px; border-radius: 10px; background: #edf5f7; }
 .consultation-triage-summary strong { font-size: 20px; }

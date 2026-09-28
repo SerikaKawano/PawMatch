@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { apiAccess } from "@/lib/access-control";
-import { updateConsultationStatus } from "@/lib/consultations";
+import { appendConsultationMessage, getAllConsultations, updateConsultationStatus } from "@/lib/consultations";
+import { currentDemoUser, isSameOrigin } from "@/lib/demo-session-server";
+import { getPets } from "@/lib/repository";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { user, error } = await apiAccess("review", request);
@@ -16,4 +18,26 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const consultation = await updateConsultationStatus(id, parsed.data.status, user.id);
   if (!consultation) return NextResponse.json({ error: "相談が見つからないか、すでに対応済みです。" }, { status: 409 });
   return NextResponse.json({ consultation }, { headers: { "Cache-Control": "no-store" } });
+}
+
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const user = await currentDemoUser();
+  if (!user) return NextResponse.json({ error: "ログインしてください。" }, { status: 401 });
+  if (!isSameOrigin(request)) return NextResponse.json({ error: "このサイトから操作してください。" }, { status: 403 });
+
+  const { id } = await params;
+  const consultation = (await getAllConsultations()).find(item => item.id === id);
+  if (!consultation) return NextResponse.json({ error: "相談が見つかりません。" }, { status: 404 });
+  const pet = (await getPets()).find(item => item.id === consultation.petId);
+  const mayParticipate = consultation.userId === user.id
+    || (user.role === "rehomer" && pet?.ownerId === user.id)
+    || user.role === "reviewer"
+    || user.role === "admin";
+  if (!mayParticipate) return NextResponse.json({ error: "この相談には参加できません。" }, { status: 403 });
+
+  const parsed = z.object({ message: z.string().trim().min(1).max(2000) }).safeParse(await request.json().catch(() => null));
+  if (!parsed.success) return NextResponse.json({ error: "2,000文字以内でメッセージを入力してください。" }, { status: 400 });
+  const updated = await appendConsultationMessage(id, user.id, parsed.data);
+  if (!updated) return NextResponse.json({ error: "終了した相談には返信できません。" }, { status: 409 });
+  return NextResponse.json({ consultation: updated }, { status: 201, headers: { "Cache-Control": "no-store" } });
 }

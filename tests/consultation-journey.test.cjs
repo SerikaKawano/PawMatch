@@ -40,3 +40,10 @@ test("timeline distinguishes waiting, ended, review stage and recorded decisions
   assert.equal(journeySteps(review, decided).at(-1).state, "stopped");
   assert.match(journeySummary(review, decided), /見送り/);
 });
+
+test("sample consultation threads include direct rehomer replies for pet-specific questions", () => {
+  const rehomerIds = new Set(["rehomer", "rehomer-hana", "rehomer-riku", "rehomer-haru", "rehomer-nagi"]);
+  const directReplies = sampleConsultations.flatMap(record => record.messages ?? []).filter(message => rehomerIds.has(message.authorId));
+  assert.ok(directReplies.length >= 8);
+  assert.ok(sampleConsultations.filter(record => record.status === "received").every(record => record.messages.some(message => rehomerIds.has(message.authorId))));
+});

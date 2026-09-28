@@ -10,7 +10,7 @@ export const roleNavigation: Record<DemoRole, { title: string; purpose: string; 
   rehomer: { title: "譲渡者のホーム", purpose: "掲載ペット、審査進捗、届いた相談を確認できます。", tasks: [
     { label: "掲載中のペット一覧", href: "/rehoming", description: "掲載中のペットと掲載内容を確認します。" },
     { label: "審査進捗ボード", href: "/reviews/progress", description: "1申込み1行で現在地を見て、確認・面談・トライアルへ進みます。" },
-    { label: "届いた相談を見る", href: "/rehoming/consultations", description: "掲載ペットへの相談と対応状況を確認します。" },
+    { label: "届いた相談を見る", href: "/rehoming/consultations", description: "掲載ペットへの相談を確認し、ペット固有の質問へ返信します。" },
   ] },
   reviewer: { title: "審査担当のホーム", purpose: "進捗一覧から1件を選び、根拠を確認・記録して次の工程へ進めましょう。", tasks: [
     { label: "審査進捗ボード", href: "/reviews/progress", description: "現在地を確認し、対象の審査を開いて確認内容を保存します。" },

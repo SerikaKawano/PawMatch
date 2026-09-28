@@ -18,7 +18,7 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
     "/adopter/profile": { title: "プロファイルと書類", description: "里親希望者の基本情報、飼育環境、本人確認、提出書類を管理します。", backHref: "/dashboard", backLabel: "ホームへ戻る" },
     "/adopter/history": { title: "相談・申込履歴", description: "これまでの相談、メッセージ、申込み後の審査進捗を確認できます。", backHref: "/dashboard", backLabel: "ホームへ戻る" },
     "/rehoming": { title: "掲載中のペット一覧", description: "掲載しているペットと、ペットごとの審査状況を確認できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
-    "/rehoming/consultations": { title: "届いた相談", description: "掲載ペットに届いた相談内容と、担当者の対応状況を確認できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
+    "/rehoming/consultations": { title: "届いた相談", description: "掲載ペットへの相談を確認し、ペット固有の質問へ譲渡者として返信できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/progress": { title: "審査進捗ボード", description: "受付から最終判断までの進捗を一目で確認できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/consultations": { title: "相談一覧", description: "届いた相談を確認し、申込みの準備へ進めるか対応を記録します。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/adopters": { title: "里親希望者のプロファイル", description: "登録情報、本人確認、提出書類の状態を確認できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
@@ -40,7 +40,7 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
   if (parts[0] === "reviews" && parts[1] === "applicants" && parts.length === 3) return { title: "申込者のプロファイル", description: "申込者の基本情報と詳しい飼育環境を確認できます。", backHref: `/reviews/${parts[2]}`, backLabel: "審査ケースへ戻る" };
   if (parts[0] === "reviews" && parts[1] === "adopters" && parts.length === 3) return { title: "里親希望者のプロファイル", description: "里親希望者の登録情報、本人確認、提出書類を確認できます。", backHref: role === "rehomer" ? "/reviews/progress" : "/reviews/adopters", backLabel: role === "rehomer" ? "審査進捗へ戻る" : "里親希望者一覧へ戻る" };
   if (parts[0] === "reviews" && parts.length === 2 && parts[1] !== "records") return { title: "審査ケース", description: "ペットと申込者の情報を照合し、現在の工程の確認結果を記録します。", backHref: "/reviews/progress", backLabel: "審査進捗へ戻る" };
-  if (parts[0] === "consultations" && parts.length === 2) return { title: "相談の詳細", description: "相談内容、メッセージ履歴、申込み・審査への進捗を確認できます。", backHref: role === "adopter" ? "/adopter/history" : role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations", backLabel: "相談一覧へ戻る" };
+  if (parts[0] === "consultations" && parts.length === 2) return { title: "相談の詳細", description: "里親希望者・譲渡者・PawMatch運営のメッセージと、申込み・審査への進捗を確認できます。", backHref: role === "adopter" ? "/adopter/history" : role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations", backLabel: "相談一覧へ戻る" };
   if (parts[0] === "research" && parts[1] === "session" && parts.length === 3) return { title: "研究評価セッション", description: "用意されたケースを確認し、各工程の分かりやすさと有用性を評価します。", backHref: "/research", backLabel: "研究評価へ戻る" };
   return null;
 }

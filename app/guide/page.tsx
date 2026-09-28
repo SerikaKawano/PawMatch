@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, CheckCircle2, PawPrint, ShieldCheck } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardCheck, HeartHandshake, PawPrint, ShieldCheck, UserRound } from "lucide-react";
 import { adoptionSteps } from "@/lib/adoption-flow";
 import { uiCopy } from "@/lib/ui-copy";
 
@@ -10,6 +10,12 @@ export default function GuidePage() {
     <section className="guide-hero"><span className="hero-label"><PawPrint size={21} /> はじめての方へ</span><p>焦らず、確かめながら。ペットと家族の双方が安心できる譲渡を進めるための手順です。</p></section>
     <main className="guide-main">
       <section className="guide-process"><h2>相談から正式譲渡まで</h2><div className="guide-step-list">{adoptionSteps.map((step, index) => { const Icon = step.icon; return <article key={step.title}><span className="guide-step-number">{index + 1}</span><span className="guide-step-art" aria-hidden="true"><Icon size={68} strokeWidth={1.65} /></span><div><h3>{step.title}</h3><p>{step.text}</p></div></article>; })}</div></section>
+
+      <section className="service-role-guide"><div><span className="section-kicker">PawMatchの役割分担</span><h2>相談は三者で共有し、審査手続きは運営が支えます</h2><p>ペットを日々世話している譲渡者に直接確認した方が早い質問には、譲渡者が回答します。一方、申込者の適合性、書類、本人確認、工程管理はPawMatch運営が整理・確認します。</p></div><div className="service-role-grid">
+        <article><UserRound /><h3>里親希望者</h3><p>ペットについて相談し、必要なプロファイルや書類を提出します。</p></article>
+        <article><HeartHandshake /><h3>譲渡者</h3><p>ペットの性格、健康、日々のケア、譲渡条件など、飼育者として把握している内容に回答します。</p></article>
+        <article><ClipboardCheck /><h3>PawMatch運営</h3><p>審査担当者と管理者が、適合性確認、書類、本人確認、審査工程と記録を管理します。</p></article>
+      </div><p className="service-role-principle"><ShieldCheck />譲渡者との直接対話を残しながら、負担の大きい審査・手続き・確認をPawMatch運営が支援することが基本方針です。</p></section>
 
       <section className="screening-guide"><div><span className="section-kicker light">確認事項の例</span><h2>細かな質問には理由があります</h2><p>申込み後は、ペットが新しい家庭で安全に暮らせるかを確認するため、例えば次のような情報の提出を求めます。審査担当者がPawMatch上で回答を整理し、適合性チェックや次のステップに進むための手続きを行います。</p></div><div className="screening-topics">{["本人・家族構成", "住居と飼育スペース", "留守時間と世話の担当", "飼育経験・先住ペット", "動物病院と健康管理", "緊急時・将来の飼育計画"].map(item => <span key={item}><CheckCircle2 />{item}</span>)}</div><p className="human-decision-note"><ShieldCheck />システムが自動で譲渡の合否を決めることはありません。譲渡者・審査担当者の綿密なコミュニケーションや確認の上で最終的な判断を行います。</p></section>
 

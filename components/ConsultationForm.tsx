@@ -23,7 +23,7 @@ export function ConsultationForm({ petId, userEmail }: { petId: string; userEmai
       const data = await response.json();
       if (!response.ok) { setExpired(response.status === 401); throw new Error(data.error); }
       setMessage(""); requestId.current = null;
-      setNotice("相談を受け付けました。審査担当者の確認待ちです。下の相談履歴から進捗を確認できます。");
+      setNotice("相談を受け付けました。譲渡者とPawMatch運営が内容を確認します。下の相談履歴から返信と進捗を確認できます。");
       router.refresh();
     } catch (error) { setNotice(error instanceof Error ? error.message : "保存できませんでした。再試行してください。"); }
     finally { submitting.current = false; setBusy(false); }
@@ -33,7 +33,7 @@ export function ConsultationForm({ petId, userEmail }: { petId: string; userEmai
     <textarea id="consultation-message" rows={7} required maxLength={2000} value={message} disabled={busy} onChange={event => { setMessage(event.target.value); requestId.current = null; }} placeholder="気になること、お迎えを検討している理由を入力してください。" />
     <label htmlFor="consultation-contact">連絡の取りやすいメールアドレスまたは電話番号</label>
     <input id="consultation-contact" type="text" required maxLength={254} autoComplete="off" value={contactEmail} disabled={busy} onChange={event => { setContactEmail(event.target.value); requestId.current = null; }} />
-    <p className="consultation-process-note">相談の送信だけでは審査は始まりません。審査担当者が内容を確認し、必要な情報の提出を案内します。</p>
+    <p className="consultation-process-note">相談の送信だけでは審査は始まりません。ペットについては譲渡者、審査や必要書類についてはPawMatch運営が同じ履歴で回答します。</p>
     <button className="session-primary" disabled={busy || !message.trim() || !contactEmail.trim()}>{busy ? "送信中…" : "相談を送信する"}</button>
     <p role="status" aria-live="polite">{notice}</p>
     {notice.startsWith("相談を受け付けました") && <Link className="task-secondary" href="/adopter/history">相談・申込履歴で進捗を見る →</Link>}

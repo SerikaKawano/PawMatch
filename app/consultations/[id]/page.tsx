@@ -5,6 +5,7 @@ import { consultationThread, getAllConsultations } from "@/lib/consultations";
 import { journeySteps, journeySummary, linkedApplication } from "@/lib/consultation-journey";
 import { getApplicants, getPets } from "@/lib/repository";
 import { demoUsers } from "@/lib/demoUsers";
+import { ConsultationReplyForm } from "@/components/ConsultationReplyForm";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
   if (!consultation || (!maySeeAsRehomer && consultation.userId !== user.id && user.role !== "admin" && user.role !== "reviewer")) notFound();
   const application = linkedApplication(consultation, applications);
   const messages = consultationThread(consultation);
+  const rehomer = demoUsers.find(item => item.id === pet?.ownerId);
   const outcome = application?.review?.decisionRecorded
     ? application.review.decision === "approve" ? "譲渡へ進める判断" : application.review.decision === "decline" ? "今回は見送り" : "追加確認・保留"
     : consultation.status === "closed" ? "審査前に終了" : "未判定";
@@ -31,6 +33,14 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
   return <div className="page-wrap consultation-detail-page">
     <Link href={user.role === "adopter" ? "/adopter/history" : user.role === "rehomer" ? "/rehoming/consultations" : "/reviews/consultations"} className="back-link">← 相談一覧へ戻る</Link>
     <h1>{pet?.name ?? consultation.petId}への相談</h1>
+    <section className="consultation-role-policy" aria-labelledby="consultation-participants-title">
+      <div><h2 id="consultation-participants-title">この相談に参加する人</h2><p>ペットの暮らし・健康・性格は譲渡者が回答し、審査・書類・手続きはPawMatch運営が担当します。里親希望者は同じ履歴で双方と連絡できます。</p></div>
+      <ul>
+        <li className="adopter"><strong>里親希望者</strong><span>{demoUsers.find(item => item.id === consultation.userId)?.name ?? "相談者"}</span></li>
+        <li className="rehomer"><strong>譲渡者</strong><span>{rehomer?.name ?? "掲載者"}</span></li>
+        <li className="operations"><strong>PawMatch運営</strong><span>審査担当者・管理者</span></li>
+      </ul>
+    </section>
     <p className={`journey-summary ${consultation.status === "closed" || outcome === "今回は見送り" ? "stopped" : application ? "active" : "waiting"}`}>{journeySummary(consultation, application)}</p>
     <dl className="journey-facts">
       <div><dt>相談受付</dt><dd>{displayDate(consultation.createdAt)}</dd></div>
@@ -46,14 +56,18 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
       {messages.map((message, index) => {
         const author = demoUsers.find(item => item.id === message.authorId);
         const isReviewer = author?.role === "reviewer" || author?.role === "admin";
+        const isRehomer = author?.role === "rehomer";
         const label = message.authorId === user.id ? "あなた"
-          : isReviewer ? `${author?.name ?? "審査担当者"}（審査担当者）`
-            : author?.name ?? "里親希望者";
-        return <article className={`journey-message ${isReviewer ? "reviewer" : "applicant"}`} key={message.id}>
+          : isReviewer ? `${author?.name ?? "担当者"}（PawMatch運営）`
+            : isRehomer ? `${author?.name ?? "掲載者"}（譲渡者）`
+              : `${author?.name ?? "相談者"}（里親希望者）`;
+        const messageRole = isReviewer ? "operations" : isRehomer ? "rehomer" : "applicant";
+        return <article className={`journey-message ${messageRole}`} key={message.id}>
           <div><strong>{index === 0 ? `${label}からの相談` : label}</strong><time dateTime={message.createdAt}>{displayDate(message.createdAt)}</time></div><p>{message.body}</p>
         </article>;
       })}
-      {messages.length === 1 && <p className="journey-no-reply">担当者からの連絡はまだありません。</p>}
+      {messages.length === 1 && <p className="journey-no-reply">譲渡者またはPawMatch運営からの返信をお待ちください。</p>}
+      <ConsultationReplyForm consultationId={consultation.id} role={user.role} closed={consultation.status === "closed"} />
     </section>
     {pet && <Link className="task-secondary" href={`/pets/${pet.id}`}>{pet.name}の詳細を見る</Link>}
   </div>;

@@ -22,6 +22,7 @@ export const consultationCopyTranslations: Record<string, string> = {
   "提出書類を受領しました。現在は書類確認を進めています。追加資料が必要な場合はこの履歴でご連絡します。": "We received the documents and are reviewing them. We will use this message history if further evidence is required.",
   "平日は朝夕各40分ほど散歩できます。面談は土曜日を希望していますが、候補日はありますか。": "I can provide about 40 minutes of walking each morning and evening. Are Saturday meeting dates available?",
   "散歩計画をありがとうございます。まずプロファイルと住居情報を確認した後、面談候補日をご案内します。": "Thank you for the walking plan. We will suggest meeting dates after reviewing your profile and housing information.",
+  "散歩計画をありがとうございます。Soraは朝夕に十分な運動が必要です。面談候補日はPawMatch運営の確認後に一緒に調整します。": "Thank you for the walking plan. Sora needs sufficient exercise every morning and evening. We will arrange meeting dates together after PawMatch operations completes its checks.",
   "書類確認まで完了したため、9月19日または20日の面談を調整できます。": "The document review is complete, so we can arrange a meeting on 19 or 20 September.",
   "9月20日の午前を希望します。同居する家族も参加できます。": "I would prefer the morning of 20 September. My household members can also attend.",
   "先住犬との相性を確かめる際、最初の対面はどのように行うのが安全でしょうか。": "How should the first meeting be managed safely when checking compatibility with my existing dog?",
@@ -35,6 +36,7 @@ export const consultationCopyTranslations: Record<string, string> = {
   "申込みを受け付け、書類確認を進めています。住居条件は確認済みです。": "The application has been accepted and document review is in progress. The housing requirement has been confirmed.",
   "トライアル中に食欲が落ちた場合の連絡先と、受診の判断基準を事前に確認したいです。": "Before the trial, I would like to confirm who to contact and when to seek veterinary care if appetite drops.",
   "食事を2回続けて取らない、嘔吐が続く、排尿がない場合はすぐに譲渡者へ連絡し、指定病院へ相談してください。": "Contact the rehomer and nominated vet promptly if two meals are missed, vomiting continues, or there is no urination.",
+  "食事を2回続けて取らない、嘔吐が続く、排尿がない場合はすぐに私へ連絡し、指定病院へ相談してください。": "Contact me and the nominated vet promptly if two meals are missed, vomiting continues, or there is no urination.",
   "自宅から指定病院まで車で15分です。夜間病院の連絡先も登録します。": "The nominated vet is a 15-minute drive from my home. I will also record an emergency clinic contact.",
   "面談内容を双方で確認しました。現在はトライアル中です。毎日の食事量と排泄、体調を記録してください。": "Both parties confirmed the meeting record. The trial is now in progress; please record food, toileting and health each day.",
   "初めて犬を迎えます。留守番の練習と、最初に揃えるものについて相談したいです。": "This will be my first dog. I would like advice on practising time alone and what to prepare first.",
@@ -56,5 +58,7 @@ export const consultationCopyTranslations: Record<string, string> = {
   "応募は可能です。大きな声や急な接触を避け、猫から近づくまで待てることを家族全員で確認してください。": "You may apply. Please confirm that everyone can avoid loud noise and sudden contact and wait for the cat to approach.",
   "家族で相談しましたが、今は静かな環境を十分に保てないため、今回は相談のみで終了します。": "After discussing it as a family, we cannot currently maintain a sufficiently quiet environment, so we will end this as an enquiry only.",
   "大型犬の飼育経験はありません。必要な運動量と、初心者が準備すべきことを教えてください。": "I have not cared for a large dog before. Please explain the exercise required and what a first-time owner should prepare.",
+  "朝夕それぞれ45分前後の散歩に加え、室内での知育遊びが必要です。大型犬を安全に休ませられる場所と、滑りにくい床もご準備ください。": "In addition to walks of around 45 minutes each morning and evening, indoor enrichment is needed. Please also prepare a safe resting area for a large dog and non-slip flooring.",
   "在宅勤務中の生活リズムと、日中に必要なお世話について確認したいです。": "I would like to check the daily routine and daytime care needed while I work from home.",
+  "昼間は同じ部屋で静かに過ごせます。正午頃の食事と投薬、短い遊びの時間を確保してください。会議中に休める別スペースがあると安心です。": "The pet can rest quietly in the same room during the day. Please allow time for a midday meal and medication and a short play session. A separate resting space during meetings would help.",
 };

@@ -24,7 +24,7 @@ export default async function RehomerConsultationsPage() {
     return <Link key={item.id} href={`/consultations/${item.id}`} className="rehomer-consultation-row">
       <MessageCircle aria-hidden="true" />
       <span><strong>{petNames.get(item.petId)}への相談</strong><small>相談者：{applicant?.name ?? "里親希望者"} · {new Date(item.createdAt).toLocaleDateString("ja-JP")}</small></span>
-      <span className={`consultation-status ${item.status ?? "received"}`}>{application ? "審査中" : item.status === "closed" ? "相談終了" : item.status === "profile_requested" ? "審査準備中" : "担当者返信待ち"}</span>
+      <span className={`consultation-status ${item.status ?? "received"}`}>{application ? "審査中" : item.status === "closed" ? "相談終了" : item.status === "profile_requested" ? "審査準備中" : "相談対応中"}</span>
       <ArrowRight aria-hidden="true" />
     </Link>;
   })}</div>;

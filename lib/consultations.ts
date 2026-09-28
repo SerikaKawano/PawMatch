@@ -15,6 +15,10 @@ export const consultationInput = z.object({
   requestId: z.string().uuid(),
 });
 
+export const consultationMessageInput = z.object({
+  message: z.string().trim().min(1, "メッセージを入力してください。").max(2000),
+});
+
 export type ConsultationStatus = "received" | "profile_requested" | "closed";
 export type ConsultationMessage = {
   id: string;
@@ -66,7 +70,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter", petId: "momo", status: "profile_requested", createdAt: "2026-09-01T09:00:00.000Z", reviewedAt: "2026-09-02T10:30:00.000Z",
     message: "朝夕の投薬は何時頃が目安でしょうか。平日の通院頻度についても詳しく伺いたいです。",
     messages: [
-      followUp("reviewer", "2026-09-01T14:20:00.000Z", "投薬は朝7時頃と夜19時頃が目安です。通院は現在3か月ごとですが、体調により追加受診があります。"),
+      followUp("rehomer", "2026-09-01T14:20:00.000Z", "投薬は朝7時頃と夜19時頃が目安です。通院は現在3か月ごとですが、体調により追加受診があります。"),
       followUp("adopter", "2026-09-01T18:40:00.000Z", "平日も家族と分担して対応できます。かかりつけ候補の病院と移動手段をプロファイルに記載します。"),
       followUp("reviewer", "2026-09-02T10:30:00.000Z", reviewerRequest),
       followUp("adopter", "2026-09-02T18:10:00.000Z", profileSubmitted),
@@ -77,7 +81,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-olivia", petId: "yuki", status: "profile_requested", createdAt: "2026-09-04T09:15:00.000Z", reviewedAt: "2026-09-05T11:00:00.000Z",
     message: "来客が少ない静かな家です。最初の数週間に用意すべき隠れ場所や生活スペースを教えてください。",
     messages: [
-      followUp("reviewer", "2026-09-04T15:40:00.000Z", "最初は扉を閉められる一室に、隠れられる箱、トイレ、食器を離して置くことを勧めています。"),
+      followUp("rehomer", "2026-09-04T15:40:00.000Z", "最初は扉を閉められる一室に、隠れられる箱、トイレ、食器を離して置くことを勧めています。"),
       followUp("adopter-olivia", "2026-09-05T08:20:00.000Z", "寝室横の個室を最初の生活スペースにできます。窓の脱走防止柵も設置予定です。"),
       followUp("reviewer", "2026-09-05T11:00:00.000Z", reviewerRequest),
       followUp("adopter-olivia", "2026-09-06T17:30:00.000Z", "飼育許可書と住居の間取りを含めてプロファイルを提出しました。"),
@@ -88,7 +92,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-amelia", petId: "sora", status: "profile_requested", createdAt: "2026-09-04T13:10:00.000Z", reviewedAt: "2026-09-05T13:40:00.000Z",
     message: "平日は朝夕各40分ほど散歩できます。面談は土曜日を希望していますが、候補日はありますか。",
     messages: [
-      followUp("reviewer", "2026-09-04T17:20:00.000Z", "散歩計画をありがとうございます。まずプロファイルと住居情報を確認した後、面談候補日をご案内します。"),
+      followUp("rehomer", "2026-09-04T17:20:00.000Z", "散歩計画をありがとうございます。Soraは朝夕に十分な運動が必要です。面談候補日はPawMatch運営の確認後に一緒に調整します。"),
       followUp("adopter-amelia", "2026-09-05T09:00:00.000Z", profileSubmitted),
       followUp("reviewer", "2026-09-05T13:40:00.000Z", "書類確認まで完了したため、9月19日または20日の面談を調整できます。"),
       followUp("adopter-amelia", "2026-09-06T10:15:00.000Z", "9月20日の午前を希望します。同居する家族も参加できます。"),
@@ -98,7 +102,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-ethan", petId: "kai", status: "profile_requested", createdAt: "2026-09-08T10:30:00.000Z", reviewedAt: "2026-09-09T15:20:00.000Z",
     message: "先住犬との相性を確かめる際、最初の対面はどのように行うのが安全でしょうか。",
     messages: [
-      followUp("reviewer-alex", "2026-09-08T16:00:00.000Z", "最初は中立な屋外で距離を保ち、二人でそれぞれの犬を担当する方法を予定しています。"),
+      followUp("rehomer", "2026-09-08T16:00:00.000Z", "最初は中立な屋外で距離を保ち、二人でそれぞれの犬を担当する方法を予定しています。"),
       followUp("adopter-ethan", "2026-09-09T08:45:00.000Z", "先住犬は避妊済みで、混合ワクチンも接種済みです。証明書を提出できます。"),
       followUp("reviewer-alex", "2026-09-09T15:20:00.000Z", reviewerRequest),
       followUp("adopter-ethan", "2026-09-10T18:10:00.000Z", profileSubmitted),
@@ -120,7 +124,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-oliver", petId: "riku", status: "profile_requested", createdAt: "2026-09-13T11:20:00.000Z", reviewedAt: "2026-09-14T10:00:00.000Z",
     message: "トライアル中に食欲が落ちた場合の連絡先と、受診の判断基準を事前に確認したいです。",
     messages: [
-      followUp("reviewer-alex", "2026-09-13T16:45:00.000Z", "食事を2回続けて取らない、嘔吐が続く、排尿がない場合はすぐに譲渡者へ連絡し、指定病院へ相談してください。"),
+      followUp("rehomer-riku", "2026-09-13T16:45:00.000Z", "食事を2回続けて取らない、嘔吐が続く、排尿がない場合はすぐに私へ連絡し、指定病院へ相談してください。"),
       followUp("adopter-oliver", "2026-09-14T08:20:00.000Z", "自宅から指定病院まで車で15分です。夜間病院の連絡先も登録します。"),
       followUp("reviewer-alex", "2026-09-14T10:00:00.000Z", reviewerRequest),
       followUp("adopter-oliver", "2026-09-15T17:00:00.000Z", profileSubmitted),
@@ -131,7 +135,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-ava", petId: "nagi", status: "profile_requested", createdAt: "2026-09-18T09:00:00.000Z", reviewedAt: "2026-09-19T10:10:00.000Z",
     message: "初めて犬を迎えます。留守番の練習と、最初に揃えるものについて相談したいです。",
     messages: [
-      followUp("reviewer", "2026-09-18T15:30:00.000Z", "短時間から留守番を練習し、落ち着ける寝床、滑りにくい床材、脱走防止ゲートを準備してください。"),
+      followUp("rehomer-nagi", "2026-09-18T15:30:00.000Z", "短時間から留守番を練習し、落ち着ける寝床、滑りにくい床材、脱走防止ゲートを準備してください。"),
       followUp("adopter-ava", "2026-09-19T08:40:00.000Z", "準備できる環境を確認しました。審査を希望するため、必要な情報を教えてください。"),
       followUp("reviewer", "2026-09-19T10:10:00.000Z", reviewerRequest),
       followUp("adopter-ava", "2026-09-20T18:00:00.000Z", "現在プロファイルと住居の資料を準備しています。提出まで数日お待ちください。"),
@@ -141,7 +145,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-liam", petId: "momo", status: "closed", createdAt: "2026-09-22T10:00:00.000Z", reviewedAt: "2026-09-24T09:30:00.000Z",
     message: "定期通院の頻度と、体調が変化した場合に必要な対応を教えてください。",
     messages: [
-      followUp("reviewer", "2026-09-22T14:00:00.000Z", "現在は3か月ごとの通院と朝夕の投薬が必要です。食欲低下や呼吸の変化がある場合は早めの受診をお願いします。"),
+      followUp("rehomer", "2026-09-22T14:00:00.000Z", "現在は3か月ごとの通院と朝夕の投薬が必要です。食欲低下や呼吸の変化がある場合は早めの受診をお願いします。"),
       followUp("adopter-liam", "2026-09-23T18:20:00.000Z", "勤務と通院先までの距離を考えると継続対応が難しいため、今回は申込みに進まず相談を終了したいです。"),
       followUp("reviewer", "2026-09-24T09:30:00.000Z", consultationReply("closed")),
     ],
@@ -150,7 +154,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-mia", petId: "yuki", status: "profile_requested", createdAt: "2026-09-20T10:25:00.000Z", reviewedAt: "2026-09-21T11:15:00.000Z",
     message: "先住猫がいるため、別室で過ごす期間と対面を始める目安を確認したいです。",
     messages: [
-      followUp("reviewer-alex", "2026-09-20T15:10:00.000Z", "最初は完全に別室で過ごし、互いの匂いと生活音に落ち着いて反応できることを確認してから短時間の対面を始めます。"),
+      followUp("rehomer", "2026-09-20T15:10:00.000Z", "最初は完全に別室で過ごし、互いの匂いと生活音に落ち着いて反応できることを確認してから短時間の対面を始めます。"),
       followUp("adopter-mia", "2026-09-21T08:30:00.000Z", "隔離できる部屋があります。先住猫の健康記録も提出できます。"),
       followUp("reviewer-alex", "2026-09-21T11:15:00.000Z", reviewerRequest),
       followUp("adopter-mia", "2026-09-23T17:45:00.000Z", "必要事項を確認中です。家族と相談してからプロファイルを提出します。"),
@@ -160,7 +164,7 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-jack", petId: "sora", status: "profile_requested", createdAt: "2026-09-10T09:10:00.000Z", reviewedAt: "2026-09-11T10:45:00.000Z",
     message: "朝夕の運動に加えて、休日に必要な活動量とトレーニングについて相談したいです。",
     messages: [
-      followUp("reviewer", "2026-09-10T15:00:00.000Z", "毎日の散歩に加え、匂い探しや基礎トレーニングを短時間ずつ行う計画を推奨します。休息時間も必要です。"),
+      followUp("rehomer", "2026-09-10T15:00:00.000Z", "毎日の散歩に加え、匂い探しや基礎トレーニングを短時間ずつ行う計画を推奨します。休息時間も必要です。"),
       followUp("adopter-jack", "2026-09-11T08:15:00.000Z", "平日は朝夕、休日は公園での運動と室内トレーニングを組み合わせられます。"),
       followUp("reviewer", "2026-09-11T10:45:00.000Z", reviewerRequest),
       followUp("adopter-jack", "2026-09-12T16:00:00.000Z", profileSubmitted),
@@ -171,13 +175,13 @@ const sampleRows: SampleRow[] = [
     userId: "adopter-mia", petId: "hana", status: "closed", createdAt: "2026-09-15T12:30:00.000Z", reviewedAt: "2026-09-17T09:20:00.000Z",
     message: "小学生の子どもがいる家庭でも応募できますか。猫が落ち着ける部屋は用意できます。",
     messages: [
-      followUp("reviewer-alex", "2026-09-15T16:00:00.000Z", "応募は可能です。大きな声や急な接触を避け、猫から近づくまで待てることを家族全員で確認してください。"),
+      followUp("rehomer-hana", "2026-09-15T16:00:00.000Z", "応募は可能です。大きな声や急な接触を避け、猫から近づくまで待てることを家族全員で確認してください。"),
       followUp("adopter-mia", "2026-09-16T18:30:00.000Z", "家族で相談しましたが、今は静かな環境を十分に保てないため、今回は相談のみで終了します。"),
       followUp("reviewer-alex", "2026-09-17T09:20:00.000Z", consultationReply("closed")),
     ],
   },
-  { userId: "adopter-ava", petId: "kai", status: "received", createdAt: "2026-09-25T13:20:00.000Z", message: "大型犬の飼育経験はありません。必要な運動量と、初心者が準備すべきことを教えてください。", messages: [] },
-  { userId: "adopter-liam", petId: "riku", status: "received", createdAt: "2026-09-27T11:10:00.000Z", message: "在宅勤務中の生活リズムと、日中に必要なお世話について確認したいです。", messages: [] },
+  { userId: "adopter-ava", petId: "kai", status: "received", createdAt: "2026-09-25T13:20:00.000Z", message: "大型犬の飼育経験はありません。必要な運動量と、初心者が準備すべきことを教えてください。", messages: [followUp("rehomer", "2026-09-25T17:40:00.000Z", "朝夕それぞれ45分前後の散歩に加え、室内での知育遊びが必要です。大型犬を安全に休ませられる場所と、滑りにくい床もご準備ください。") ] },
+  { userId: "adopter-liam", petId: "riku", status: "received", createdAt: "2026-09-27T11:10:00.000Z", message: "在宅勤務中の生活リズムと、日中に必要なお世話について確認したいです。", messages: [followUp("rehomer-riku", "2026-09-27T15:30:00.000Z", "昼間は同じ部屋で静かに過ごせます。正午頃の食事と投薬、短い遊びの時間を確保してください。会議中に休める別スペースがあると安心です。") ] },
 ];
 
 export const sampleConsultations: Consultation[] = sampleRows.map((row, index) => ({
@@ -194,8 +198,11 @@ function withSamples(records: Consultation[]) {
   const regular = records.filter(record => !record.id.startsWith("sample-consultation-"));
   const samples = sampleConsultations.map(sample => {
     const stored = records.find(record => record.id === sample.id);
-    // Old seed rows had no message thread. Replace them so the richer test data is visible.
-    return stored?.messages ? stored : sample;
+    if (!stored?.messages) return sample;
+    // Refresh canonical synthetic messages while preserving replies added in the running demo.
+    const canonicalIds = new Set((sample.messages ?? []).map(message => message.id));
+    const addedReplies = stored.messages.filter(message => !canonicalIds.has(message.id));
+    return { ...sample, messages: [...(sample.messages ?? []), ...addedReplies] };
   });
   return [...regular, ...samples];
 }
@@ -230,6 +237,22 @@ export async function updateConsultationStatus(id: string, status: Exclude<Consu
     record.messages = [...(record.messages ?? []), {
       id: `${record.id}-message-${(record.messages?.length ?? 0) + 1}`,
       authorId: reviewerId, body: replyMessage, createdAt: reviewedAt,
+    }];
+    return record;
+  });
+}
+
+export async function appendConsultationMessage(id: string, authorId: DemoUserId, input: unknown) {
+  const data = consultationMessageInput.parse(input);
+  return mutateStore<Consultation[], Consultation | null>(key, () => [], records => {
+    records.splice(0, records.length, ...withSamples(records));
+    const record = records.find(item => item.id === id);
+    if (!record || record.status === "closed") return null;
+    record.messages = [...(record.messages ?? []), {
+      id: `${record.id}-message-${(record.messages?.length ?? 0) + 1}`,
+      authorId,
+      body: data.message,
+      createdAt: new Date().toISOString(),
     }];
     return record;
   });
