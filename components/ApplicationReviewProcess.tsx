@@ -31,7 +31,7 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
   const [draft,setDraft]=useState<ReviewRecord>(application.review!);
   const [confirmationNote,setConfirmationNote]=useState(()=>{
     const stage=application.stage;
-    return (["meeting","trial","final_review"] as ReviewStage[]).includes(stage)?application.review?.signoffs?.[stage as "meeting"|"trial"|"final_review"]?.[actorRole]?.note??"":"";
+    return (["meeting","trial","final_review"] as ReviewStage[]).includes(stage)?application.review?.signoffs?.[stage as "meeting"|"trial"|"final_review"]?.[actorRole]?.note??application.review?.note??"":"";
   });
   const [view,setView]=useState(application.stage);
   const [message,setMessage]=useState("");

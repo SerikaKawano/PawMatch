@@ -30,14 +30,27 @@ export async function getReviewRecords():Promise<ReviewStore> {
   const records=await readStore<ReviewStore>("review-v1",()=>({}));
   return Object.fromEntries(Object.entries(records).map(([id,record])=>[id,normalizeIntake(record)]));
 }
+function initialReviewNote(app:Applicant){
+  const risks=app.risks.map(risk=>`${risk.label}：${risk.detail}`);
+  const pendingVerification=Object.entries(app.verification).filter(([,state])=>state!=="verified").map(([field,state])=>`${verificationNames[field as keyof Applicant["verification"]]}：${state==="pending"?"確認待ち":"未提出"}`);
+  const next=app.nextActions.length?app.nextActions.join("／"):"ペットに必要なケアと申込者の生活計画を確認する";
+  if(app.stage==="final_review"){
+    const attention=[...risks,...pendingVerification];
+    return attention.length
+      ? `要確認事項：${attention.join("／")}。確認後の対応：${next}`
+      : "書類、面談、トライアルの記録と双方の意向を確認し、最終判断とその理由を記録します。";
+  }
+  if(app.stage==="trial")return `トライアルで確認する事項：${next}。期間中の生活状況、相性、安全面、継続できるケアを項目ごとに記録します。`;
+  if(app.stage==="meeting")return `面談で確認する事項：${next}。申込内容と実際の住環境・家族の意向に相違がないか確認します。`;
+  if(app.stage==="verification")return pendingVerification.length
+    ? `書類確認で残っている事項：${pendingVerification.join("／")}。提出内容と申告された飼育計画の整合性を確認します。`
+    : "提出済み書類の記載内容、有効性、申告された飼育計画との整合性を確認します。";
+  return risks.length
+    ? `適合性確認で確認する事項：${risks.join("／")}。次の対応：${next}`
+    : `適合性確認では、ペットに必要なケアと申込者の住環境・生活計画を照合します。次の確認：${next}`;
+}
 export function initialReview(app:Applicant):ReviewRecord {
-  const attention=[
-    ...app.risks.map(risk=>`${risk.label}：${risk.detail}`),
-    ...Object.entries(app.verification).filter(([,state])=>state!=="verified").map(([field,state])=>`${verificationNames[field as keyof Applicant["verification"]]}：${state==="pending"?"確認待ち":"未提出"}`),
-  ];
-  const note=app.stage==="final_review"&&attention.length
-    ? `要確認事項：${attention.join("／")}。確認後の対応：${app.nextActions.join("／")}`
-    : "";
+  const note=initialReviewNote(app);
   return {revision:0,stage:activeStage(app.stage),verification:app.verification,meetingChecks:[false,false,false],trialChecks:[false,false,false],trial:{periodFrom:"",periodTo:"",transportFrom:"",transportTo:"",transportMethod:"",result:"pending",criteria:{...emptyTrialCriteria},memo:""},note,decision:"hold",decisionRecorded:false,riskAcknowledged:false,history:[]};
 }
 export async function saveReview(app:Applicant,input:unknown,actor:DemoUser) {

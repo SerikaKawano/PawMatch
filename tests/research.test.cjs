@@ -108,6 +108,16 @@ test("proposal research invariants and persistence", async t => {
       for(const risk of application.risks)assert.ok(application.review.note.includes(risk.label));
     }
   });
+  await t.test("every active prepared review starts with a stage-specific comment", async () => {
+    const active=(await getApplicants()).filter(application=>!application.review?.decisionRecorded);
+    assert.ok(active.length>0);
+    for(const application of active)assert.ok(application.review.note.trim().length>=20,`${application.id} should have an initial review comment`);
+    assert.match(active.find(application=>application.stage==="risk_review").review.note,/適合性確認/);
+    assert.match(active.find(application=>application.stage==="verification").review.note,/書類確認|提出済み書類/);
+    assert.match(active.find(application=>application.stage==="meeting").review.note,/面談で確認する事項/);
+    assert.match(active.find(application=>application.stage==="trial").review.note,/トライアルで確認する事項/);
+    assert.match(active.find(application=>application.stage==="final_review").review.note,/最終判断|要確認事項/);
+  });
   await t.test("admin weights reach ordinary reviews while issued sessions retain their version", async () => {
     const beforeConfig=(await store.getResearch()).config;
     const before=await getApplicants();
