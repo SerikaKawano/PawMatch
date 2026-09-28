@@ -411,12 +411,21 @@ small { font-size: 17px; }
 .public-pet-detail .health-card > div { min-width: 0; width: 100%; }
 .public-pet-detail .health-card .detail-evidence-list { margin: 10px 0 0; }
 .public-pet-detail .pet-data-grid .pet-data-wide { grid-column: 1 / -1; }
-.public-pet-detail .pet-profile-hero { column-gap: 42px; row-gap: 24px; align-items: start; }
+.public-pet-detail .pet-profile-hero { grid-template-columns: minmax(360px, 48%) minmax(0, 1fr); column-gap: 42px; row-gap: 24px; align-items: stretch; }
 .public-pet-detail .pet-profile-heading { grid-column: 1 / -1; display: grid; justify-items: start; width: 100%; text-align: left; }
-.public-pet-detail .pet-profile-heading .detail-title { justify-content: flex-start; width: 100%; }
+.public-pet-detail .pet-name-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; }
+.public-pet-detail .pet-profile-heading .detail-title { justify-content: flex-start; min-width: 0; }
 .public-pet-detail .pet-profile-heading .detail-title h1 { font-size: 52px; }
+.public-pet-detail .pet-profile-heading .tag-row { justify-content: flex-end; }
+.public-pet-detail .pet-profile-heading .tag { padding: 8px 13px; background: #e8f5f7; color: #075f6c; }
 .public-pet-detail .pet-profile-heading .location { margin: 10px 0 0; font-size: 17px; }
-@media (max-width: 760px) { .public-pet-detail .pet-profile-heading .detail-title h1 { font-size: 43px; } }
+.public-pet-detail .pet-gallery-column { display: flex; min-width: 0; height: 100%; flex-direction: column; gap: 14px; }
+.public-pet-detail .pet-gallery-column .pet-primary-actions { margin: 0; }
+.public-pet-detail .pet-gallery-column .pet-primary-actions > a { min-height: 56px; }
+.public-pet-detail .pet-profile-copy { display: flex; min-width: 0; height: 100%; flex-direction: column; }
+.public-pet-detail .pet-profile-copy .profile-facts { margin-top: 0; }
+.public-pet-detail .pet-profile-copy .pet-share { margin: 12px 0 0; }
+@media (max-width: 760px) { .public-pet-detail .pet-profile-hero { grid-template-columns: 1fr; } .public-pet-detail .pet-profile-heading .detail-title h1 { font-size: 43px; } .public-pet-detail .pet-name-row { align-items: flex-start; flex-direction: column; gap: 8px; } .public-pet-detail .pet-profile-heading .tag-row { justify-content: flex-start; } }
 .rehomer-message { margin: 0 0 18px; padding: 20px 22px; border-left: 5px solid #dfbac5; border-radius: 8px; background: #fff8f4; font-size: 18px; line-height: 1.8; }
 .pet-profile-copy .profile-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .pet-profile-copy .profile-facts > div:last-child { grid-column: 1 / -1; }
