@@ -27,6 +27,8 @@ test("shared Japanese actions have consistent English labels", () => {
   assert.equal(translateText("未集計 / 0回答"), "Not calculated / 0 responses");
   assert.equal(translateText("評価の準備へ →"), "Prepare the evaluation →");
   assert.equal(translateText("トライアル を進行中"), "Trial in progress");
+  assert.equal(translateText("自動チェック"), "Automated check");
+  assert.equal(translateText("自動チェック：要確認"), "Automated check: Attention required");
   for (const description of Object.values(reviewStageDescriptions)) {
     assert.doesNotMatch(translateText(description), /[ぁ-んァ-ン一-龯]/);
   }

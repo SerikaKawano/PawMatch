@@ -1,6 +1,6 @@
 import { requirePageAccess } from "@/lib/access-control";
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardList, FileWarning } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardList } from "lucide-react";
 import { getApplicants, getPets } from "@/lib/repository";
 import { visibleApplications, visiblePets } from "@/lib/ownership";
 import type { ReviewStage } from "@/lib/types";
@@ -56,10 +56,12 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
       {stages.map(stage => <p key={stage.id}><strong>{stage.short}</strong>{reviewStageDescriptions[stage.id]}</p>)}
     </div></details>
     <section className="pipeline-board" aria-label="申込み審査の進捗一覧">
-      <div className="pipeline-row pipeline-heading"><span>譲渡者・団体</span><span>対象のペット</span><span>申込者</span>{stages.map(stage => <span key={stage.id}>{stage.short}</span>)}<span>確認</span><span aria-label="開く" /></div>
+      <div className="pipeline-row pipeline-heading"><span>譲渡者・団体</span><span>対象のペット</span><span>申込者</span>{stages.map(stage => <span key={stage.id}>{stage.short}</span>)}<span>自動チェック</span><span aria-label="開く" /></div>
       {applications.map(application => {
         const current = stages.findIndex(stage => stage.id === application.stage);
         const pending = Object.values(application.verification).filter(value => value !== "verified").length;
+        const needsAttention = pending > 0 || application.risks.length > 0;
+        const automatedCheckLabel = needsAttention ? "自動チェック：要確認" : "自動チェック：OK";
         const declined = application.review?.decisionRecorded && application.review.decision === "decline";
         const adopted = application.review?.decisionRecorded && application.review.decision === "approve";
         const pet = pets.find(item => item.id === application.petId);
@@ -69,7 +71,9 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
           <span className="pipeline-pet">{pet?.name}</span>
           <span className="pipeline-applicant"><strong>{application.name}</strong><small>{application.submittedAt}</small></span>
           {stages.map((stage, index) => <span key={stage.id} className={`pipeline-stage ${index < current ? "complete" : index === current ? declined ? "stopped" : "current" : "upcoming"}`}><i>{index < current ? <CheckCircle2 /> : index + 1}</i><b>{index < current ? "完了" : index === current ? declined ? "見送り" : adopted ? "譲渡済" : "現在" : "—"}</b>{index < stages.length - 1 && <ArrowRight className="pipeline-arrow" />}</span>)}
-          <span className={`pipeline-alert ${declined || pending || application.risks.length ? "has-alert" : ""}`}>{declined ? <><AlertTriangle />見送り</> : adopted ? <><CheckCircle2 />譲渡済</> : pending ? <><FileWarning />未確認 {pending}</> : application.risks.length ? <><AlertTriangle />確認 {application.risks.length}</> : <><CheckCircle2 />確認済み</>}</span>
+          <span className={`pipeline-alert ${needsAttention ? "has-alert" : ""}`} role="img" aria-label={automatedCheckLabel} title={automatedCheckLabel}>
+            {needsAttention ? <AlertTriangle aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />}
+          </span>
           <span className="pipeline-open">開く <ArrowRight size={18} /></span>
         </Link>;
       })}

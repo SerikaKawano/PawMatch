@@ -81,3 +81,13 @@ test("consultation history presents one unambiguous progress indicator", () => {
   assert.match(triage, /メッセージ履歴・返信を開く/);
   assert.match(detail, /<ConsultationReplyForm/);
 });
+
+test("review progress uses icon-only automated check states", () => {
+  const progress = readFileSync(path.join(__dirname, "../app/reviews/progress/page.tsx"), "utf8");
+  assert.ok(progress.includes("<span>自動チェック</span>"));
+  assert.ok(progress.includes('aria-label={automatedCheckLabel}'));
+  assert.ok(progress.includes('needsAttention ? <AlertTriangle aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />'));
+  assert.ok(!progress.includes("未確認 {pending}"));
+  assert.ok(!progress.includes("確認 {application.risks.length}"));
+  assert.ok(!progress.includes("<CheckCircle2 />確認済み"));
+});
