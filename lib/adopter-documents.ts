@@ -2,12 +2,15 @@ import { randomUUID } from "node:crypto";
 import { mutateStore, readStore } from "./persistence";
 import type { DemoUserId } from "./demoUsers";
 import { demoUsers } from "./demoUsers";
+import type { Applicant } from "./types";
+import { applicants } from "./seed";
+import { reviewStages } from "./review-store";
 
 export const MAX_DOCUMENT_BYTES = 2 * 1024 * 1024;
 const MAX_DOCUMENTS_PER_USER = 5;
 const key = "adopter-documents-v1";
 export type AdopterDocument = {
-  id: string; userId: DemoUserId; label: string; filename: string;
+  id: string; userId?: DemoUserId; applicationId?: string; label: string; filename: string;
   requestId?: string;
   mimeType: "application/pdf" | "image/png" | "image/jpeg"; size: number; uploadedAt: string; base64: string;
 };
@@ -37,6 +40,33 @@ const sampleDocuments: AdopterDocument[] = demoUsers.filter(user => user.role ==
   return { id: item.id, userId: user.id, label: item.label, filename: item.filename, mimeType: "application/pdf" as const,
     size: bytes.length, uploadedAt: `2026-09-${index ? "02" : "01"}T09:00:00.000Z`, base64: bytes.toString("base64") };
 }));
+
+const applicationDocumentDefinitions = [
+  { suffix: "application", label: "里親申込書・飼育計画書", filename: "adoption-application-and-care-plan.pdf", title: "Adoption application and care plan" },
+  { suffix: "emergency", label: "緊急時対応計画書", filename: "emergency-care-plan.pdf", title: "Emergency care plan" },
+] as const;
+
+function applicationDocumentDate(application: Applicant, index: number) {
+  const submittedAt = Date.parse(`${application.submittedAt}T00:00:00.000Z`);
+  return new Date(submittedAt + (6 + index * 4) * 60 * 60 * 1000).toISOString();
+}
+
+const sampleApplicationDocuments: AdopterDocument[] = applicants.flatMap(application =>
+  applicationDocumentDefinitions.map((item, index) => {
+    const bytes = examplePdf(item.title);
+    return {
+      id: `sample-${application.id}-${item.suffix}`,
+      userId: application.userId,
+      applicationId: application.id,
+      label: item.label,
+      filename: item.filename,
+      mimeType: "application/pdf" as const,
+      size: bytes.length,
+      uploadedAt: applicationDocumentDate(application, index),
+      base64: bytes.toString("base64"),
+    };
+  }),
+);
 export function publicDocument(record: AdopterDocument): AdopterDocumentSummary {
   const { base64: _base64, ...summary } = record;
   void _base64;
@@ -52,8 +82,22 @@ export async function listAdopterDocuments(userId: DemoUserId) {
   return [...sampleDocuments, ...await readStore<AdopterDocument[]>(key, () => [])]
     .filter(item => item.userId === userId).map(publicDocument).sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
 }
+export async function listApplicationDocuments(application: Applicant) {
+  const verificationIndex = reviewStages.indexOf("verification");
+  if (reviewStages.indexOf(application.stage) < verificationIndex) {
+    return application.userId ? listAdopterDocuments(application.userId) : [];
+  }
+  const applicationDocuments = sampleApplicationDocuments
+    .filter(item => item.applicationId === application.id)
+    .map(publicDocument);
+  const adopterDocuments = application.userId ? await listAdopterDocuments(application.userId) : [];
+  return [...applicationDocuments, ...adopterDocuments].sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
+}
 export async function getAdopterDocument(id: string) {
-  return (await readStore<AdopterDocument[]>(key, () => [])).find(item => item.id === id) ?? sampleDocuments.find(item => item.id === id) ?? null;
+  return (await readStore<AdopterDocument[]>(key, () => [])).find(item => item.id === id)
+    ?? sampleDocuments.find(item => item.id === id)
+    ?? sampleApplicationDocuments.find(item => item.id === id)
+    ?? null;
 }
 export async function addAdopterDocument(userId: DemoUserId, label: string, filename: string, bytes: Buffer, requestId?: string) {
   const mimeType = detectDocumentType(bytes);

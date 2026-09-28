@@ -10,6 +10,8 @@ const { demoUsers } = load("lib/demoUsers.ts");
 const profileStore = load("lib/adopter-profile.ts");
 const documentStore = load("lib/adopter-documents.ts");
 const requestStore = load("lib/document-requests.ts");
+const { applicants } = load("lib/seed.ts");
+const { reviewStages } = load("lib/review-store.ts");
 const noah = demoUsers.find(user => user.id === "adopter");
 const olivia = demoUsers.find(user => user.id === "adopter-olivia");
 
@@ -44,6 +46,22 @@ test("document records validate type and keep content private to the owner", asy
   assert.equal(await documentStore.removeAdopterDocument(noah.id, summary.id), true);
   assert.equal((await documentStore.listAdopterDocuments(noah.id)).length, 2);
   assert.match((await documentStore.getAdopterDocument(`sample-${noah.id}-care`)).base64, /^[A-Za-z0-9+/=]+$/);
+});
+
+test("every application at document verification or later has dated submission evidence", async () => {
+  const verificationIndex = reviewStages.indexOf("verification");
+  const advancedApplications = applicants.filter(application => reviewStages.indexOf(application.stage) >= verificationIndex);
+  assert.ok(advancedApplications.length > 0);
+  for (const application of advancedApplications) {
+    const documents = await documentStore.listApplicationDocuments(application);
+    const applicationDocuments = documents.filter(document => document.applicationId === application.id);
+    assert.ok(applicationDocuments.length >= 2, `${application.id} should have submitted documents`);
+    for (const document of applicationDocuments) {
+      assert.ok(document.uploadedAt > `${application.submittedAt}T00:00:00.000Z`);
+      assert.ok(document.uploadedAt < application.stageTimeline.verification.startedAt);
+      assert.ok(await documentStore.getAdopterDocument(document.id));
+    }
+  }
 });
 
 test("review document requests link an uploaded file or a recorded acknowledgement to one adopter", async () => {

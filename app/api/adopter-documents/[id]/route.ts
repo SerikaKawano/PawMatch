@@ -12,7 +12,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   if (!record) return NextResponse.json({ error: "書類が見つかりません。" }, { status: 404 });
   if (record.userId !== user.id && user.role !== "reviewer" && user.role !== "admin") {
     const [applications,pets]=await Promise.all([getApplicants(),getPets()]);
-    if (user.role!=="rehomer"||!visibleApplications(user,applications,pets).some(item=>item.userId===record.userId)) return NextResponse.json({ error: "書類が見つかりません。" }, { status: 404 });
+    const visible=visibleApplications(user,applications,pets);
+    const canRead=user.role==="rehomer"&&visible.some(item=>
+      record.applicationId ? item.id===record.applicationId : Boolean(record.userId&&item.userId===record.userId)
+    );
+    if (!canRead) return NextResponse.json({ error: "書類が見つかりません。" }, { status: 404 });
   }
   return new Response(Buffer.from(record.base64, "base64"), { headers: {
     "Content-Type": record.mimeType,
