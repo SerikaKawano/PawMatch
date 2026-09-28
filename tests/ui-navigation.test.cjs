@@ -51,9 +51,16 @@ test("public shell remains cacheable while session navigation hydrates separatel
   const shell = readFileSync(path.join(__dirname, "../components/SessionChrome.tsx"), "utf8");
   const layout = readFileSync(path.join(__dirname, "../app/layout.tsx"), "utf8");
   assert.match(shell, /fetch\("\/api\/demo-session", \{ cache: "no-store"/);
-  assert.match(shell, /<PublicHeader user=\{user\}/);
+  assert.match(shell, /<PublicHeader user=\{user \?\? null\}/);
   assert.doesNotMatch(layout, /currentDemoUser/);
   for (const page of ["guide", "terms", "privacy"]) {
     assert.match(readFileSync(path.join(__dirname, `../app/${page}/page.tsx`), "utf8"), /dynamic = "force-static"/);
   }
+});
+test("every function page uses the shared title and description bar without accessibility shortcuts", () => {
+  const contextBar = readFileSync(path.join(__dirname, "../components/PageContextBar.tsx"), "utf8");
+  assert.match(contextBar, /page-context-title/);
+  assert.match(contextBar, /page-context-description/);
+  assert.ok(!existsSync(path.join(__dirname, "../components/PageHeader.tsx")));
+  assert.ok(!existsSync(path.join(__dirname, "../components/AccessibilityControls.tsx")));
 });

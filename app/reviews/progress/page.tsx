@@ -39,7 +39,7 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
   });
 
   return <div className="progress-board-page">
-    <header className="progress-board-header"><div><p>受付から最終判断までの進捗を一目で確認できます。</p></div><span><ClipboardList />表示 {applications.length}件</span></header>
+    <header className="progress-board-header progress-board-count"><span><ClipboardList />表示 {applications.length}件</span></header>
     <form className="pipeline-filter" action="/reviews/progress">
       <input type="hidden" name="filtered" value="1" />
       <label htmlFor="progress-owner">対象の譲渡者・団体<select id="progress-owner" name="owner" defaultValue={selectedOwner?.id ?? ""}><option value="">すべての譲渡者・団体</option>{owners.map(owner => <option key={owner.id} value={owner.id}>{owner.kind === "organization" ? owner.organization : owner.name}</option>)}</select></label>

@@ -2,6 +2,7 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const load = require("./load-ts.cjs");
 const { pageContext } = load("lib/page-context.ts");
+const { translateText } = load("lib/i18n.ts");
 
 test("every app page except home has a title and a predictable parent link", () => {
   const pages = ["/login", "/guide", "/pets", "/pets/momo", "/pets/momo/consult", "/dashboard", "/rehoming", "/rehoming/consultations", "/reviews/progress", "/reviews/app-aiko", "/reviews/consultations", "/reviews/adopters", "/reviews/adopters/adopter", "/reviews/applicants/app-aiko", "/consultations/sample-consultation-1", "/admin/records", "/admin/analytics", "/admin/users", "/research", "/research/setup", "/research/results", "/research/session/example", "/terms", "/privacy", "/docs", "/access-denied"];
@@ -9,6 +10,9 @@ test("every app page except home has a title and a predictable parent link", () 
   for (const page of pages) {
     const context = pageContext(page, "admin");
     assert.ok(context?.title, page);
+    assert.ok(context?.description, page);
+    assert.ok(!context.description.trimStart().startsWith("・"), page);
+    assert.notEqual(translateText(context.description), context.description, `English description: ${page}`);
     assert.ok(context.backHref.startsWith("/"), page);
     assert.notEqual(context.backHref, page);
   }
@@ -17,6 +21,10 @@ test("every app page except home has a title and a predictable parent link", () 
   assert.equal(pageContext("/dashboard", "rehomer").title, "譲渡者のホーム");
   assert.equal(pageContext("/dashboard", "admin").title, "管理者のホーム");
   assert.equal(pageContext("/dashboard", "adopter").title, "里親希望者のホーム");
+  for (const role of ["reviewer", "rehomer", "admin", "adopter"]) {
+    const description = pageContext("/dashboard", role).description;
+    assert.notEqual(translateText(description), description, `English dashboard description: ${role}`);
+  }
   assert.equal(pageContext("/adopter/profile", "adopter").backHref, "/dashboard");
   assert.equal(pageContext("/consultations/example", "rehomer").backHref, "/rehoming/consultations");
   assert.equal(pageContext("/reviews/adopters/adopter", "rehomer").backHref, "/reviews/progress");

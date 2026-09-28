@@ -4,7 +4,6 @@ export const dynamic = "force-static";
 
 export default function PrivacyPage() {
   return <article className="policy-page">
-    <header><span className="section-kicker">DATA & PRIVACY</span><p>入力・表示される情報と保存範囲についての案内です。</p></header>
     <section><h2>表示する情報</h2><p>ペット、譲渡者、応募者、団体のプロファイルは研究評価のために構成した情報です。実在の動物や人を示しません。</p></section>
     <section><h2>保存される操作</h2><p>相談文、プロファイル、登録した一般書類の内容とファイル名、本人確認の申請・確認状態、審査履歴、研究課題への回答はサイト内のストレージへ保存されます。設定によってローカルファイルかMongoDBを使います。テストアカウントはパスワードなしで選べるため、実在の個人情報や秘密情報を入力・アップロードしないでください。登録した書類は本人が削除できます。</p></section>
     <section><h2>研究評価</h2><p>管理者が発行した評価リンクから、用意された事例に対する回答を記録できます。回答時間・判断理由などを比較します。研究参加者への説明、同意、保管期間、撤回手順は正式な評価開始前に別途定める必要があります。</p></section>

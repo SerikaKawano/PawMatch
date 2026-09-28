@@ -30,7 +30,6 @@ export default async function RehomerConsultationsPage() {
   })}</div>;
 
   return <div className="page-wrap rehomer-consultations-page">
-    <header className="role-page-heading"><p>掲載ペットに届いた相談の内容と、その後の対応状況を確認できます。</p></header>
     {reviewConsultations.length > 0 && <section className="rehomer-consultation-group"><h2>審査へ進んだ相談 <span>{reviewConsultations.length}件</span></h2>{renderRows(reviewConsultations)}</section>}
     {enquiryConsultations.length > 0 && <section className="rehomer-consultation-group"><h2>審査前の相談 <span>{enquiryConsultations.length}件</span></h2>{renderRows(enquiryConsultations)}</section>}
     {!consultations.length && <p className="consultation-empty">届いた相談はまだありません。</p>}

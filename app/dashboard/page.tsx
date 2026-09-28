@@ -9,7 +9,7 @@ export default async function DashboardPage() {
   const user = await currentDemoUser();
   if (!user) redirect("/login?next=%2Fdashboard");
   if (user.role === "adopter") return <div className="role-menu-home page-wrap">
-    <RoleHomeHero name={user.name} description="気になる子を探し、相談や申込みの状況を確認できます。" />
+    <RoleHomeHero name={user.name} />
     <nav className="role-home-menu" aria-label="里親希望者のメニュー">
       <Link href="/pets"><span><strong>里親募集中のペットを探す</strong><small>写真とプロファイルから、気になる子の詳細を見る</small></span><ArrowRight /></Link>
       <Link href="/adopter/profile"><span><strong>プロファイルと書類</strong><small>ご自身の情報、本人確認、提出書類を確認・編集する</small></span><ArrowRight /></Link>
@@ -17,7 +17,7 @@ export default async function DashboardPage() {
     </nav>
   </div>;
   if (user.role === "rehomer") return <div className="rehomer-home page-wrap">
-    <RoleHomeHero name={user.name} description="掲載、審査、相談を確認できます。" />
+    <RoleHomeHero name={user.name} />
     <nav className="rehomer-home-menu" aria-label="譲渡者のメニュー">
       <Link href="/rehoming" className="listing"><span className="rehomer-menu-icon"><PawPrint /></span><span><strong>掲載中のペット一覧</strong><small>自分が掲載しているペットと掲載内容を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
       <Link href="/reviews/progress" className="progress"><span className="rehomer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>受付から最終判断までの現在地を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
@@ -25,14 +25,14 @@ export default async function DashboardPage() {
     </nav>
   </div>;
   if (user.role === "reviewer") return <div className="reviewer-home page-wrap">
-    <RoleHomeHero name={user.name} description="担当する相談と申込みの確認・記録を行います。" />
+    <RoleHomeHero name={user.name} />
     <nav className="reviewer-home-menu" aria-label="審査担当者のメニュー">
       <Link href="/reviews/progress" className="progress"><span className="reviewer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>担当する申込みを選び、現在の工程と次に確認する項目を見る</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
       <Link href="/reviews/consultations" className="enquiries"><span className="reviewer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>相談内容を確認し、審査へ進めるか記録する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
     </nav>
   </div>;
   return <div className="admin-home page-wrap">
-    <RoleHomeHero name={user.name} description="運営の履歴・審査状況を確認したり設定の変更やユーザ管理が行えます" />
+    <RoleHomeHero name={user.name} />
     <nav className="reviewer-home-menu admin-home-menu" aria-label="管理者のメニュー">
       <Link href="/admin/analytics" className="analytics"><span className="reviewer-menu-icon"><BarChart3 /></span><span><strong>運営状況と履歴を確認する</strong><small>運営指標、審査状況、保存された操作履歴を確認する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>
       <Link href="/reviews/progress" className="progress"><span className="reviewer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>すべての申込みの現在地と停滞している工程を確認する</small></span><ArrowRight className="reviewer-menu-arrow" /></Link>

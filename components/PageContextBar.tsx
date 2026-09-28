@@ -12,5 +12,8 @@ export function PageContextBar({ role, sessionPending = false }: { role: DemoUse
   const context = pageContext(pathname, role);
   if (!context) return null;
   const hideBack = pathname === "/dashboard" || Boolean(role && context.backHref === "/");
-  return <nav className="page-context-bar" aria-label="ページの位置"><div className="page-context-inner">{!hideBack && <Link href={context.backHref} className="page-context-back"><ArrowLeft size={19} />{context.backLabel}</Link>}<h1 className="page-context-title">{context.title}</h1></div></nav>;
+  return <nav className="page-context-bar" aria-label="ページの位置">
+    <div className="page-context-heading"><div className="page-context-inner">{!hideBack && <Link href={context.backHref} className="page-context-back"><ArrowLeft size={19} />{context.backLabel}</Link>}<h1 className="page-context-title">{context.title}</h1></div></div>
+    <div className="page-context-description-band"><p className="page-context-description">{context.description}</p></div>
+  </nav>;
 }

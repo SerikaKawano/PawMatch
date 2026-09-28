@@ -12,7 +12,6 @@ export default async function RehomingPage() {
   const pets = visiblePets(user, allPets);
   const applications = visibleApplications(user, allApplications, allPets);
   return <div className="page-wrap">
-    <header className="role-page-heading"><p>掲載内容と、ペットごとの審査進捗を確認できます。</p></header>
     <div className="rehoming-list">{pets.map(pet => <article key={pet.id}>
       {pet.imageUrl && <Image src={pet.imageUrl} alt={pet.name + "の写真"} width={160} height={160} unoptimized />}
       <div><span className="listing-status">募集中</span><h2>{pet.name}</h2><p>{pet.breed} · {pet.age}</p><p>掲載元：{demoUsers.find(account => account.id === pet.ownerId)?.name}</p><p>届いた里親申込み <strong>{applications.filter(item => item.petId === pet.id).length}件</strong></p></div>

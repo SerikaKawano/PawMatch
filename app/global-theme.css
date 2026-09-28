@@ -432,13 +432,16 @@ small { font-size: 17px; }
 
 /* The title and parent link occupy one consistent row beneath the navigation. */
 :root { --adoption-flow-icon: #a82e4d; }
-.page-context-bar { background: #fffaf4; border-bottom: 1px solid #e2d3c4; }
-.page-context-inner { max-width: 1440px; min-height: 66px; margin: auto; padding: 10px 40px; display: flex; align-items: center; justify-content: flex-start; gap: 24px; }
+.page-context-bar { background: #f5f8f9; }
+.page-context-heading { background: #fffaf4; border-bottom: 1px solid #e2d3c4; }
+.page-context-inner { max-width: 1440px; min-height: 64px; margin: auto; padding: 10px 40px; display: flex; align-items: center; justify-content: flex-start; gap: 24px; }
 .page-context-title { margin: 0; font-size: 22px; line-height: 1.35; font-weight: 850; color: #493b32; }
+.page-context-description-band { max-width: 1440px; margin: auto; padding: 24px 40px 8px; }
+.page-context-description { margin: 0; color: #4f6267; font-size: 17px; font-weight: 400; line-height: 1.55; }
 .page-context-back { min-height: 44px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 8px; color: #006b78; border: 1px solid #a6c9c8; background: white; font-size: 17px; font-weight: 800; }
 .page-context-back:hover, .page-context-back:focus-visible { background: #eaf6f5; border-color: #006b78; }
 .main-shell > .page-context-bar ~ * .back-link { display: none; }
-@media (max-width: 650px) { .page-context-inner { padding: 10px 16px; flex-wrap: wrap; gap: 6px 14px; } .page-context-title { font-size: 19px; } .page-context-back { font-size: 17px; } }
+@media (max-width: 650px) { .page-context-inner { min-height: 60px; padding: 8px 16px; gap: 10px; } .page-context-description-band { padding: 18px 16px 6px; } .page-context-title { font-size: 19px; } .page-context-back { font-size: 17px; } }
 .dashboard-welcome h2 { font-family: var(--font-display); font-size: 39px; margin: 7px 0; }
 .rehomer-home-intro h2 { margin: 8px 0; font-size: clamp(34px, 4vw, 48px); color: #163f4d; }
 .reviewer-home { max-width: 1120px; }

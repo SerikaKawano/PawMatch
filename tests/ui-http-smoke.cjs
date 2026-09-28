@@ -46,7 +46,10 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
   assert.match(guideHero.headers.get("content-type"), /image\/png/);
   const listings = await (await fetch(base + "/pets")).text();
   assert.ok(listings.includes("里親募集中のペットたち"));
-  assert.ok(listings.includes("・「詳細を見る」ボタンから募集内容を確認できます"));
+  assert.ok(listings.includes("写真や募集条件からペットを探し、詳細を確認できます。"));
+  assert.ok(!listings.includes("・「詳細を見る」ボタンから募集内容を確認できます"));
+  assert.ok(!listings.includes("文字を大きく"));
+  assert.ok(!listings.includes('aria-label="お知らせ"'));
   assert.ok(!listings.includes("写真・条件を見る"));
   const login = await (await fetch(base + "/login")).text();
   for (const name of ["Serika Kawano", "Sophie Bennett", "Alex Morgan", "Noah Williams", "Olivia Parker"]) assert.ok(login.includes(name));

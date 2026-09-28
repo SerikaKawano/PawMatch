@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, CirclePause, RotateCcw, Save, ShieldCheck } from "lucide-react";
+import { CheckCircle2, CirclePause, RotateCcw, Save } from "lucide-react";
 import type { DemoRole, DemoUserId } from "@/lib/demoUsers";
 import type { ManagedUser, ManagedUserStatus } from "@/lib/admin-users";
 
@@ -40,10 +40,6 @@ export function AdminUserManagement({ initialUsers, currentUserId }: { initialUs
   }
 
   return <div className="admin-users-page page-wrap">
-    <section className="admin-users-intro">
-      <div><span className="section-kicker">ユーザと権限</span><p>テストユーザの権限と利用状態を管理します。変更した権限は次回の画面表示から反映されます。</p></div>
-      <ShieldCheck aria-hidden="true" />
-    </section>
     {message && <p className="admin-users-message" role="status"><CheckCircle2 />{message}</p>}
     <div className="admin-user-list">
       {users.map(user => {
