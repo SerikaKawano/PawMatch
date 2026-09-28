@@ -14,8 +14,8 @@ const { listManagedUsers, effectiveDemoUser, updateManagedUser } = load("lib/adm
 test("demo login validates roles and accepts only local intended destinations", () => {
   for (const id of ["admin", "reviewer", "rehomer", "adopter"]) assert.equal(resolveDemoUser(id).id, id);
   for (const value of ["root", null, {}, "Admin"]) assert.equal(resolveDemoUser(value), null);
-  for (const value of ["/pets/momo/consult", "/pets/sora", "/pets", "/dashboard#consultations", "/consultations/sample-consultation-12"]) assert.equal(safeLoginNext(value), value);
-  for (const value of ["https://example.com", "//example.com", "/\\example.com", "/%2f%2fexample.com", "/pets/../login", "/login", "/dashboard?user=admin", "/pets/momo/consult\n", null, []]) assert.equal(safeLoginNext(value), "/dashboard");
+  for (const value of ["/pets/Q8N4V2K7/consult", "/pets/J7C2P9X4", "/pets", "/dashboard#consultations", "/consultations/sample-consultation-12"]) assert.equal(safeLoginNext(value), value);
+  for (const value of ["https://example.com", "//example.com", "/\\example.com", "/%2f%2fexample.com", "/pets/../login", "/login", "/dashboard?user=admin", "/pets/Q8N4V2K7/consult\n", null, []]) assert.equal(safeLoginNext(value), "/dashboard");
 });
 
 test("consultations validate, persist, avoid duplicates and isolate users and pets", async () => {

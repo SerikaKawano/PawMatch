@@ -1,6 +1,6 @@
 import { canAccess } from "@/lib/permissions";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import {
   CalendarDays,
   ExternalLink,
@@ -20,11 +20,13 @@ import { criterionLabels } from "@/lib/research/scoring";
 import { demoUsers } from "@/lib/demoUsers";
 import { mayReviewPet } from "@/lib/ownership";
 import { uiCopy } from "@/lib/ui-copy";
+import { findPetByRouteKey, isCanonicalPetRoute, petConsultPath } from "@/lib/pet-routes";
 
 export default async function PetDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const pet = (await getPets()).find((item) => item.id === id);
+  const pet = findPetByRouteKey(await getPets(), id);
   if (!pet) notFound();
+  if (!isCanonicalPetRoute(pet, id)) redirect(`/pets/${pet.listingNumber}`);
 
   const user = await currentDemoUser();
   const canReview = Boolean(user && mayReviewPet(user, pet));
@@ -62,7 +64,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
                   <span>{pet.emoji}</span>{pet.urgent && <b className="urgent-ribbon">優先して募集中</b>}
                 </div>
               </div>
-              <div className="pet-primary-actions">{canConsult && <Link href={`/pets/${pet.id}/consult`} className="task-primary">{uiCopy.contactPet(pet.name)} <MessageCircle size={22} /></Link>}{canReview && <Link href={`/reviews/progress?pet=${pet.id}`} className="task-secondary">この子の審査進捗を見る</Link>}{!canConsult && !canReview && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
+              <div className="pet-primary-actions">{canConsult && <Link href={petConsultPath(pet)} className="task-primary">{uiCopy.contactPet(pet.name)} <MessageCircle size={22} /></Link>}{canReview && <Link href={`/reviews/progress?pet=${pet.id}`} className="task-secondary">この子の審査進捗を見る</Link>}{!canConsult && !canReview && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
             </div>
             <div className="pet-profile-copy">
               <div className="profile-facts">
@@ -72,7 +74,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
                 <div><Home /><span>募集地域</span><strong>{pet.location.split(" ")[0]}</strong></div>
                 <div><PawPrint /><span>血統書</span><strong>{pet.rehoming?.pedigree ?? "未確認"}</strong></div>
               </div>
-              <PetShareActions petId={pet.id} petName={pet.name} />
+              <PetShareActions listingNumber={pet.listingNumber} petName={pet.name} />
             </div>
           </section>
 

@@ -5,7 +5,7 @@ const { pageContext } = load("lib/page-context.ts");
 const { translateText } = load("lib/i18n.ts");
 
 test("every app page except home has a title and a predictable parent link", () => {
-  const pages = ["/login", "/guide", "/pets", "/pets/momo", "/pets/momo/consult", "/dashboard", "/rehoming", "/rehoming/consultations", "/reviews/progress", "/reviews/app-aiko", "/reviews/consultations", "/reviews/adopters", "/reviews/adopters/adopter", "/reviews/applicants/app-aiko", "/consultations/sample-consultation-1", "/admin/records", "/admin/analytics", "/admin/users", "/research", "/research/setup", "/research/results", "/research/session/example", "/terms", "/privacy", "/docs", "/access-denied"];
+  const pages = ["/login", "/guide", "/pets", "/pets/Q8N4V2K7", "/pets/Q8N4V2K7/consult", "/dashboard", "/rehoming", "/rehoming/consultations", "/reviews/progress", "/reviews/app-aiko", "/reviews/consultations", "/reviews/adopters", "/reviews/adopters/adopter", "/reviews/applicants/app-aiko", "/consultations/sample-consultation-1", "/admin/records", "/admin/analytics", "/admin/users", "/research", "/research/setup", "/research/results", "/research/session/example", "/terms", "/privacy", "/docs", "/access-denied"];
   assert.equal(pageContext("/", null), null);
   for (const page of pages) {
     const context = pageContext(page, "admin");
@@ -16,7 +16,7 @@ test("every app page except home has a title and a predictable parent link", () 
     assert.ok(context.backHref.startsWith("/"), page);
     assert.notEqual(context.backHref, page);
   }
-  assert.equal(pageContext("/pets/momo/consult", "adopter").backHref, "/pets/momo");
+  assert.equal(pageContext("/pets/Q8N4V2K7/consult", "adopter").backHref, "/pets/Q8N4V2K7");
   assert.equal(pageContext("/dashboard", "reviewer").title, "審査担当のホーム");
   assert.equal(pageContext("/dashboard", "rehomer").title, "譲渡者のホーム");
   assert.equal(pageContext("/dashboard", "admin").title, "管理者のホーム");

@@ -6,6 +6,7 @@ import { journeySteps, journeySummary, linkedApplication } from "@/lib/consultat
 import { getApplicants, getPets } from "@/lib/repository";
 import { demoUsers } from "@/lib/demoUsers";
 import { ConsultationReplyForm } from "@/components/ConsultationReplyForm";
+import { petPath } from "@/lib/pet-routes";
 
 export const dynamic = "force-dynamic";
 
@@ -68,6 +69,6 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
       {messages.length === 1 && <p className="journey-no-reply">譲渡者またはPawMatch運営からの返信をお待ちください。</p>}
       <ConsultationReplyForm consultationId={consultation.id} role={user.role} closed={consultation.status === "closed"} />
     </section>
-    {pet && <Link className="task-secondary" href={`/pets/${pet.id}`}>{pet.name}の詳細を見る</Link>}
+    {pet && <Link className="task-secondary" href={petPath(pet)}>{pet.name}の詳細を見る</Link>}
   </div>;
 }

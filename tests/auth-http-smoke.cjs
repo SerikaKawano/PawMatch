@@ -7,9 +7,9 @@ async function json(path, method, body, cookie) {
   return fetch(base + path, { method, redirect: "manual", headers: { "Content-Type": "application/json", Origin: base, ...(cookie ? { Cookie: cookie } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) });
 }
 (async () => {
-  const guest = await fetch(base + "/pets/momo/consult", { redirect: "manual" });
+  const guest = await fetch(base + "/pets/Q8N4V2K7/consult", { redirect: "manual" });
   assert.equal(guest.status, 307);
-  assert.equal(guest.headers.get("location"), "/login?next=%2Fpets%2Fmomo%2Fconsult");
+  assert.equal(guest.headers.get("location"), "/login?next=%2Fpets%2FQ8N4V2K7%2Fconsult");
   assert.equal((await json("/api/consultations", "POST", {})).status, 401);
   assert.equal((await json("/api/demo-session", "POST", { userId: "invalid" })).status, 400);
   const sessions = {};
@@ -26,7 +26,7 @@ async function json(path, method, body, cookie) {
     assert.ok(html.includes(name));
     assert.ok(html.includes('class="role-home-hero"'));
     assert.ok(html.includes(`<span>${name}</span>`));
-    const consult = await fetch(base + "/pets/momo/consult", { redirect: "manual", headers: { Cookie: sessions[id] } });
+    const consult = await fetch(base + "/pets/Q8N4V2K7/consult", { redirect: "manual", headers: { Cookie: sessions[id] } });
     if (["adopter", "admin"].includes(id)) {
       assert.equal(consult.status, 200);
       assert.ok((await consult.text()).includes("consultation-message"));
@@ -52,7 +52,7 @@ async function json(path, method, body, cookie) {
     if (role === "admin") assert.ok(!(await response.json()).consultations.some(item => item.message === marker));
     else assert.equal(response.status, 403);
   }
-  const persisted = await fetch(base + "/pets/momo/consult", { headers: { Cookie: sessions.adopter } });
+  const persisted = await fetch(base + "/pets/Q8N4V2K7/consult", { headers: { Cookie: sessions.adopter } });
   assert.ok((await persisted.text()).includes(marker));
   const badPet = await json("/api/consultations", "POST", { ...body, petId: "missing-pet", requestId: randomUUID() }, sessions.adopter);
   assert.equal(badPet.status, 404);

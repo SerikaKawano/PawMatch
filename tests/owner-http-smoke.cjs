@@ -21,6 +21,8 @@ async function login(userId) {
     ["rehomer-nagi", ["nagi"]],
   ];
   const allIds = owners.flatMap(([, ids]) => ids);
+  const allPets = (await (await fetch(base + "/api/pets")).json()).data;
+  const listingNumberFor = id => allPets.find(pet => pet.id === id).listingNumber;
   for (const [userId, petIds] of owners) {
     const cookie = await login(userId);
     const response = await fetch(base + "/api/applications", { headers: { Cookie: cookie } });
@@ -29,9 +31,9 @@ async function login(userId) {
     assert.equal(applications.length, petIds.length * 4, userId);
     assert.deepEqual([...new Set(applications.map(item => item.petId))].sort(), [...petIds].sort());
     const listing = await (await fetch(base + "/rehoming", { headers: { Cookie: cookie } })).text();
-    for (const id of petIds) assert.match(listing, new RegExp(`href="/pets/${id}"`), userId + ":" + id);
+    for (const id of petIds) assert.match(listing, new RegExp(`href="/pets/${listingNumberFor(id)}"`), userId + ":" + id);
     for (const id of allIds.filter(id => !petIds.includes(id))) {
-      assert.doesNotMatch(listing, new RegExp(`href="/pets/${id}"`), userId + " must not list " + id);
+      assert.doesNotMatch(listing, new RegExp(`href="/pets/${listingNumberFor(id)}"`), userId + " must not list " + id);
       const filtered = await fetch(base + "/api/applications?petId=" + id, { headers: { Cookie: cookie } });
       assert.deepEqual((await filtered.json()).data, []);
     }

@@ -3,7 +3,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export function ConsultationForm({ petId, userEmail }: { petId: string; userEmail: string }) {
+export function ConsultationForm({ petId, listingNumber, userEmail }: { petId: string; listingNumber: string; userEmail: string }) {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [contactEmail, setContactEmail] = useState(userEmail);
@@ -37,6 +37,6 @@ export function ConsultationForm({ petId, userEmail }: { petId: string; userEmai
     <button className="session-primary" disabled={busy || !message.trim() || !contactEmail.trim()}>{busy ? "送信中…" : "相談を送信する"}</button>
     <p role="status" aria-live="polite">{notice}</p>
     {notice.startsWith("相談を受け付けました") && <Link className="task-secondary" href="/adopter/history">相談・申込履歴で進捗を見る →</Link>}
-    {expired && <Link href={`/login?next=${encodeURIComponent("/pets/" + petId + "/consult")}`}>再ログインしてこの相談画面へ戻る</Link>}
+    {expired && <Link href={`/login?next=${encodeURIComponent("/pets/" + listingNumber + "/consult")}`}>再ログインしてこの相談画面へ戻る</Link>}
   </form>;
 }

@@ -8,6 +8,7 @@ const { scenarios } = load("lib/research/scenarios.ts");
 const { roleNavigation } = load("lib/role-navigation.ts");
 const { safeLoginNext } = load("lib/demo-session.ts");
 const { demoUsers } = load("lib/demoUsers.ts");
+const { petPath, petConsultPath, findPetByRouteKey, isCanonicalPetRoute } = load("lib/pet-routes.ts");
 test("eight distinct local pet images and English names preserve research links", () => {
   assert.equal(pets.length, 8);
   assert.equal(applicants.length, 32);
@@ -20,6 +21,21 @@ test("eight distinct local pet images and English names preserve research links"
     assert.ok(existsSync(file), file);
     assert.equal(readFileSync(file).toString("ascii", 8, 12), "WEBP");
     assert.equal(applicants.filter(a => a.petId === pet.id).length, 4);
+  }
+});
+test("public pet routes use listing numbers while legacy ids remain resolvable", () => {
+  for (const pet of pets) {
+    assert.equal(petPath(pet), `/pets/${pet.listingNumber}`);
+    assert.equal(petConsultPath(pet), `/pets/${pet.listingNumber}/consult`);
+    assert.equal(findPetByRouteKey(pets, pet.listingNumber)?.id, pet.id);
+    assert.equal(findPetByRouteKey(pets, pet.id)?.id, pet.id);
+    assert.equal(isCanonicalPetRoute(pet, pet.listingNumber), true);
+    assert.equal(isCanonicalPetRoute(pet, pet.id), false);
+  }
+  for (const file of ["components/PetCard.tsx", "components/ApplicationReviewProcess.tsx", "app/rehoming/page.tsx", "app/consultations/[id]/page.tsx"]) {
+    const source = readFileSync(path.join(__dirname, "..", file), "utf8");
+    assert.ok(source.includes("petPath"), file);
+    assert.ok(!source.includes('href={`/pets/${pet.id}`}'), file);
   }
 });
 test("every persona has an actionable primary destination", () => {

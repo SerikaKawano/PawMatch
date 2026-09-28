@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { Copy, Share2 } from "lucide-react";
 
-export function PetShareActions({ petId, petName }: { petId: string; petName: string }) {
+export function PetShareActions({ listingNumber, petName }: { listingNumber: string; petName: string }) {
   const [copied, setCopied] = useState(false);
-  const url = () => `${window.location.origin}/pets/${encodeURIComponent(petId)}`;
+  const url = () => `${window.location.origin}/pets/${encodeURIComponent(listingNumber)}`;
   const message = `${petName}の里親募集を見てみませんか？`;
 
   async function copyUrl() {

@@ -10,6 +10,6 @@ test("independent minimum roles and admin superset",()=>{
 });
 test("login destinations do not loop into a different role",()=>{
   for(const path of ["/rehoming","/reviews?pet=momo","/admin/analytics","/research/setup","/docs"]) assert.equal(permittedDestination({role:"adopter"},path),"/dashboard");
-  assert.equal(permittedDestination({role:"rehomer"},"/pets/momo/consult"),"/dashboard");
+  assert.equal(permittedDestination({role:"rehomer"},"/pets/Q8N4V2K7/consult"),"/dashboard");
   assert.equal(permittedDestination({role:"admin"},"/rehoming"),"/rehoming");
 });

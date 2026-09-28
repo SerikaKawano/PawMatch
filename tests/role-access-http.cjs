@@ -13,7 +13,7 @@ const matrix=[
  ["/reviews/adopters/adopter",["rehomer","reviewer","admin"]],
  ["/reviews/applicants/app-ren",["rehomer","reviewer","admin"]],
  ["/reviews/app-aiko",["rehomer","reviewer","admin"]],
- ["/pets/momo/consult",["adopter","admin"]],
+ ["/pets/Q8N4V2K7/consult",["adopter","admin"]],
  ...["/admin/records","/admin/analytics","/admin/users","/research","/research/setup","/research/results","/docs"].map(p=>[p,["admin"]])
 ];
 const apis=[

@@ -14,7 +14,7 @@ async function cookieFor(userId) {
   const reviewer = await cookieFor("reviewer");
   const rehomer = await cookieFor("rehomer");
   const unrelatedRehomer = await cookieFor("rehomer-hana");
-  const page = await (await fetch(base + "/pets/momo/consult", { headers: { Cookie: adopter } })).text();
+  const page = await (await fetch(base + "/pets/Q8N4V2K7/consult", { headers: { Cookie: adopter } })).text();
   assert.match(page, /Bella(?:<!-- -->)?について問い合わせる/);
   assert.ok(page.includes("相談内容（必須・2,000文字まで）"));
   assert.ok(page.includes("連絡の取りやすいメールアドレスまたは電話番号"));
