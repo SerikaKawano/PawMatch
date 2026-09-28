@@ -97,21 +97,16 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
     assert.ok(!html.includes('class="page-context-back"'));
     const headerMenu = html.split('aria-label="メインメニュー"')[1]?.split('</nav>')[0];
     assert.ok(headerMenu);
-    const headerLinks = {
-      adopter: ["/pets", "/adopter/profile", "/adopter/history", "/guide"],
-      rehomer: ["/rehoming", "/reviews/progress", "/rehoming/consultations", "/guide"],
-      reviewer: ["/reviews/progress", "/reviews/consultations", "/guide"],
-      admin: ["/admin/analytics", "/reviews/progress", "/research/setup", "/admin/users", "/guide"],
-    }[role];
-    for (const href of headerLinks) assert.ok(headerMenu.includes(`href="${href}"`), `${role} header: ${href}`);
-    assert.equal((headerMenu.match(/href="/g) || []).length, headerLinks.length);
+    // The public shell stays cacheable. After hydration, SessionChrome replaces
+    // these links with the signed-in role's navigation.
+    for (const href of ["/pets", "/login?intent=list&amp;next=%2Frehoming", "/guide"]) assert.ok(headerMenu.includes(`href="${href}"`), `static header: ${href}`);
+    assert.equal((headerMenu.match(/href="/g) || []).length, 3);
     if (role === "adopter") {
       const menu = html.split('class="role-home-menu"')[1]?.split('</nav>')[0];
       assert.ok(menu);
       for (const href of ["/pets", "/adopter/profile", "/adopter/history"]) assert.ok(menu.includes(`href="${href}"`));
       assert.equal((menu.match(/href="/g) || []).length, 3);
       assert.ok(html.includes("Noah Williams"));
-      assert.ok(html.includes("里親希望者のホーム"));
       assert.ok(!html.includes('class="role-nav-links"'));
       for (const old of ["里親希望者としてログイン中", "目的に合わせて選ぶ", "あなたの利用状況", 'class="dashboard-user"']) assert.ok(!html.includes(old));
     } else if (role === "rehomer") {
@@ -125,7 +120,6 @@ if (!base || !/^http:\/\/127\.0\.0\.1:\d+$/.test(base)) throw new Error("Set PAW
       for (const href of ["/reviews/progress", "/reviews/consultations"]) assert.ok(menu.includes(`href="${href}"`));
       assert.equal((menu.match(/href="/g) || []).length, 2);
       assert.ok(!menu.includes("書類の確認待ちを見る"));
-      assert.ok(html.includes("審査担当のホーム"));
       assert.ok(!html.includes('class="next-task-panel"'));
     } else {
       const menu = html.split('class="reviewer-home-menu admin-home-menu"')[1]?.split('</nav>')[0];

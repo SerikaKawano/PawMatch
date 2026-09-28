@@ -3,6 +3,8 @@ import { AlertTriangle, ArrowRight, CheckCircle2, PawPrint, ShieldCheck } from "
 import { adoptionSteps } from "@/lib/adoption-flow";
 import { uiCopy } from "@/lib/ui-copy";
 
+export const dynamic = "force-static";
+
 export default function GuidePage() {
   return <div className="guide-page">
     <section className="guide-hero"><span className="hero-label"><PawPrint size={21} /> はじめての方へ</span><p>焦らず、確かめながら。ペットと家族の双方が安心できる譲渡を進めるための手順です。</p></section>

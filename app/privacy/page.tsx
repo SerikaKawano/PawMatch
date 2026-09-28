@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const dynamic = "force-static";
+
 export default function PrivacyPage() {
   return <article className="policy-page">
     <header><span className="section-kicker">DATA & PRIVACY</span><p>入力・表示される情報と保存範囲についての案内です。</p></header>

@@ -47,3 +47,13 @@ test("account menu requires logout before choosing another user", () => {
   assert.ok(!header.includes("テストユーザーを切り替える"));
   assert.ok(header.includes('window.location.assign("/login")'));
 });
+test("public shell remains cacheable while session navigation hydrates separately", () => {
+  const shell = readFileSync(path.join(__dirname, "../components/SessionChrome.tsx"), "utf8");
+  const layout = readFileSync(path.join(__dirname, "../app/layout.tsx"), "utf8");
+  assert.match(shell, /fetch\("\/api\/demo-session", \{ cache: "no-store"/);
+  assert.match(shell, /<PublicHeader user=\{user\}/);
+  assert.doesNotMatch(layout, /currentDemoUser/);
+  for (const page of ["guide", "terms", "privacy"]) {
+    assert.match(readFileSync(path.join(__dirname, `../app/${page}/page.tsx`), "utf8"), /dynamic = "force-static"/);
+  }
+});

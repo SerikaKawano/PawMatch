@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const dynamic = "force-static";
+
 export default function TermsPage() {
   return <article className="policy-page">
     <header><span className="section-kicker">TERMS & SAFETY</span><p>画面を利用する際の前提と、実際の譲渡サービスに必要な確認事項を示します。</p></header>
