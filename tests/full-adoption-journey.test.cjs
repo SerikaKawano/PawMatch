@@ -171,7 +171,7 @@ test("one pet can move consistently from inquiry to completed adoption across al
   application = linkedApplication(audited, applications);
   assert.equal(application.review.decisionRecorded, true);
   assert.equal(application.review.decision, "approve");
-  assert.match(journeySummary(audited, application), /譲渡へ進める判断/);
+  assert.match(journeySummary(audited, application), /譲渡済/);
 
   const steps = journeySteps(audited, application);
   assert.deepEqual(steps.map(step => step.state), Array(steps.length).fill("done"));

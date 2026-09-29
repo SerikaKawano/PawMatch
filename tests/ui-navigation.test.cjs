@@ -99,6 +99,9 @@ test("consultation history presents one unambiguous progress indicator", () => {
   const detail = readFileSync(path.join(__dirname, "../app/consultations/[id]/page.tsx"), "utf8");
   assert.ok(history.includes("担当者が確認中"));
   assert.ok(history.includes("申込み前情報の提出"));
+  assert.ok(history.includes("今回は見送り"));
+  assert.ok(history.includes("譲渡済"));
+  assert.ok(history.includes('application.review?.decisionRecorded'));
   assert.ok(!history.includes('className={`consultation-status'));
   assert.ok(!history.includes('className={`consultation-path'));
   assert.ok(!history.includes('"相談のみ"'));

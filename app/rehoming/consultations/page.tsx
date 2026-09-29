@@ -21,10 +21,13 @@ export default async function RehomerConsultationsPage() {
   const enquiryConsultations = consultationGroups.filter(item => !item.application);
   const renderRows = (items: typeof consultationGroups) => <div className="rehomer-consultation-list">{items.map(item => {
     const applicant = demoUsers.find(account => account.id === item.userId);
+    const decision = item.application?.review?.decisionRecorded ? item.application.review.decision : null;
+    const statusLabel = decision === "decline" ? "今回は見送り" : decision === "approve" ? "譲渡済" : decision === "hold" ? "追加確認・保留" : item.application ? "審査中" : item.status === "closed" ? "相談終了" : item.status === "profile_requested" ? "審査準備中" : "相談対応中";
+    const statusClass = decision === "decline" ? "closed" : decision === "approve" ? "profile_requested" : item.status;
     return <Link key={item.key} href={`/consultations/${item.representative.id}`} className="rehomer-consultation-row">
       <MessageCircle aria-hidden="true" />
       <span><strong>{petNames.get(item.petId)}への相談</strong><small>相談者：{applicant?.name ?? "里親希望者"} · 最終更新 {new Date(item.latestAt).toLocaleDateString("ja-JP")}{item.records.length > 1 ? ` · ${item.records.length}件を統合` : ""}</small></span>
-      <span className={`consultation-status ${item.status}`}>{item.application ? "審査中" : item.status === "closed" ? "相談終了" : item.status === "profile_requested" ? "審査準備中" : "相談対応中"}</span>
+      <span className={`consultation-status ${statusClass}`}>{statusLabel}</span>
       <ArrowRight aria-hidden="true" />
     </Link>;
   })}</div>;

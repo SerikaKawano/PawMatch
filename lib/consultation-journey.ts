@@ -17,7 +17,7 @@ export function journeySummary(consultation: Consultation, application: Applican
   if (!application && consultation.status === "profile_requested") return "事前情報の提出待ちです。審査はまだ始まっていません。";
   if (!application) return "担当者の確認待ちです。審査はまだ始まっていません。";
   if (application.review?.decisionRecorded) {
-    if (application.review.decision === "approve") return "担当者が譲渡へ進める判断を記録しました。";
+    if (application.review.decision === "approve") return "担当者が譲渡済として記録しました。";
     if (application.review.decision === "decline") return "担当者が今回は見送りと判断しました。";
     return "担当者が追加確認・保留を記録しました。";
   }
@@ -37,11 +37,11 @@ export function journeySteps(consultation: Consultation, application: Applicant 
   const current = stages.indexOf(application.stage);
   const history = [...(application.review?.history ?? [])].sort((a, b) => a.at.localeCompare(b.at));
   for (const [index, stage] of stages.entries()) {
-    const finalDecision = stage === "final_review" && application.review?.decisionRecorded;
+    const recordedDecision = index === current && application.review?.decisionRecorded;
     const state = index < current ? "done"
       : index > current ? "pending"
-        : finalDecision && application.review?.decision === "decline" ? "stopped"
-          : finalDecision && application.review?.decision === "approve" ? "done" : "active";
+        : recordedDecision && application.review?.decision === "decline" ? "stopped"
+          : recordedDecision && application.review?.decision === "approve" ? "done" : "active";
     const timeline = application.stageTimeline?.[stage];
     const enteredAt = history.find(entry => entry.stage === stage)?.at ?? timeline?.startedAt;
     const nextStage = stages[index + 1];

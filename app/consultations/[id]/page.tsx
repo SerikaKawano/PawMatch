@@ -32,7 +32,7 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
   const messages = group.records.flatMap(consultationThread).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   const rehomer = demoUsers.find(item => item.id === pet?.ownerId);
   const outcome = application?.review?.decisionRecorded
-    ? application.review.decision === "approve" ? "譲渡へ進める判断" : application.review.decision === "decline" ? "今回は見送り" : "追加確認・保留"
+    ? application.review.decision === "approve" ? "譲渡済" : application.review.decision === "decline" ? "今回は見送り" : "追加確認・保留"
     : group.status === "closed" ? "審査前に終了" : "未判定";
 
   return <div className="page-wrap consultation-detail-page">

@@ -5,6 +5,7 @@ const { applicants } = load("lib/seed.ts");
 const { sampleConsultations } = load("lib/consultations.ts");
 const { linkedApplication, journeySteps, journeySummary } = load("lib/consultation-journey.ts");
 const { groupConsultations } = load("lib/consultation-groups.ts");
+const { stageLabels } = load("lib/review-labels.ts");
 
 test("sample enquiries only link to a later application for the same adopter and pet", () => {
   assert.equal(sampleConsultations.length, 19);
@@ -62,6 +63,17 @@ test("timeline distinguishes waiting, ended, review stage and recorded decisions
   const decided = { ...application, stage: "final_review", review: { ...application.review, decisionRecorded: true, decision: "decline", history: [] } };
   assert.equal(journeySteps(review, decided).at(-1).state, "stopped");
   assert.match(journeySummary(review, decided), /見送り/);
+
+  const decidedConsultations = sampleConsultations
+    .map(consultation => ({ consultation, application: linkedApplication(consultation, applicants) }))
+    .filter(item => item.application?.review?.decisionRecorded);
+  assert.ok(decidedConsultations.some(item => item.application.review.decision === "decline"), "fixture must include a declined consultation");
+  assert.ok(decidedConsultations.some(item => item.application.review.decision === "approve"), "fixture must include an adopted consultation");
+  for (const { consultation, application: decidedApplication } of decidedConsultations) {
+    const currentStep = journeySteps(consultation, decidedApplication).find(step => step.label === stageLabels[decidedApplication.stage]);
+    assert.equal(currentStep.state, decidedApplication.review.decision === "decline" ? "stopped" : "done", decidedApplication.id);
+    assert.match(journeySummary(consultation, decidedApplication), decidedApplication.review.decision === "decline" ? /見送り/ : /譲渡済/);
+  }
 });
 
 test("sample consultation threads include direct rehomer replies for pet-specific questions", () => {

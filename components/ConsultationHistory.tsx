@@ -13,12 +13,19 @@ function compactProgress(record: Consultation, application: Applicant | null): C
     { label: "担当者確認済み", state: "done" },
     { label: "審査に進まず終了", state: "stopped" },
   ];
-  if (application) return [
-    { label: "相談受付済み", state: "done" },
-    { label: "担当者確認済み", state: "done" },
-    { label: "申込み前情報の提出済み", state: "done" },
-    { label: `${stageLabels[application.stage]} を進行中`, state: "active" },
-  ];
+  if (application) {
+    const base: CompactStep[] = [
+      { label: "相談受付済み", state: "done" },
+      { label: "担当者確認済み", state: "done" },
+      { label: "申込み前情報の提出済み", state: "done" },
+    ];
+    if (application.review?.decisionRecorded) {
+      if (application.review.decision === "decline") return [...base, { label: `${stageLabels[application.stage]}で今回は見送り`, state: "stopped" }];
+      if (application.review.decision === "approve") return [...base, { label: "譲渡済", state: "done" }];
+      return [...base, { label: `${stageLabels[application.stage]}で追加確認・保留`, state: "active" }];
+    }
+    return [...base, { label: `${stageLabels[application.stage]} を進行中`, state: "active" }];
+  }
   if (status === "profile_requested") return [
     { label: "相談受付済み", state: "done" },
     { label: "担当者確認済み", state: "done" },
@@ -41,7 +48,7 @@ export function ConsultationHistory({ records, names, applications = [], title =
       const steps = compactProgress(record, application);
       return <li key={record.id}>
         <div className="consultation-record-heading"><Link href={`/consultations/${record.id}`}>{`${names[record.petId] ?? record.petId}への相談`}</Link><time dateTime={record.createdAt}>{new Date(record.createdAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })}</time></div>
-        <ol className="consultation-mini-progress" aria-label="相談の進捗">{steps.map((step, index) => <li className={step.state} key={step.label}><span className="consultation-step-marker" aria-hidden="true">{step.state === "done" ? "✓" : index + 1}</span><span>{step.label}</span></li>)}</ol>
+        <ol className="consultation-mini-progress" aria-label="相談の進捗">{steps.map((step, index) => <li className={step.state} key={step.label}><span className="consultation-step-marker" aria-hidden="true">{step.state === "done" ? "✓" : step.state === "stopped" ? "×" : index + 1}</span><span>{step.label}</span></li>)}</ol>
         <p className="consultation-message">{record.message}</p>
       </li>;
     })}</ul>;
