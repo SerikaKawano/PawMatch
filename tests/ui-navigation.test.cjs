@@ -79,6 +79,14 @@ test("public shell remains cacheable while session navigation hydrates separatel
     assert.match(readFileSync(path.join(__dirname, `../app/${page}/page.tsx`), "utf8"), /dynamic = "force-static"/);
   }
 });
+
+test("production builds enable Next.js deployment skew recovery", () => {
+  const packageJson = JSON.parse(readFileSync(path.join(__dirname, "../package.json"), "utf8"));
+  const buildScript = readFileSync(path.join(__dirname, "../tools/build-with-deployment-id.mjs"), "utf8");
+  assert.equal(packageJson.scripts.build, "node tools/build-with-deployment-id.mjs");
+  assert.ok(buildScript.includes("NEXT_DEPLOYMENT_ID"));
+  assert.ok(buildScript.includes("Date.now()"));
+});
 test("every function page uses the shared title and description bar without accessibility shortcuts", () => {
   const contextBar = readFileSync(path.join(__dirname, "../components/PageContextBar.tsx"), "utf8");
   assert.match(contextBar, /page-context-title/);
