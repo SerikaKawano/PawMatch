@@ -11,7 +11,7 @@ const load = require("./load-ts.cjs");
 const { demoUsers } = load("lib/demoUsers.ts");
 const { pets } = load("lib/seed.ts");
 const { canAccess } = load("lib/permissions.ts");
-const { getApplicants } = load("lib/repository.ts");
+const { getApplicants, getPets } = load("lib/repository.ts");
 const { initialReview, saveReview } = load("lib/review-store.ts");
 const { appendConsultationMessage, consultationThread, sampleConsultations } = load("lib/consultations.ts");
 const { linkedApplication, journeySteps, journeySummary } = load("lib/consultation-journey.ts");
@@ -46,9 +46,13 @@ test("one pet can move consistently from inquiry to completed adoption across al
   assert.equal(canAccess(admin, "admin"), true);
 
   const consultation = sampleConsultations[0];
-  const pet = pets.find(item => item.id === consultation.petId);
+  const publicListings = await getPets();
+  const pet = publicListings.find(item => item.id === consultation.petId);
   assert.equal(pet.name, "Bella");
   assert.equal(pet.ownerId, rehomer.id);
+  assert.equal(pet.listingNumber, "Q8N4V2K7");
+  assert.ok(publicListings.filter(item => item.ownerId === rehomer.id).length > 1, "the organisation account should own its published listings");
+  assert.equal(pets.find(item => item.id === pet.id).listingNumber, pet.listingNumber, "the public listing and review fixture must identify the same pet");
 
   // The applicant starts the inquiry; the pet's rehomer and PawMatch operations
   // can answer in the same thread. The administrator can audit and clarify it.

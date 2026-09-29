@@ -7,7 +7,7 @@
 | Emma Wilson（North Star Rescue） | 譲渡者・団体 | Bella、Snow、Finn、Leo（4頭） | 自団体の16申込み |
 | Daniel Carter | 個人譲渡者・宮城県 | Luna（1頭） | 自分の4申込み |
 | Olivia Reed | 個人譲渡者・愛知県 | Oreo（1頭） | 自分の4申込み |
-| Lucas Meyer | 個人譲渡者・香川県 | Daisy（1頭） | 自分の4申込み |
+| Lucas Evans | 個人譲渡者・香川県 | Daisy（1頭） | 自分の4申込み |
 | Mia Thompson | 個人譲渡者・福岡県 | Mocha（1頭） | 自分の4申込み |
 | Noah Williams / Olivia Parker | 里親希望者 | なし | 各自の相談履歴 |
 | Sophie Bennett / Alex Morgan | 審査担当 | なし | 全32申込みの審査 |

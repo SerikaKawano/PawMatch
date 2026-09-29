@@ -19,7 +19,7 @@ test("shared Japanese actions have consistent English labels", () => {
   assert.equal(translateText(uiCopy.contactPet("Bella")), "Enquire about Bella");
   assert.equal(translateText(" 掲載番号 "), " Listing ID ");
   assert.equal(translateText("全国のペットを 8件表示しています"), "Showing 8 pets in All regions");
-  assert.equal(translateText("日本猫・キジトラのBella"), "Bella, Domestic shorthair · tabby");
+  assert.equal(translateText("ドメスティック・ショートヘア（キジトラ）のBella"), "Bella, Domestic Shorthair · tabby");
   assert.equal(translateText("2015年4月18日（11歳）"), "18/4/2015 (11 years old)");
   assert.equal(translateText("4名"), "4 applicants");
   assert.equal(translateText("ペット可住宅の確認待ち"), "Pet-friendly housing awaiting verification");
@@ -80,5 +80,5 @@ test("prepared adopter profiles and consultation messages have English copy", ()
     if (consultation.replyMessage) assert.doesNotMatch(translateText(consultation.replyMessage), /[ぁ-んァ-ン一-龯]/);
     for (const message of consultation.messages ?? []) assert.doesNotMatch(translateText(message.body), /[ぁ-んァ-ン一-龯]/, message.body);
   }
-  assert.equal(translateText("犬・ゴールデン・レトリバー"), "Dog · Golden Retriever");
+  assert.equal(translateText("犬・ラブラドール・レトリーバー"), "Dog · Labrador Retriever");
 });

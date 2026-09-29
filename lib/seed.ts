@@ -12,9 +12,9 @@ const petOwners: Record<string, Pet["ownerId"]> = {
 };
 
 const breeds: Record<string, string> = {
-  momo: "日本猫・キジトラ", yuki: "日本猫・白猫", sora: "柴犬系ミックス",
-  kai: "ゴールデン・レトリバー", hana: "日本猫・三毛", riku: "日本猫・白黒",
-  haru: "ミニチュア・ダックスフンド", nagi: "トイ・プードル",
+  momo: "ドメスティック・ショートヘア（キジトラ）", yuki: "ドメスティック・ショートヘア（白）", sora: "ボーダー・コリー系ミックス",
+  kai: "ラブラドール・レトリーバー", hana: "ドメスティック・ショートヘア（三毛）", riku: "ドメスティック・ショートヘア（白黒）",
+  haru: "ミニチュア・ダックスフンド", nagi: "コッカプー",
 };
 export const pets: Pet[] = scenarios.map((scenario,index)=>({
   id:scenario.petId,ownerId:petOwners[scenario.petId],name:scenario.petName,species:scenario.species,breed:breeds[scenario.petId],
