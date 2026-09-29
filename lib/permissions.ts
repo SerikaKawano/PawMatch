@@ -14,7 +14,7 @@ export function capabilityForPath(path: string): Capability | null {
   if (/^\/api\/adopter-profile\/identity\/[^/]+$/.test(path)) return "review";
   if (path === "/api/adopter-profile" || path === "/api/adopter-profile/identity" || path === "/api/adopter-documents" || /^\/api\/adopter-documents\/[^/]+$/.test(path)) return "consult";
   if (/^\/pets\/[^/]+\/consult$/.test(path) || path === "/api/consultations") return "consult";
-  if (path === "/rehoming") return "rehome";
+  if (path === "/rehoming" || path.startsWith("/rehoming/")) return "rehome";
   if (path === "/reviews" || path.startsWith("/reviews/") || path === "/api/applications" || path.startsWith("/api/applications/")) return "review";
   if (path.startsWith("/admin/") || path === "/research" || path === "/research/setup" || path === "/research/results" || path === "/docs" || path === "/api/openapi" || path === "/api/seed" || (path.startsWith("/api/research/") && !/^\/api\/research\/sessions\/[^/]+$/.test(path))) return "admin";
   return null;

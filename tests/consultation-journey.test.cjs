@@ -7,7 +7,7 @@ const { linkedApplication, journeySteps, journeySummary } = load("lib/consultati
 const { groupConsultations } = load("lib/consultation-groups.ts");
 
 test("sample enquiries only link to a later application for the same adopter and pet", () => {
-  assert.equal(sampleConsultations.length, 18);
+  assert.equal(sampleConsultations.length, 19);
   assert.equal(sampleConsultations.filter(record => linkedApplication(record, applicants)).length, 12);
   for (const record of sampleConsultations) {
     const application = linkedApplication(record, applicants);
@@ -92,4 +92,12 @@ test("consultations from the same person about the same pet form one thread", ()
   assert.equal(group.representative.id, original.id, "the record linked to the application remains the reply target");
   assert.ok(group.application);
   assert.equal(group.latestAt, duplicate.createdAt);
+});
+
+test("tester preview data includes an enquiry that ended without an application", () => {
+  const enquiryOnly = sampleConsultations.find(record => record.userId === "tester-2-adopter" && record.petId === "tester-pet-1");
+  assert.ok(enquiryOnly);
+  assert.equal(enquiryOnly.status, "closed");
+  assert.equal(linkedApplication(enquiryOnly, applicants), null);
+  assert.match(enquiryOnly.messages.at(-1).body, /no review case was created/);
 });

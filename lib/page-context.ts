@@ -18,6 +18,7 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
     "/adopter/profile": { title: "プロファイルと書類", description: "里親希望者の基本情報、飼育環境、本人確認、提出書類を管理します。", backHref: "/dashboard", backLabel: "ホームへ戻る" },
     "/adopter/history": { title: "相談・申込履歴", description: "これまでの相談、メッセージ、申込み後の審査進捗を確認できます。", backHref: "/dashboard", backLabel: "ホームへ戻る" },
     "/rehoming": { title: "掲載中のペット一覧", description: "掲載しているペットと、ペットごとの審査状況を確認できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
+    "/rehoming/new": { title: "ペットを掲載する", description: "新しい里親募集に必要なペットの情報、健康状態、暮らしの条件を登録します。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/rehoming/consultations": { title: "届いた相談", description: "掲載ペットへの相談を確認し、ペット固有の質問へ譲渡者として返信できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/progress": { title: "審査進捗ボード", description: "受付から最終判断までの進捗を一目で確認できます。", backHref: "/dashboard", backLabel: "マイページへ戻る" },
     "/reviews/consultations": { title: "相談一覧", description: "届いた相談を確認し、申込みの準備へ進めるか対応を記録します。", backHref: "/dashboard", backLabel: "マイページへ戻る" },

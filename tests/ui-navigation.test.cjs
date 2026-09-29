@@ -50,7 +50,7 @@ test("every persona has an actionable primary destination", () => {
   assert.equal(new Set(applicants.filter(application => application.userId).map(application => application.stage)).size, 6);
   assert.equal(demoUsers.filter(user => user.role === "rehomer" && user.kind === "individual").length, 9);
   assert.equal(roleNavigation.adopter.tasks[0].href, "/pets");
-  assert.equal(roleNavigation.rehomer.tasks[0].href, "/rehoming");
+  assert.equal(roleNavigation.rehomer.tasks[0].href, "/rehoming/new");
   assert.equal(roleNavigation.reviewer.tasks[0].href, "/reviews/progress");
   assert.equal(roleNavigation.admin.tasks[0].href, "/admin/analytics");
   for (const group of Object.values(roleNavigation)) {
@@ -61,6 +61,7 @@ test("every persona has an actionable primary destination", () => {
     }
   }
   assert.equal(safeLoginNext("/rehoming"), "/rehoming");
+  assert.equal(safeLoginNext("/rehoming/new"), "/rehoming/new");
 });
 test("account menu requires logout before choosing another user", () => {
   const header = readFileSync(path.join(__dirname, "../components/PublicHeader.tsx"), "utf8");

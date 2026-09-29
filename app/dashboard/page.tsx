@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, BarChart3, ClipboardList, MessageCircle, PawPrint, Settings2, UsersRound } from "lucide-react";
+import { ArrowRight, BarChart3, ClipboardList, MessageCircle, PawPrint, PlusCircle, Settings2, UsersRound } from "lucide-react";
 import { currentDemoUser } from "@/lib/demo-session-server";
 import { RoleHomeHero } from "@/components/RoleHomeHero";
 export const dynamic = "force-dynamic";
@@ -19,6 +19,7 @@ export default async function DashboardPage() {
   if (user.role === "rehomer") return <div className="rehomer-home page-wrap">
     <RoleHomeHero name={user.name} />
     <nav className="rehomer-home-menu" aria-label="譲渡者のメニュー">
+      <Link href="/rehoming/new" className="create-listing"><span className="rehomer-menu-icon"><PlusCircle /></span><span><strong>ペットを掲載する</strong><small>新しい里親募集のプロファイルと譲渡条件を登録する</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
       <Link href="/rehoming" className="listing"><span className="rehomer-menu-icon"><PawPrint /></span><span><strong>掲載中のペット一覧</strong><small>自分が掲載しているペットと掲載内容を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
       <Link href="/reviews/progress" className="progress"><span className="rehomer-menu-icon"><ClipboardList /></span><span><strong>審査進捗ボード</strong><small>受付から最終判断までの現在地を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>
       <Link href="/rehoming/consultations" className="enquiries"><span className="rehomer-menu-icon"><MessageCircle /></span><span><strong>届いた相談を見る</strong><small>掲載ペットについて届いた相談と対応状況を見る</small></span><ArrowRight className="rehomer-menu-arrow" /></Link>

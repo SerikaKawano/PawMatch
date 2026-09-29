@@ -8,6 +8,7 @@ export const roleNavigation: Record<DemoRole, { title: string; purpose: string; 
     { label: "相談・申込履歴", href: "/adopter/history", description: "相談したペットと審査の進捗を確認します。" },
   ] },
   rehomer: { title: "譲渡者のホーム", purpose: "掲載ペット、審査進捗、届いた相談を確認できます。", tasks: [
+    { label: "ペットを掲載する", href: "/rehoming/new", description: "新しい里親募集のプロファイルと譲渡条件を登録します。" },
     { label: "掲載中のペット一覧", href: "/rehoming", description: "掲載中のペットと掲載内容を確認します。" },
     { label: "審査進捗ボード", href: "/reviews/progress", description: "1申込み1行で現在地を見て、確認・面談・トライアルへ進みます。" },
     { label: "届いた相談を見る", href: "/rehoming/consultations", description: "掲載ペットへの相談を確認し、ペット固有の質問へ返信します。" },
@@ -30,6 +31,7 @@ export function navigationLabel(path: string) {
   if (/^\/pets\/[^/]+\/consult$/.test(path)) return "相談内容を入力";
   if (path.startsWith("/pets/")) return "ペットの詳細";
   if (path === "/rehoming") return uiCopy.manageListings;
+  if (path === "/rehoming/new") return "ペットを掲載する";
   if (path === "/reviews/progress") return "審査の進捗一覧";
   if (path === "/reviews/consultations") return "届いた相談";
   if (path === "/reviews") return "審査の進捗一覧";

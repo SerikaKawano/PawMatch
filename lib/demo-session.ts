@@ -7,5 +7,5 @@ export function resolveDemoUser(value: unknown) {
 // Deliberately allow only destinations used by the demo login flow.
 export function safeLoginNext(value: unknown): string {
   if (typeof value !== "string") return "/dashboard";
-  return /^(?:\/dashboard(?:#consultations)?|\/rehoming|\/consultations\/[a-zA-Z0-9-]+|\/pets(?:\/[a-zA-Z0-9-]+(?:\/consult)?)?)$/.test(value) ? value : "/dashboard";
+  return /^(?:\/dashboard(?:#consultations)?|\/rehoming(?:\/new|\/consultations)?|\/consultations\/[a-zA-Z0-9-]+|\/pets(?:\/[a-zA-Z0-9-]+(?:\/consult)?)?)$/.test(value) ? value : "/dashboard";
 }

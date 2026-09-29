@@ -221,6 +221,14 @@ const sampleRows: SampleRow[] = [
       followUp("tester-5-adopter", "2026-09-29T15:13:00.000Z", "test test / checked status display"),
     ],
   },
+  {
+    userId: "tester-2-adopter", petId: "tester-pet-1", status: "closed", createdAt: "2026-09-29T12:20:00.000Z", reviewedAt: "2026-09-29T12:27:00.000Z",
+    message: "test only enquiry — checking the conversation without starting an application.", messages: [
+      followUp("tester-1-rehomer", "2026-09-29T12:23:00.000Z", "Test reply: daily care details can be discussed before applying."),
+      followUp("tester-2-adopter", "2026-09-29T12:25:00.000Z", "Thanks. I am only checking the enquiry flow today."),
+      followUp("tester-2-reviewer", "2026-09-29T12:27:00.000Z", "SIMULATED DATA — closed as an enquiry only; no review case was created."),
+    ],
+  },
 ];
 
 export const sampleConsultations: Consultation[] = sampleRows.map((row, index) => ({

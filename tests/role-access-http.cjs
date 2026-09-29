@@ -6,6 +6,7 @@ const matrix=[
  ["/adopter/profile",["adopter","admin"]],
  ["/adopter/history",["adopter","admin"]],
  ["/rehoming",["rehomer","admin"]],
+ ["/rehoming/new",["rehomer"]],
  ["/rehoming/consultations",["rehomer","admin"]],
  ["/reviews/progress",["rehomer","reviewer","admin"]],
  ["/reviews/consultations",["reviewer","admin"]],

@@ -7,6 +7,7 @@ import { getReviewRecords, initialReview, saveReview } from "./review-store";
 import type { DemoUser } from "./demoUsers";
 import { assess } from "./research/scoring";
 import { getResearch } from "./research/store";
+import { getPetListings } from "./pet-listings";
 
 function withoutMongoFields<T>(record: Record<string, unknown>): T {
   const result = { ...record }; delete result._id; delete result.__v;
@@ -16,11 +17,12 @@ function mergeById<T extends {id:string}>(records:T[],seed:T[]):T[] {
   return [...records,...seed.filter(s=>!records.some(r=>r.id===s.id))];
 }
 export async function getPets(): Promise<Pet[]> {
-  if (!isDatabaseConfigured()) return pets;
+  const availablePets = mergeById(await getPetListings(), pets);
+  if (!isDatabaseConfigured()) return availablePets;
   await connectDatabase();
   const records = await PetModel.find({}).lean();
-  return mergeById(records.map(record=>withoutMongoFields<Pet>(record)),pets).map(record => {
-    const fixture = pets.find(pet => pet.id === record.id);
+  return mergeById(records.map(record=>withoutMongoFields<Pet>(record)),availablePets).map(record => {
+    const fixture = availablePets.find(pet => pet.id === record.id);
     return fixture ? { ...record, listedAt: fixture.listedAt, ownerId: fixture.ownerId, name: fixture.name, breed: fixture.breed, imageUrl: fixture.imageUrl, summary: fixture.summary, careNeeds: fixture.careNeeds, health: fixture.health, rehoming: fixture.rehoming } : record;
   });
 }
