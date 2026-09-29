@@ -14,7 +14,8 @@
 .research-card .primary-button{background:#865d51;color:#fff}
 .research-card .primary-button:disabled{opacity:.55;cursor:not-allowed}
 .research-card .secondary-button{background:#fff4d6}
-.research-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}
+.research-kpi-period{margin:22px 0 8px;font-weight:800;color:#5b4a43}
+.research-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin:8px 0 24px}
 .research-kpis article{border-radius:16px;background:#f5e5df;padding:22px;display:flex;flex-direction:column}
 .research-kpis article:nth-child(even){background:#fff1c9}
 .research-kpis strong{font-size:36px;line-height:1.4;color:#925968}

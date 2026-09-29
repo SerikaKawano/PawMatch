@@ -6,6 +6,7 @@ export type ReviewStage = "screening" | "risk_review" | "verification" | "meetin
 
 export interface Pet {
   id: string;
+  listedAt: string;
   listingNumber: string;
   birthDate: string;
   birthDateApproximate: boolean;

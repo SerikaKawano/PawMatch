@@ -21,7 +21,7 @@ export async function getPets(): Promise<Pet[]> {
   const records = await PetModel.find({}).lean();
   return mergeById(records.map(record=>withoutMongoFields<Pet>(record)),pets).map(record => {
     const fixture = pets.find(pet => pet.id === record.id);
-    return fixture ? { ...record, ownerId: fixture.ownerId, name: fixture.name, breed: fixture.breed, imageUrl: fixture.imageUrl, summary: fixture.summary, careNeeds: fixture.careNeeds, health: fixture.health, rehoming: fixture.rehoming } : record;
+    return fixture ? { ...record, listedAt: fixture.listedAt, ownerId: fixture.ownerId, name: fixture.name, breed: fixture.breed, imageUrl: fixture.imageUrl, summary: fixture.summary, careNeeds: fixture.careNeeds, health: fixture.health, rehoming: fixture.rehoming } : record;
   });
 }
 export async function getApplicants(petId?: string): Promise<Applicant[]> {

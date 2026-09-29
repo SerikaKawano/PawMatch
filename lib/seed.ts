@@ -18,6 +18,7 @@ const breeds: Record<string, string> = {
 };
 export const pets: Pet[] = scenarios.map((scenario,index)=>({
   id:scenario.petId,ownerId:petOwners[scenario.petId],name:scenario.petName,species:scenario.species,breed:breeds[scenario.petId],
+  listedAt:`2026-08-${String(index+3).padStart(2,"0")}T09:00:00.000Z`,
   age:scenario.age,sex:index%2?"Male":"Female",location:scenario.location,
   temperament:scenario.species==="Cat"?["ゆっくり信頼関係を築く"]:["家族との時間が好き"],
   careNeeds:[scenario.animalNeeds],summary:scenario.animalNeeds,emoji:scenario.species==="Cat"?"🐈":"🐕",
@@ -127,7 +128,8 @@ function buildPreparedReview(candidateId:string,stage:ReviewStage,verification:V
 export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario.candidates.map((candidate,i)=>{
   const assessment=assess(candidate);
   const linked = adopterCases[candidate.id];
-  const submittedAt=linked ? adopterSubmittedDates[linked.userId]! : "2026-09-"+String(index*3+i+1).padStart(2,"0");
+  const preparedSubmittedAt=preparedOutcomes[candidate.id]?`2026-09-${String(2+((index*4+i)%8)).padStart(2,"0")}`:undefined;
+  const submittedAt=linked ? adopterSubmittedDates[linked.userId]! : preparedSubmittedAt ?? "2026-09-"+String(index*3+i+1).padStart(2,"0");
   const stage=preparedOutcomes[candidate.id]?.stage ?? linked?.stage ?? reviewStages[(index*4+i)%reviewStages.length];
   const stageTimeline=buildStageTimeline(submittedAt,stage,index*4+i);
   const review=buildPreparedReview(candidate.id,stage,candidate.verification,submittedAt,petOwners[scenario.petId]);
