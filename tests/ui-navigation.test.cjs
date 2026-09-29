@@ -62,6 +62,7 @@ test("every persona has an actionable primary destination", () => {
   }
   assert.equal(safeLoginNext("/rehoming"), "/rehoming");
   assert.equal(safeLoginNext("/rehoming/new"), "/rehoming/new");
+  assert.equal(safeLoginNext("/rehoming/pet-id/edit"), "/rehoming/pet-id/edit");
 });
 test("account menu requires logout before choosing another user", () => {
   const header = readFileSync(path.join(__dirname, "../components/PublicHeader.tsx"), "utf8");

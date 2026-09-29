@@ -24,6 +24,7 @@ export interface Pet {
   imageUrl?: string;
   accent: string;
   applications: number;
+  listingStatus?: "active" | "stopped";
   urgent?: boolean;
   health?: {
     medicalHistory: string;

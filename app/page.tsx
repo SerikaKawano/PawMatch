@@ -10,7 +10,7 @@ import { uiCopy } from "@/lib/ui-copy";
 
 export default async function HomePage() {
   if (await currentDemoUser()) redirect("/dashboard");
-  const petList = await getPets();
+  const petList = (await getPets()).filter(pet => pet.listingStatus !== "stopped");
   return <>
     <section className="public-hero">
       <div className="public-hero-photo" aria-hidden="true" />

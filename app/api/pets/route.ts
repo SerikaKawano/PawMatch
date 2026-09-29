@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getPets } from "@/lib/repository";
 import { apiAccess } from "@/lib/access-control";
 import { createPetListing, petListingInput } from "@/lib/pet-listings";
-export async function GET() { return NextResponse.json({ data: await getPets() }); }
+export async function GET() { return NextResponse.json({ data: (await getPets()).filter(pet => pet.listingStatus !== "stopped") }); }
 
 export async function POST(request: Request) {
   const { user, error } = await apiAccess("rehome", request);

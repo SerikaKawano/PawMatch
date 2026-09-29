@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   if (error || !user) return error!;
   const parsed = consultationInput.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "相談内容と連絡先を確認してください。" }, { status: 400 });
-  if (!(await getPets()).some(pet => pet.id === parsed.data.petId)) return NextResponse.json({ error: "ペットが見つかりません。" }, { status: 404 });
+  if (!(await getPets()).some(pet => pet.id === parsed.data.petId && pet.listingStatus !== "stopped")) return NextResponse.json({ error: "ペットが見つかりません。" }, { status: 404 });
   try {
     return NextResponse.json({ consultation: await saveConsultation(user.id, parsed.data) }, { status: 201 });
   } catch {

@@ -7,7 +7,7 @@ import { getReviewRecords, initialReview, saveReview } from "./review-store";
 import type { DemoUser } from "./demoUsers";
 import { assess } from "./research/scoring";
 import { getResearch } from "./research/store";
-import { getPetListings } from "./pet-listings";
+import { applyPetListingOverrides, getPetListings } from "./pet-listings";
 
 function withoutMongoFields<T>(record: Record<string, unknown>): T {
   const result = { ...record }; delete result._id; delete result.__v;
@@ -18,13 +18,14 @@ function mergeById<T extends {id:string}>(records:T[],seed:T[]):T[] {
 }
 export async function getPets(): Promise<Pet[]> {
   const availablePets = mergeById(await getPetListings(), pets);
-  if (!isDatabaseConfigured()) return availablePets;
+  if (!isDatabaseConfigured()) return applyPetListingOverrides(availablePets);
   await connectDatabase();
   const records = await PetModel.find({}).lean();
-  return mergeById(records.map(record=>withoutMongoFields<Pet>(record)),availablePets).map(record => {
+  const merged = mergeById(records.map(record=>withoutMongoFields<Pet>(record)),availablePets).map(record => {
     const fixture = availablePets.find(pet => pet.id === record.id);
     return fixture ? { ...record, listedAt: fixture.listedAt, ownerId: fixture.ownerId, name: fixture.name, breed: fixture.breed, imageUrl: fixture.imageUrl, summary: fixture.summary, careNeeds: fixture.careNeeds, health: fixture.health, rehoming: fixture.rehoming } : record;
   });
+  return applyPetListingOverrides(merged);
 }
 export async function getApplicants(petId?: string): Promise<Applicant[]> {
   let base=applicants;

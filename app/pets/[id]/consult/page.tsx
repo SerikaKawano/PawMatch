@@ -11,7 +11,7 @@ import { findPetByRouteKey, isCanonicalPetRoute, petConsultPath } from "@/lib/pe
 export default async function ConsultationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const pet = findPetByRouteKey(await getPets(), id);
-  if (!pet) notFound();
+  if (!pet || pet.listingStatus === "stopped") notFound();
   if (!isCanonicalPetRoute(pet, id)) redirect(petConsultPath(pet));
   const user = await requirePageAccess("consult", petConsultPath(pet));
 

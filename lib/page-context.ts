@@ -36,6 +36,7 @@ export function pageContext(pathname: string, role: Role): PageContext | null {
   };
   if (exact[pathname]) return exact[pathname];
   const parts = pathname.split("/").filter(Boolean);
+  if (parts[0] === "rehoming" && parts.length === 3 && parts[2] === "edit") return { title: "掲載内容を編集する", description: "ペットの写真、プロファイル、健康状態、暮らしの条件を更新します。", backHref: "/rehoming", backLabel: "掲載中のペット一覧へ戻る" };
   if (parts[0] === "pets" && parts.length === 3 && parts[2] === "consult") return { title: "相談内容を入力", description: "相談内容と連絡先を入力し、譲渡者へ問い合わせます。", backHref: `/pets/${parts[1]}`, backLabel: "ペットの詳細へ戻る" };
   if (parts[0] === "pets" && parts.length === 2) return { title: "ペットの詳細", description: "ペットのプロファイル、健康状態、必要なケア、譲渡条件を確認できます。", backHref: "/pets", backLabel: "ペット一覧へ戻る" };
   if (parts[0] === "reviews" && parts[1] === "applicants" && parts.length === 3) return { title: "申込者のプロファイル", description: "申込者の基本情報と詳しい飼育環境を確認できます。", backHref: `/reviews/${parts[2]}`, backLabel: "審査ケースへ戻る" };

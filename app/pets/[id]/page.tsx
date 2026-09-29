@@ -29,8 +29,9 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
   if (!isCanonicalPetRoute(pet, id)) redirect(`/pets/${pet.listingNumber}`);
 
   const user = await currentDemoUser();
+  const isActiveListing = pet.listingStatus !== "stopped";
   const canReview = Boolean(user && mayReviewPet(user, pet));
-  const canConsult = !user || canAccess(user, "consult");
+  const canConsult = isActiveListing && (!user || canAccess(user, "consult"));
   const owner = demoUsers.find(account => account.id === pet.ownerId);
   const species = pet.species === "Dog" ? "犬" : "猫";
   const sex = pet.sex === "Female" ? "女の子" : "男の子";
@@ -51,7 +52,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
         <div className="pet-detail-main">
           <section className="pet-profile-hero">
             <header className="pet-profile-heading">
-              <div className="detail-label-row"><span className="listing-status">里親募集中</span><span>掲載番号 {pet.listingNumber}</span></div>
+              <div className="detail-label-row"><span className={`listing-status ${isActiveListing ? "" : "stopped"}`}>{isActiveListing ? "里親募集中" : "掲載停止"}</span><span>掲載番号 {pet.listingNumber}</span></div>
               <div className="pet-name-row">
                 <div className="detail-title"><h1>{pet.name}</h1></div>
                 <div className="tag-row" aria-label="性格">{pet.temperament.map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div>
@@ -64,7 +65,7 @@ export default async function PetDetailPage({ params }: { params: Promise<{ id: 
                   <span>{pet.emoji}</span>{pet.urgent && <b className="urgent-ribbon">優先して募集中</b>}
                 </div>
               </div>
-              <div className="pet-primary-actions">{canConsult && <Link href={petConsultPath(pet)} className="task-primary">{uiCopy.contactPet(pet.name)} <MessageCircle size={22} /></Link>}{canReview && <Link href={`/reviews/progress?pet=${pet.id}`} className="task-secondary">この子の審査進捗を見る</Link>}{!canConsult && !canReview && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
+              <div className="pet-primary-actions">{canConsult && <Link href={petConsultPath(pet)} className="task-primary">{uiCopy.contactPet(pet.name)} <MessageCircle size={22} /></Link>}{!isActiveListing && <span className="listing-stopped-message">このペットの掲載は停止されています。</span>}{canReview && <Link href={`/reviews/progress?pet=${pet.id}`} className="task-secondary">この子の審査進捗を見る</Link>}{!canConsult && !canReview && user?.role === "rehomer" && <Link href="/rehoming" className="task-secondary">自分の掲載ペットへ戻る</Link>}</div>
             </div>
             <div className="pet-profile-copy">
               <div className="profile-facts">
