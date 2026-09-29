@@ -111,7 +111,8 @@ test("review progress uses icon-only automated check states", () => {
   const progress = readFileSync(path.join(__dirname, "../app/reviews/progress/page.tsx"), "utf8");
   assert.ok(progress.includes("<span>状況</span>"));
   assert.ok(progress.includes('aria-label={automatedCheckLabel}'));
-  assert.ok(progress.includes('needsAttention ? <AlertTriangle aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />'));
+  assert.ok(progress.includes('declined ? <XCircle aria-hidden="true" /> : needsAttention ? <AlertTriangle aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />'));
+  assert.ok(progress.includes('declined ? "状況：見送り"'));
   assert.ok(!progress.includes("未確認 {pending}"));
   assert.ok(!progress.includes("確認 {application.risks.length}"));
   assert.ok(!progress.includes("<CheckCircle2 />確認済み"));
