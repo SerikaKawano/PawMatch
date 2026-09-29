@@ -1,5 +1,8 @@
 export type DemoRole = "admin" | "reviewer" | "rehomer" | "adopter";
-export type DemoUserId = DemoRole | "reviewer-alex" | "adopter-olivia" | "adopter-amelia" | "adopter-ethan" | "adopter-grace" | "adopter-oliver" | "adopter-ava" | "adopter-liam" | "adopter-mia" | "adopter-jack" | "rehomer-hana" | "rehomer-riku" | "rehomer-haru" | "rehomer-nagi";
+export type TesterNumber = 1 | 2 | 3 | 4 | 5;
+export type TesterRole = "reviewer" | "rehomer" | "adopter";
+export type TesterUserId = `tester-${TesterNumber}-${TesterRole}`;
+export type DemoUserId = DemoRole | "reviewer-alex" | "adopter-olivia" | "adopter-amelia" | "adopter-ethan" | "adopter-grace" | "adopter-oliver" | "adopter-ava" | "adopter-liam" | "adopter-mia" | "adopter-jack" | "rehomer-hana" | "rehomer-riku" | "rehomer-haru" | "rehomer-nagi" | TesterUserId;
 export type DemoUser = { id: DemoUserId; role: DemoRole; name: string; organization: string; roleLabel: string; email: string; initials: string; description: string; color: string; kind?: "organization" | "individual"; websiteUrl?: string; socialUrl?: string };
 
 export const demoUsers: DemoUser[] = [
@@ -21,4 +24,40 @@ export const demoUsers: DemoUser[] = [
   { id: "adopter-liam", role: "adopter", name: "Liam Turner", organization: "個人利用", roleLabel: "里親希望者", email: "liam@pawmatch.test", initials: "LT", description: "適合性の確認状況を確認します。", color: "yellow" },
   { id: "adopter-mia", role: "adopter", name: "Mia Campbell", organization: "個人利用", roleLabel: "里親希望者", email: "mia.campbell@pawmatch.test", initials: "MC", description: "相談の対応状況を確認します。", color: "yellow" },
   { id: "adopter-jack", role: "adopter", name: "Jack Robinson", organization: "個人利用", roleLabel: "里親希望者", email: "jack@pawmatch.test", initials: "JR", description: "最終確認の状態を確認します。", color: "yellow" },
+  ...([1, 2, 3, 4, 5] as const).flatMap(number => [
+    {
+      id: `tester-${number}-adopter` as TesterUserId,
+      role: "adopter" as const,
+      name: `Tester-${number}-Adopter`,
+      organization: "模擬検証データ",
+      roleLabel: "里親希望者",
+      email: `tester${number}.adopter@pawmatch.test`,
+      initials: `T${number}`,
+      description: "30分自由操作の見栄え確認用アカウントです。実参加者データではありません。",
+      color: "yellow",
+    },
+    {
+      id: `tester-${number}-rehomer` as TesterUserId,
+      role: "rehomer" as const,
+      name: `Tester-${number}-Rehomer`,
+      organization: "模擬検証データ",
+      roleLabel: "譲渡者（模擬）",
+      email: `tester${number}.rehomer@pawmatch.test`,
+      initials: `T${number}`,
+      description: "30分自由操作の見栄え確認用アカウントです。実参加者データではありません。",
+      color: "pink",
+      kind: "individual" as const,
+    },
+    {
+      id: `tester-${number}-reviewer` as TesterUserId,
+      role: "reviewer" as const,
+      name: `Tester-${number}-Reviewer`,
+      organization: "PawMatch simulated review",
+      roleLabel: "審査担当（模擬）",
+      email: `tester${number}.reviewer@pawmatch.test`,
+      initials: `T${number}`,
+      description: "30分自由操作の見栄え確認用アカウントです。実参加者データではありません。",
+      color: "green",
+    },
+  ]),
 ];

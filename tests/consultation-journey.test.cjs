@@ -7,8 +7,8 @@ const { linkedApplication, journeySteps, journeySummary } = load("lib/consultati
 const { groupConsultations } = load("lib/consultation-groups.ts");
 
 test("sample enquiries only link to a later application for the same adopter and pet", () => {
-  assert.equal(sampleConsultations.length, 13);
-  assert.equal(sampleConsultations.filter(record => linkedApplication(record, applicants)).length, 7);
+  assert.equal(sampleConsultations.length, 18);
+  assert.equal(sampleConsultations.filter(record => linkedApplication(record, applicants)).length, 12);
   for (const record of sampleConsultations) {
     const application = linkedApplication(record, applicants);
     if (record.status === "closed" || record.status === "received") {
@@ -65,7 +65,7 @@ test("timeline distinguishes waiting, ended, review stage and recorded decisions
 });
 
 test("sample consultation threads include direct rehomer replies for pet-specific questions", () => {
-  const rehomerIds = new Set(["rehomer", "rehomer-hana", "rehomer-riku", "rehomer-haru", "rehomer-nagi"]);
+  const rehomerIds = new Set(["rehomer", "rehomer-hana", "rehomer-riku", "rehomer-haru", "rehomer-nagi", ...[1,2,3,4,5].map(number => `tester-${number}-rehomer`)]);
   const directReplies = sampleConsultations.flatMap(record => record.messages ?? []).filter(message => rehomerIds.has(message.authorId));
   assert.ok(directReplies.length >= 8);
   assert.ok(sampleConsultations.filter(record => record.status === "received").every(record => record.messages.some(message => rehomerIds.has(message.authorId))));

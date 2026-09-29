@@ -19,5 +19,5 @@ test("demo people and animal breeds use UK-plausible presentation data", () => {
   assert.deepEqual(new Set(pets.map(pet => pet.breed)), expectedBreeds);
   assert.equal(demoUsers.find(user => user.id === "rehomer-haru").name, "Lucas Evans");
   assert.equal(demoUsers.find(user => user.id === "admin").name, "Serika Kawano", "the named project administrator remains unchanged");
-  assert.ok(demoUsers.filter(user => user.role !== "admin").every(user => /^[A-Z][a-z]+ [A-Z][a-z]+$/.test(user.name)));
+  assert.ok(demoUsers.filter(user => user.role !== "admin" && !user.id.startsWith("tester-")).every(user => /^[A-Z][a-z]+ [A-Z][a-z]+$/.test(user.name)));
 });

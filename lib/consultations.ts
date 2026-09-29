@@ -182,6 +182,45 @@ const sampleRows: SampleRow[] = [
   },
   { userId: "adopter-ava", petId: "kai", status: "received", createdAt: "2026-09-25T13:20:00.000Z", message: "大型犬の飼育経験はありません。必要な運動量と、初心者が準備すべきことを教えてください。", messages: [followUp("rehomer", "2026-09-25T17:40:00.000Z", "朝夕それぞれ45分前後の散歩に加え、室内での知育遊びが必要です。大型犬を安全に休ませられる場所と、滑りにくい床もご準備ください。") ] },
   { userId: "adopter-liam", petId: "riku", status: "received", createdAt: "2026-09-27T11:10:00.000Z", message: "在宅勤務中の生活リズムと、日中に必要なお世話について確認したいです。", messages: [followUp("rehomer-riku", "2026-09-27T15:30:00.000Z", "昼間は同じ部屋で静かに過ごせます。正午頃の食事と投薬、短い遊びの時間を確保してください。会議中に休める別スペースがあると安心です。") ] },
+  {
+    userId: "tester-1-adopter", petId: "tester-pet-1", status: "profile_requested", createdAt: "2026-09-29T11:01:00.000Z", reviewedAt: "2026-09-29T11:09:00.000Z",
+    message: "test test test", messages: [
+      followUp("tester-1-rehomer", "2026-09-29T11:04:00.000Z", "Test reply from the rehomer role."),
+      followUp("tester-1-reviewer", "2026-09-29T11:09:00.000Z", "SIMULATED DATA — profile submission was selected during a UI preview."),
+    ],
+  },
+  {
+    userId: "tester-2-adopter", petId: "tester-pet-2", status: "profile_requested", createdAt: "2026-09-29T12:03:00.000Z", reviewedAt: "2026-09-29T12:16:00.000Z",
+    message: "Is this button the next step? test", messages: [
+      followUp("tester-2-rehomer", "2026-09-29T12:08:00.000Z", "A short simulated reply was entered to check whether the conversation remained readable."),
+      followUp("tester-2-adopter", "2026-09-29T12:12:00.000Z", "OK, I will try the profile page next."),
+      followUp("tester-2-reviewer", "2026-09-29T12:16:00.000Z", "SIMULATED DATA — selected the application hand-off action."),
+    ],
+  },
+  {
+    userId: "tester-3-adopter", petId: "tester-pet-3", status: "profile_requested", createdAt: "2026-09-29T13:02:00.000Z", reviewedAt: "2026-09-29T13:11:00.000Z",
+    message: "Testing enquiry form and contact field.", messages: [
+      followUp("tester-3-rehomer", "2026-09-29T13:06:00.000Z", "Please check the care details before continuing. This is simulated preview text."),
+      followUp("tester-3-reviewer", "2026-09-29T13:11:00.000Z", "The simulated application was moved into review."),
+      followUp("tester-3-adopter", "2026-09-29T13:16:00.000Z", "test document uploaded / next button checked"),
+    ],
+  },
+  {
+    userId: "tester-4-adopter", petId: "tester-pet-4", status: "profile_requested", createdAt: "2026-09-29T14:04:00.000Z", reviewedAt: "2026-09-29T14:18:00.000Z",
+    message: "test", messages: [
+      followUp("tester-4-rehomer", "2026-09-29T14:10:00.000Z", "test reply"),
+      followUp("tester-4-adopter", "2026-09-29T14:15:00.000Z", "Tried opening the pet profile and returning to this thread."),
+      followUp("tester-4-reviewer", "2026-09-29T14:18:00.000Z", "SIMULATED DATA — moved the preview record to the meeting stage."),
+    ],
+  },
+  {
+    userId: "tester-5-adopter", petId: "tester-pet-5", status: "profile_requested", createdAt: "2026-09-29T15:01:00.000Z", reviewedAt: "2026-09-29T15:07:00.000Z",
+    message: "Checking how direct questions to the rehomer appear in the thread.", messages: [
+      followUp("tester-5-rehomer", "2026-09-29T15:05:00.000Z", "Simulated practical reply about daily care and handover arrangements."),
+      followUp("tester-5-reviewer", "2026-09-29T15:07:00.000Z", "SIMULATED DATA — the review hand-off action was selected."),
+      followUp("tester-5-adopter", "2026-09-29T15:13:00.000Z", "test test / checked status display"),
+    ],
+  },
 ];
 
 export const sampleConsultations: Consultation[] = sampleRows.map((row, index) => ({

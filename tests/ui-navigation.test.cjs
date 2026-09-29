@@ -9,18 +9,19 @@ const { roleNavigation } = load("lib/role-navigation.ts");
 const { safeLoginNext } = load("lib/demo-session.ts");
 const { demoUsers } = load("lib/demoUsers.ts");
 const { petPath, petConsultPath, findPetByRouteKey, isCanonicalPetRoute } = load("lib/pet-routes.ts");
-test("eight distinct local pet images and English names preserve research links", () => {
-  assert.equal(pets.length, 8);
-  assert.equal(applicants.length, 32);
+test("local pet images and English names preserve research links", () => {
+  assert.equal(pets.length, 13);
+  assert.equal(applicants.length, 37);
   assert.equal(new Set(pets.map(pet => pet.imageUrl)).size, 8);
   assert.equal(new Set(pets.map(pet => pet.breed)).size, 8);
   assert.ok(pets.every(pet => /^[A-Za-z]+$/.test(pet.name)));
   for (const pet of pets) {
-    assert.equal(pet.name, scenarios.find(s => s.petId === pet.id).petName);
+    const scenario = scenarios.find(s => s.petId === pet.id);
+    if (scenario) assert.equal(pet.name, scenario.petName);
     const file = path.join(__dirname, "../public", pet.imageUrl);
     assert.ok(existsSync(file), file);
     assert.equal(readFileSync(file).toString("ascii", 8, 12), "WEBP");
-    assert.equal(applicants.filter(a => a.petId === pet.id).length, 4);
+    assert.equal(applicants.filter(a => a.petId === pet.id).length, pet.id.startsWith("tester-pet-") ? 1 : 4);
   }
 });
 test("public pet routes use listing numbers while legacy ids remain resolvable", () => {
@@ -44,10 +45,10 @@ test("every persona has an actionable primary destination", () => {
   assert.ok(demoUsers.filter(user => user.role === "rehomer").every(user => user.color === "pink"));
   assert.ok(demoUsers.filter(user => user.role === "adopter").every(user => user.color === "yellow"));
   for (const role of ["reviewer", "rehomer", "adopter"]) assert.ok(demoUsers.filter(user => user.role === role).length >= 2);
-  assert.equal(demoUsers.filter(user => user.role === "adopter").length, 10);
+  assert.equal(demoUsers.filter(user => user.role === "adopter").length, 15);
   assert.equal(applicants.filter(application => application.userId?.startsWith("adopter")).length, 7);
   assert.equal(new Set(applicants.filter(application => application.userId).map(application => application.stage)).size, 6);
-  assert.equal(demoUsers.filter(user => user.role === "rehomer" && user.kind === "individual").length, 4);
+  assert.equal(demoUsers.filter(user => user.role === "rehomer" && user.kind === "individual").length, 9);
   assert.equal(roleNavigation.adopter.tasks[0].href, "/pets");
   assert.equal(roleNavigation.rehomer.tasks[0].href, "/rehoming");
   assert.equal(roleNavigation.reviewer.tasks[0].href, "/reviews/progress");

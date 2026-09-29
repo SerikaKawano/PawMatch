@@ -14,19 +14,24 @@ export function annualAdminMetrics(pets: Pet[], consultations: Consultation[], a
     return Number.isFinite(time) && time >= periodStart.getTime() && time <= periodEnd.getTime();
   };
   const personPetKey = (application: Applicant) => `${application.userId ?? application.name}:${application.petId}`;
-  const reviewCases = new Set(applications.filter(application => withinPeriod(application.submittedAt)).map(personPetKey));
-  const decisionCases = (decision: "decline" | "approve") => new Set(applications.filter(application => {
+  // The Tester-* records are UI-preview fixtures, not observations from human
+  // participants. Keep them visible in the workflow screens without allowing
+  // them to change operational or research-facing administrator totals.
+  const operationalPets = pets.filter(pet => !pet.id.startsWith("tester-pet-"));
+  const operationalApplications = applications.filter(application => !application.id.startsWith("tester-application-"));
+  const operationalConsultations = consultations.filter(record => !record.userId.startsWith("tester-"));
+  const reviewCases = new Set(operationalApplications.filter(application => withinPeriod(application.submittedAt)).map(personPetKey));
+  const decisionCases = (decision: "decline" | "approve") => new Set(operationalApplications.filter(application => {
     if (!application.review?.decisionRecorded || application.review.decision !== decision) return false;
     return withinPeriod(application.review.history.at(-1)?.at);
   }).map(personPetKey)).size;
-  const enquiryGroups = groupConsultations(consultations, applications).filter(group => group.records.some(record => withinPeriod(record.createdAt)));
+  const enquiryGroups = groupConsultations(operationalConsultations, operationalApplications).filter(group => group.records.some(record => withinPeriod(record.createdAt)));
   return {
     periodStart: dateKey(periodStart), periodEnd: dateKey(periodEnd),
-    listedPets: pets.filter(pet => withinPeriod(pet.listedAt)).length,
+    listedPets: operationalPets.filter(pet => withinPeriod(pet.listedAt)).length,
     enquiries: enquiryGroups.length,
     reviews: reviewCases.size,
     declined: decisionCases("decline"),
     adopted: decisionCases("approve"),
   };
 }
-

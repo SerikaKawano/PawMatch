@@ -84,7 +84,7 @@ test("proposal research invariants and persistence", async t => {
   });
   await t.test("every rehomer has suitability decline, trial decline, and adopted cases", async () => {
     const applications=await getApplicants();
-    const ownerIds=[...new Set(pets.map(pet=>pet.ownerId))];
+    const ownerIds=[...new Set(pets.filter(pet=>!pet.id.startsWith("tester-pet-")).map(pet=>pet.ownerId))];
     assert.equal(ownerIds.length,5);
     for(const ownerId of ownerIds){
       const petIds=pets.filter(pet=>pet.ownerId===ownerId).map(pet=>pet.id);
@@ -109,8 +109,9 @@ test("proposal research invariants and persistence", async t => {
       assert.equal(adopted.review.signoffs.final_review.rehomer.userId,ownerId);
       assert.ok(adopted.stageTimeline.final_review.completedAt);
     }
-    assert.equal(applications.filter(application=>application.review?.decision==="decline").length,10);
-    assert.equal(applications.filter(application=>application.review?.decision==="approve").length,5);
+    const operationalApplications=applications.filter(application=>!application.id.startsWith("tester-application-"));
+    assert.equal(operationalApplications.filter(application=>application.review?.decision==="decline").length,10);
+    assert.equal(operationalApplications.filter(application=>application.review?.decision==="approve").length,5);
   });
   await t.test("final-review cases with attention flags include an actionable initial comment", async () => {
     const finalCases=(await getApplicants()).filter(application=>application.stage==="final_review"&&!application.review?.decisionRecorded);

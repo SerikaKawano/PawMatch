@@ -16,7 +16,7 @@ const breeds: Record<string, string> = {
   kai: "ラブラドール・レトリーバー", hana: "ドメスティック・ショートヘア（三毛）", riku: "ドメスティック・ショートヘア（白黒）",
   haru: "ミニチュア・ダックスフンド", nagi: "コッカプー",
 };
-export const pets: Pet[] = scenarios.map((scenario,index)=>({
+const basePets: Pet[] = scenarios.map((scenario,index)=>({
   id:scenario.petId,ownerId:petOwners[scenario.petId],name:scenario.petName,species:scenario.species,breed:breeds[scenario.petId],
   listedAt:`2026-08-${String(index+3).padStart(2,"0")}T09:00:00.000Z`,
   age:scenario.age,sex:index%2?"Male":"Female",location:scenario.location,
@@ -31,6 +31,23 @@ export const pets: Pet[] = scenarios.map((scenario,index)=>({
   health: { ...petProfiles[scenario.petId].health!, vaccinationHistory: petEditorial[scenario.petId].vaccinationHistory, recordEvidence: petEditorial[scenario.petId].recordEvidence },
   rehoming: { ...petProfiles[scenario.petId].rehoming!, story: petEditorial[scenario.petId].story, conditionsMessage: petEditorial[scenario.petId].conditionsMessage, livingPoints: petEditorial[scenario.petId].livingPoints, pedigree: petEditorial[scenario.petId].pedigree, trial: petEditorial[scenario.petId].trial, fees: petEditorial[scenario.petId].fees },
 }));
+const testerPetSeeds = [
+  { id: "tester-pet-1", sourceId: "nagi", ownerId: "tester-1-rehomer", name: "Archie", listingNumber: "T8K4W1P6", breed: "コッカプー" },
+  { id: "tester-pet-2", sourceId: "riku", ownerId: "tester-2-rehomer", name: "Poppy", listingNumber: "R3M9C7H2", breed: "ドメスティック・ショートヘア（白黒）" },
+  { id: "tester-pet-3", sourceId: "kai", ownerId: "tester-3-rehomer", name: "Alfie", listingNumber: "V6D2Q8N5", breed: "ラブラドール・レトリーバー" },
+  { id: "tester-pet-4", sourceId: "momo", ownerId: "tester-4-rehomer", name: "Willow", listingNumber: "L9F3B7X4", breed: "ドメスティック・ショートヘア（キジトラ）" },
+  { id: "tester-pet-5", sourceId: "sora", ownerId: "tester-5-rehomer", name: "Milo", listingNumber: "C4J8T2S7", breed: "ボーダー・コリー系ミックス" },
+] as const;
+const testerPets: Pet[] = testerPetSeeds.map((seed, index) => ({
+  ...basePets.find(pet => pet.id === seed.sourceId)!,
+  ...seed,
+  ownerId: seed.ownerId,
+  listedAt: `2026-09-29T0${index + 8}:00:00.000Z`,
+  applications: 1,
+  summary: "模擬検証用の掲載データです。実在する参加者の操作記録ではありません。",
+  careNeeds: ["模擬検証用の情報です。画面表示と操作フローの確認に使用します。"],
+}));
+export const pets: Pet[] = [...basePets, ...testerPets];
 const aliases:Record<string,string>={"senior-a":"app-aiko","senior-b":"app-ren","senior-c":"app-mai","active-a":"app-daichi"};
 const adopterCases: Record<string, { userId: DemoUserId; stage: Applicant["stage"] }> = {
   "senior-a": { userId: "adopter", stage: "screening" },
@@ -125,7 +142,7 @@ function buildPreparedReview(candidateId:string,stage:ReviewStage,verification:V
     history:[{at:decidedAt,stage,note:outcome.reason,actorName:"Sophie Bennett",actorRole:"reviewer",action:adopted?"Sophie Bennettが最終判断を確定し、譲渡済みとして記録":`Sophie Bennettが今回は見送りを記録（${outcome.kind==="clear"?"明確な不一致":"境界ケース"}）`}],
   };
 }
-export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario.candidates.map((candidate,i)=>{
+const baseApplicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario.candidates.map((candidate,i)=>{
   const assessment=assess(candidate);
   const linked = adopterCases[candidate.id];
   const preparedSubmittedAt=preparedOutcomes[candidate.id]?`2026-09-${String(2+((index*4+i)%8)).padStart(2,"0")}`:undefined;
@@ -147,3 +164,86 @@ export const applicants:Applicant[]=scenarios.flatMap((scenario,index)=>scenario
     researchCandidate:candidate,assessment,
   };
 }));
+
+const completeVerification: VerificationStatus = {
+  identity: "verified", housing: "verified", cohabitantConsent: "verified", lifelongCare: "verified", followUp: "verified",
+};
+const pendingVerification: VerificationStatus = {
+  identity: "verified", housing: "pending", cohabitantConsent: "not_provided", lifelongCare: "pending", followUp: "pending",
+};
+const testerApplicationSeeds = [
+  { number: 1, stage: "risk_review", decision: "decline", note: "test test test — 住居条件を試しに変更したため、要確認として操作後に見送りを選択。", completed: true },
+  { number: 2, stage: "trial", decision: "hold", note: "ボタン、日付、メモ欄を自由に操作。トライアル結果は未確定のまま保存。", completed: false },
+  { number: 3, stage: "final_review", decision: "approve", note: "各工程の表示を確認し、模擬データとして譲渡完了まで操作。", completed: true },
+  { number: 4, stage: "meeting", decision: "hold", note: "test と短いメモを入力し、面談工程で途中保存。", completed: false },
+  { number: 5, stage: "trial", decision: "decline", note: "トライアル項目を確認後、相性面を要確認として見送りを選択。", completed: true },
+] as const;
+
+function testerTimeline(number: number, stage: ReviewStage, completed: boolean): NonNullable<Applicant["stageTimeline"]> {
+  const started = Date.parse(`2026-09-29T1${number}:00:00.000Z`);
+  const currentIndex = reviewStages.indexOf(stage);
+  return Object.fromEntries(reviewStages.slice(0, currentIndex + 1).map((item, index) => {
+    const startedAt = new Date(started + index * 4 * 60_000).toISOString();
+    const isDone = index < currentIndex || (index === currentIndex && completed);
+    return [item, isDone ? { startedAt, completedAt: new Date(started + (index * 4 + 2) * 60_000).toISOString() } : { startedAt }];
+  }));
+}
+
+const testerApplicants: Applicant[] = testerApplicationSeeds.map((seed, index) => {
+  const base = baseApplicants[index];
+  const pet = testerPets[index];
+  const reviewerId = `tester-${seed.number}-reviewer` as DemoUserId;
+  const rehomerId = `tester-${seed.number}-rehomer` as DemoUserId;
+  const adopterId = `tester-${seed.number}-adopter` as DemoUserId;
+  const reviewerName = `Tester-${seed.number}-Reviewer`;
+  const rehomerName = `Tester-${seed.number}-Rehomer`;
+  const decisionAt = `2026-09-29T1${seed.number}:28:00.000Z`;
+  const decided = seed.decision !== "hold";
+  const reachedTrial = seed.stage === "trial" || seed.stage === "final_review";
+  const signoff = {
+    reviewer: { userId: reviewerId, name: reviewerName, at: decisionAt, note: seed.note },
+    rehomer: { userId: rehomerId, name: rehomerName, at: `2026-09-29T1${seed.number}:26:00.000Z`, note: "模擬操作として確認しました。" },
+  };
+  return {
+    ...base,
+    id: `tester-application-${seed.number}`,
+    petId: pet.id,
+    userId: adopterId,
+    name: `Tester-${seed.number}-Adopter`,
+    submittedAt: "2026-09-29",
+    household: "SIMULATED UI PREVIEW — 30分自由操作の表示確認用データ",
+    housing: seed.number === 1 ? "test test test" : "模擬入力：住居情報を入力して保存",
+    experience: "模擬入力：フォーム、選択肢、戻る操作を自由に確認",
+    availability: "模擬入力：30分の操作枠内で時刻や文章を試行",
+    stage: seed.stage,
+    stageTimeline: testerTimeline(seed.number, seed.stage, seed.completed),
+    verification: seed.decision === "approve" ? completeVerification : pendingVerification,
+    risks: seed.decision === "decline" ? [{ severity: "medium", label: "模擬の要確認", detail: seed.note }] : [],
+    nextActions: decided ? [] : ["模擬操作を続ける、または途中保存の表示を確認する"],
+    review: {
+      revision: 1,
+      stage: seed.stage,
+      verification: seed.decision === "approve" ? completeVerification : pendingVerification,
+      meetingChecks: seed.stage === "meeting" || reachedTrial ? [true, seed.number !== 4, true] : [false, false, false],
+      trialChecks: reachedTrial ? [true, seed.number === 3, true] : [false, false, false],
+      trial: reachedTrial ? {
+        periodFrom: "2026-09-29", periodTo: "2026-09-29",
+        transportFrom: "模擬入力：譲渡者住所", transportTo: "模擬入力：里親希望者住所",
+        transportMethod: "test / 自家用車", result: seed.decision === "approve" ? "ok" : seed.decision === "decline" ? "ng" : "pending",
+        criteria: { housing: "ok", compatibility: seed.number === 5 ? "ng" : seed.number === 2 ? "pending" : "ok", dailyCare: "ok", contingency: seed.decision === "hold" ? "pending" : "ok" },
+        memo: seed.note,
+      } : undefined,
+      note: seed.note,
+      decision: seed.decision,
+      decisionRecorded: decided,
+      riskAcknowledged: true,
+      signoffs: seed.stage === "meeting" ? { meeting: signoff } : seed.stage === "trial" ? { trial: signoff } : seed.stage === "final_review" ? { final_review: signoff } : undefined,
+      history: [
+        { at: `2026-09-29T1${seed.number}:05:00.000Z`, stage: seed.stage, action: "模擬セッションを開始", note: "SIMULATED DATA — not collected from human participants", actorName: reviewerName, actorRole: "reviewer" },
+        { at: decisionAt, stage: seed.stage, action: seed.decision === "approve" ? "模擬操作で譲渡完了" : seed.decision === "decline" ? "模擬操作で今回は見送る" : "模擬操作を途中保存", note: seed.note, actorName: reviewerName, actorRole: "reviewer" },
+      ],
+    },
+  };
+});
+
+export const applicants: Applicant[] = [...baseApplicants, ...testerApplicants];
