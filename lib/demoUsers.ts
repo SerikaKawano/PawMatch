@@ -52,7 +52,7 @@ export const demoUsers: DemoUser[] = [
       id: `tester-${number}-reviewer` as TesterUserId,
       role: "reviewer" as const,
       name: `Tester-${number}-Reviewer`,
-      organization: "PawMatch simulated review",
+      organization: "PawMatch 模擬審査",
       roleLabel: "審査担当（模擬）",
       email: `tester${number}.reviewer@pawmatch.test`,
       initials: `T${number}`,

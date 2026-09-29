@@ -99,5 +99,5 @@ test("tester preview data includes an enquiry that ended without an application"
   assert.ok(enquiryOnly);
   assert.equal(enquiryOnly.status, "closed");
   assert.equal(linkedApplication(enquiryOnly, applicants), null);
-  assert.match(enquiryOnly.messages.at(-1).body, /no review case was created/);
+  assert.match(enquiryOnly.messages.at(-1).body, /審査ケースは作成しませんでした/);
 });

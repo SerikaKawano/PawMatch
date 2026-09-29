@@ -211,7 +211,7 @@ const testerApplicants: Applicant[] = testerApplicationSeeds.map((seed, index) =
     userId: adopterId,
     name: `Tester-${seed.number}-Adopter`,
     submittedAt: "2026-09-29",
-    household: "SIMULATED UI PREVIEW — 30分自由操作の表示確認用データ",
+    household: "30分の自由操作で入力画面と表示を確認するためのデータ",
     housing: seed.number === 1 ? "test test test" : "模擬入力：住居情報を入力して保存",
     experience: "模擬入力：フォーム、選択肢、戻る操作を自由に確認",
     availability: "模擬入力：30分の操作枠内で時刻や文章を試行",
@@ -239,7 +239,7 @@ const testerApplicants: Applicant[] = testerApplicationSeeds.map((seed, index) =
       riskAcknowledged: true,
       signoffs: seed.stage === "meeting" ? { meeting: signoff } : seed.stage === "trial" ? { trial: signoff } : seed.stage === "final_review" ? { final_review: signoff } : undefined,
       history: [
-        { at: `2026-09-29T1${seed.number}:05:00.000Z`, stage: seed.stage, action: "模擬セッションを開始", note: "SIMULATED DATA — not collected from human participants", actorName: reviewerName, actorRole: "reviewer" },
+        { at: `2026-09-29T1${seed.number}:05:00.000Z`, stage: seed.stage, action: "模擬セッションを開始", note: "実参加者から収集したデータではありません", actorName: reviewerName, actorRole: "reviewer" },
         { at: decisionAt, stage: seed.stage, action: seed.decision === "approve" ? "模擬操作で譲渡完了" : seed.decision === "decline" ? "模擬操作で今回は見送る" : "模擬操作を途中保存", note: seed.note, actorName: reviewerName, actorRole: "reviewer" },
       ],
     },
