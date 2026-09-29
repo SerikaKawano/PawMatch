@@ -40,5 +40,19 @@ test("each tester has a linked pet, conversation and review case within a 30-min
   }
   assert.ok(applicants.some(application => application.id.startsWith("tester-application-") && application.review?.decision === "decline" && application.review.decisionRecorded));
   assert.ok(applicants.some(application => application.id.startsWith("tester-application-") && application.review?.decision === "approve" && application.review.decisionRecorded));
-  assert.ok(sampleConsultations.some(record => record.userId.startsWith("tester-") && /test test test/i.test(record.message)));
+  const operationalMetaCopy = /(ボタン|画面|表示|操作|フォーム|模擬|テスト|\btest\b)/i;
+  const testerApplications = applicants.filter(application => application.id.startsWith("tester-application-"));
+  for (const application of testerApplications) {
+    const visibleInputs = [
+      application.household, application.housing, application.experience, application.availability,
+      application.review?.note, application.review?.trial?.memo,
+      ...(application.risks ?? []).flatMap(risk => [risk.label, risk.detail]),
+      ...(application.review?.history ?? []).flatMap(entry => [entry.action, entry.note]),
+    ].filter(Boolean);
+    assert.ok(visibleInputs.every(value => !operationalMetaCopy.test(value)), `${application.id} contains UI-testing narration`);
+  }
+  const testerMessages = sampleConsultations
+    .filter(record => record.userId.startsWith("tester-"))
+    .flatMap(record => [record.message, ...record.messages.map(message => message.body)]);
+  assert.ok(testerMessages.every(value => !operationalMetaCopy.test(value)), "tester consultations must read like real enquiries");
 });

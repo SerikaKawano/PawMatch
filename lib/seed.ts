@@ -44,8 +44,6 @@ const testerPets: Pet[] = testerPetSeeds.map((seed, index) => ({
   ownerId: seed.ownerId,
   listedAt: `2026-09-29T0${index + 8}:00:00.000Z`,
   applications: 1,
-  summary: "模擬検証用の掲載データです。実在する参加者の操作記録ではありません。",
-  careNeeds: ["模擬検証用の情報です。画面表示と操作フローの確認に使用します。"],
 }));
 export const pets: Pet[] = [...basePets, ...testerPets];
 const aliases:Record<string,string>={"senior-a":"app-aiko","senior-b":"app-ren","senior-c":"app-mai","active-a":"app-daichi"};
@@ -172,11 +170,61 @@ const pendingVerification: VerificationStatus = {
   identity: "verified", housing: "pending", cohabitantConsent: "not_provided", lifelongCare: "pending", followUp: "pending",
 };
 const testerApplicationSeeds = [
-  { number: 1, stage: "risk_review", decision: "decline", note: "test test test — 住居条件を試しに変更したため、要確認として操作後に見送りを選択。", completed: true },
-  { number: 2, stage: "trial", decision: "hold", note: "ボタン、日付、メモ欄を自由に操作。トライアル結果は未確定のまま保存。", completed: false },
-  { number: 3, stage: "final_review", decision: "approve", note: "各工程の表示を確認し、模擬データとして譲渡完了まで操作。", completed: true },
-  { number: 4, stage: "meeting", decision: "hold", note: "test と短いメモを入力し、面談工程で途中保存。", completed: false },
-  { number: 5, stage: "trial", decision: "decline", note: "トライアル項目を確認後、相性面を要確認として見送りを選択。", completed: true },
+  {
+    number: 1, stage: "risk_review", decision: "decline", completed: true,
+    household: "本人と配偶者の2人暮らしです。平日は2人とも勤務しています。",
+    housing: "賃貸マンションです。管理規約では犬の飼育が認められていません。",
+    experience: "猫の飼育経験はありますが、犬の飼育経験はありません。",
+    availability: "平日は約8時間留守になります。朝夕の散歩は各30分を予定しています。",
+    note: "住居の管理規約で犬の飼育が認められていないため、今回は見送ります。",
+    riskLabel: "住居で犬を飼育できない",
+    nextAction: "",
+    rehomerNote: "管理規約の内容を確認し、見送りに同意しました。",
+  },
+  {
+    number: 2, stage: "trial", decision: "hold", completed: false,
+    household: "本人、配偶者、中学生の子どもの3人暮らしです。",
+    housing: "ペット飼育可能な持ち家です。猫が落ち着ける個室を用意しています。",
+    experience: "犬、猫、鳥、魚の飼育経験があります。保護活動のボランティア経験もあります。",
+    availability: "日中は家族の誰かが在宅し、朝夕の給餌と健康確認を分担できます。",
+    note: "トライアル3日目で食事量が少ないため、体調と環境への慣れを確認しながら判断を保留しています。",
+    riskLabel: "トライアル中の食事量低下",
+    nextAction: "毎日の食事量、排泄、活動量を記録し、3日後に再確認する",
+    rehomerNote: "食事量の記録を共有してもらい、数日間様子を見ることに同意しました。",
+  },
+  {
+    number: 3, stage: "final_review", decision: "approve", completed: true,
+    household: "本人と配偶者の2人暮らしです。近隣に支援を頼める家族がいます。",
+    housing: "庭付きの持ち家です。室内に休息場所を設け、玄関には脱走防止ゲートを設置しました。",
+    experience: "猫の飼育経験があり、現在はペットショップで動物のお世話を担当しています。",
+    availability: "朝夕に各45分の散歩が可能です。不在時は配偶者が世話を担当します。",
+    note: "書類、面談、トライアルの確認が完了し、双方が合意したため譲渡済です。",
+    riskLabel: "",
+    nextAction: "",
+    rehomerNote: "トライアル中も落ち着いて過ごせたため、正式譲渡に同意しました。",
+  },
+  {
+    number: 4, stage: "meeting", decision: "hold", completed: false,
+    household: "本人1人暮らしです。緊急時は近隣に住む兄が世話を手伝います。",
+    housing: "ペット飼育可能な賃貸住宅です。窓と玄関の脱走防止対策を準備しています。",
+    experience: "ペットの飼育経験はありませんが、保護活動への参加を検討しています。",
+    availability: "週3日は在宅勤務です。出社日は兄に夕方の世話を依頼できます。",
+    note: "緊急時の支援者がまだ面談に参加していないため、支援内容を確認するまで判断を保留します。",
+    riskLabel: "緊急時の支援体制を確認中",
+    nextAction: "支援者を含む追加面談の日程を調整する",
+    rehomerNote: "支援者の役割を確認してから次の工程へ進める方針に同意しました。",
+  },
+  {
+    number: 5, stage: "trial", decision: "decline", completed: true,
+    household: "本人とスタッフ2名で猫のお世話を分担します。自宅には先住猫が1頭います。",
+    housing: "猫カフェとは別に、トライアル中に隔離できる自宅の個室があります。",
+    experience: "猫カフェで保護猫の譲渡活動を行っており、複数の猫の飼育経験があります。",
+    availability: "朝夕の給餌と健康確認に加え、営業時間中もスタッフが状態を確認できます。",
+    note: "トライアル中、先住猫への威嚇と食欲低下が続き、双方の負担が大きいため今回は見送ります。",
+    riskLabel: "先住猫との相性",
+    nextAction: "",
+    rehomerNote: "猫同士の安全と健康を優先し、見送りに同意しました。",
+  },
 ] as const;
 
 function testerTimeline(number: number, stage: ReviewStage, completed: boolean): NonNullable<Applicant["stageTimeline"]> {
@@ -202,7 +250,7 @@ const testerApplicants: Applicant[] = testerApplicationSeeds.map((seed, index) =
   const reachedTrial = seed.stage === "trial" || seed.stage === "final_review";
   const signoff = {
     reviewer: { userId: reviewerId, name: reviewerName, at: decisionAt, note: seed.note },
-    rehomer: { userId: rehomerId, name: rehomerName, at: `2026-09-29T1${seed.number}:26:00.000Z`, note: "模擬操作として確認しました。" },
+    rehomer: { userId: rehomerId, name: rehomerName, at: `2026-09-29T1${seed.number}:26:00.000Z`, note: seed.rehomerNote },
   };
   return {
     ...base,
@@ -211,15 +259,15 @@ const testerApplicants: Applicant[] = testerApplicationSeeds.map((seed, index) =
     userId: adopterId,
     name: `Tester-${seed.number}-Adopter`,
     submittedAt: "2026-09-29",
-    household: "30分の自由操作で入力画面と表示を確認するためのデータ",
-    housing: seed.number === 1 ? "test test test" : "模擬入力：住居情報を入力して保存",
-    experience: "模擬入力：フォーム、選択肢、戻る操作を自由に確認",
-    availability: "模擬入力：30分の操作枠内で時刻や文章を試行",
+    household: seed.household,
+    housing: seed.housing,
+    experience: seed.experience,
+    availability: seed.availability,
     stage: seed.stage,
     stageTimeline: testerTimeline(seed.number, seed.stage, seed.completed),
     verification: seed.decision === "approve" ? completeVerification : pendingVerification,
-    risks: seed.decision === "decline" ? [{ severity: "medium", label: "模擬の要確認", detail: seed.note }] : [],
-    nextActions: decided ? [] : ["模擬操作を続ける、または途中保存の表示を確認する"],
+    risks: seed.riskLabel ? [{ severity: "medium", label: seed.riskLabel, detail: seed.note }] : [],
+    nextActions: seed.nextAction ? [seed.nextAction] : [],
     review: {
       revision: 1,
       stage: seed.stage,
@@ -227,9 +275,10 @@ const testerApplicants: Applicant[] = testerApplicationSeeds.map((seed, index) =
       meetingChecks: seed.stage === "meeting" || reachedTrial ? [true, seed.number !== 4, true] : [false, false, false],
       trialChecks: reachedTrial ? [true, seed.number === 3, true] : [false, false, false],
       trial: reachedTrial ? {
-        periodFrom: "2026-09-29", periodTo: "2026-09-29",
-        transportFrom: "模擬入力：譲渡者住所", transportTo: "模擬入力：里親希望者住所",
-        transportMethod: "test / 自家用車", result: seed.decision === "approve" ? "ok" : seed.decision === "decline" ? "ng" : "pending",
+        periodFrom: seed.number === 2 ? "2026-09-27" : seed.number === 3 ? "2026-09-21" : "2026-09-23",
+        periodTo: seed.number === 2 ? "2026-10-04" : "2026-09-29",
+        transportFrom: "譲渡者宅（東京都世田谷区）", transportTo: "里親希望者宅（東京都杉並区）",
+        transportMethod: "譲渡者の自家用車で対面受け渡し", result: seed.decision === "approve" ? "ok" : seed.decision === "decline" ? "ng" : "pending",
         criteria: { housing: "ok", compatibility: seed.number === 5 ? "ng" : seed.number === 2 ? "pending" : "ok", dailyCare: "ok", contingency: seed.decision === "hold" ? "pending" : "ok" },
         memo: seed.note,
       } : undefined,
@@ -239,8 +288,8 @@ const testerApplicants: Applicant[] = testerApplicationSeeds.map((seed, index) =
       riskAcknowledged: true,
       signoffs: seed.stage === "meeting" ? { meeting: signoff } : seed.stage === "trial" ? { trial: signoff } : seed.stage === "final_review" ? { final_review: signoff } : undefined,
       history: [
-        { at: `2026-09-29T1${seed.number}:05:00.000Z`, stage: seed.stage, action: "模擬セッションを開始", note: "実参加者から収集したデータではありません", actorName: reviewerName, actorRole: "reviewer" },
-        { at: decisionAt, stage: seed.stage, action: seed.decision === "approve" ? "模擬操作で譲渡完了" : seed.decision === "decline" ? "模擬操作で今回は見送る" : "模擬操作を途中保存", note: seed.note, actorName: reviewerName, actorRole: "reviewer" },
+        { at: `2026-09-29T1${seed.number}:05:00.000Z`, stage: seed.stage, action: "申込み内容を確認", note: "申込者プロファイルと提出済みの情報を確認しました。", actorName: reviewerName, actorRole: "reviewer" },
+        { at: decisionAt, stage: seed.stage, action: seed.decision === "approve" ? "譲渡済として記録" : seed.decision === "decline" ? "今回は見送りを記録" : "確認内容を保存", note: seed.note, actorName: reviewerName, actorRole: "reviewer" },
       ],
     },
   };

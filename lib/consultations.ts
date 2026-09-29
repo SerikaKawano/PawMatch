@@ -184,48 +184,48 @@ const sampleRows: SampleRow[] = [
   { userId: "adopter-liam", petId: "riku", status: "received", createdAt: "2026-09-27T11:10:00.000Z", message: "在宅勤務中の生活リズムと、日中に必要なお世話について確認したいです。", messages: [followUp("rehomer-riku", "2026-09-27T15:30:00.000Z", "昼間は同じ部屋で静かに過ごせます。正午頃の食事と投薬、短い遊びの時間を確保してください。会議中に休める別スペースがあると安心です。") ] },
   {
     userId: "tester-1-adopter", petId: "tester-pet-1", status: "profile_requested", createdAt: "2026-09-29T11:01:00.000Z", reviewedAt: "2026-09-29T11:09:00.000Z",
-    message: "test test test", messages: [
-      followUp("tester-1-rehomer", "2026-09-29T11:04:00.000Z", "test 返信です。譲渡者として返信欄の表示を確認しました。"),
-      followUp("tester-1-reviewer", "2026-09-29T11:09:00.000Z", "画面確認中にプロファイル提出の操作を選択しました。"),
+    message: "平日の留守時間が8時間ほどあります。Archieは留守番できますか。", messages: [
+      followUp("tester-1-rehomer", "2026-09-29T11:04:00.000Z", "短時間の留守番はできますが、毎日の長時間留守番はおすすめしていません。朝夕の散歩と日中の見守りが必要です。"),
+      followUp("tester-1-reviewer", "2026-09-29T11:09:00.000Z", "住居条件と日中のお世話の計画を含むプロファイルをご提出ください。"),
     ],
   },
   {
     userId: "tester-2-adopter", petId: "tester-pet-2", status: "profile_requested", createdAt: "2026-09-29T12:03:00.000Z", reviewedAt: "2026-09-29T12:16:00.000Z",
-    message: "このボタンが次のステップですか？ test", messages: [
-      followUp("tester-2-rehomer", "2026-09-29T12:08:00.000Z", "短い返信を入力し、会話履歴が読みやすく表示されるか確認しました。"),
-      followUp("tester-2-adopter", "2026-09-29T12:12:00.000Z", "分かりました。次はプロファイル画面を試します。"),
-      followUp("tester-2-reviewer", "2026-09-29T12:16:00.000Z", "申込み準備へ進める操作を選択しました。"),
+    message: "Poppyが普段食べているフードと、使用している猫砂を教えてください。", messages: [
+      followUp("tester-2-rehomer", "2026-09-29T12:08:00.000Z", "現在は消化器ケア用のドライフードを朝夕に与え、無香料の鉱物系猫砂を使用しています。"),
+      followUp("tester-2-adopter", "2026-09-29T12:12:00.000Z", "同じフードと猫砂を用意できます。家族全員でお世話を分担する予定です。"),
+      followUp("tester-2-reviewer", "2026-09-29T12:16:00.000Z", "飼育環境と家族のお世話分担を確認するため、プロファイルの提出をご案内しました。"),
     ],
   },
   {
     userId: "tester-3-adopter", petId: "tester-pet-3", status: "profile_requested", createdAt: "2026-09-29T13:02:00.000Z", reviewedAt: "2026-09-29T13:11:00.000Z",
-    message: "相談フォームと連絡先欄を確認しています。", messages: [
-      followUp("tester-3-rehomer", "2026-09-29T13:06:00.000Z", "次へ進む前に、必要なケアの詳細を確認してください。返信表示の確認用文章です。"),
-      followUp("tester-3-reviewer", "2026-09-29T13:11:00.000Z", "申込みを審査へ進める操作を行いました。"),
-      followUp("tester-3-adopter", "2026-09-29T13:16:00.000Z", "test 書類をアップロード／次へボタンを確認"),
+    message: "Alfieに必要な散歩時間と、留守番できる時間の目安を教えてください。", messages: [
+      followUp("tester-3-rehomer", "2026-09-29T13:06:00.000Z", "朝夕それぞれ45分程度の散歩が必要です。留守番は4時間以内を目安にしてください。"),
+      followUp("tester-3-reviewer", "2026-09-29T13:11:00.000Z", "散歩と留守番時のお世話の計画を確認し、申込みを受け付けました。"),
+      followUp("tester-3-adopter", "2026-09-29T13:16:00.000Z", "勤務予定表と、配偶者がお世話を担当できる時間を提出しました。"),
     ],
   },
   {
     userId: "tester-4-adopter", petId: "tester-pet-4", status: "profile_requested", createdAt: "2026-09-29T14:04:00.000Z", reviewedAt: "2026-09-29T14:18:00.000Z",
-    message: "test", messages: [
-      followUp("tester-4-rehomer", "2026-09-29T14:10:00.000Z", "test 返信"),
-      followUp("tester-4-adopter", "2026-09-29T14:15:00.000Z", "ペットのプロファイルを開いてから、この相談画面へ戻る操作を試しました。"),
-      followUp("tester-4-reviewer", "2026-09-29T14:18:00.000Z", "確認用の申込みを面談工程へ進めました。"),
+    message: "初めて猫を迎えます。Willowが落ち着いて過ごすために最初に準備するものを教えてください。", messages: [
+      followUp("tester-4-rehomer", "2026-09-29T14:10:00.000Z", "隠れられる箱、静かな寝床、現在と同じ猫砂のトイレを用意してください。最初は一部屋で過ごします。"),
+      followUp("tester-4-adopter", "2026-09-29T14:15:00.000Z", "個室を用意し、窓と玄関に脱走防止対策を行います。"),
+      followUp("tester-4-reviewer", "2026-09-29T14:18:00.000Z", "住環境の準備状況を確認できたため、面談の日程調整へ進みました。"),
     ],
   },
   {
     userId: "tester-5-adopter", petId: "tester-pet-5", status: "profile_requested", createdAt: "2026-09-29T15:01:00.000Z", reviewedAt: "2026-09-29T15:07:00.000Z",
-    message: "譲渡者への直接の質問が、履歴上でどのように見えるか確認しています。", messages: [
-      followUp("tester-5-rehomer", "2026-09-29T15:05:00.000Z", "日々のお世話と受け渡し方法について、実務を想定した返信を入力しました。"),
-      followUp("tester-5-reviewer", "2026-09-29T15:07:00.000Z", "審査へ引き継ぐ操作を選択しました。"),
-      followUp("tester-5-adopter", "2026-09-29T15:13:00.000Z", "test test／ステータス表示を確認"),
+    message: "Miloは先住猫と暮らした経験がありますか。初対面の際に注意すべきことも教えてください。", messages: [
+      followUp("tester-5-rehomer", "2026-09-29T15:05:00.000Z", "猫と同居した経験はありますが、最初は別室で過ごし、匂いの交換から段階的に対面してください。"),
+      followUp("tester-5-reviewer", "2026-09-29T15:07:00.000Z", "先住猫との隔離場所と段階的な導入計画を確認するため、審査へ引き継ぎました。"),
+      followUp("tester-5-adopter", "2026-09-29T15:13:00.000Z", "隔離用の個室と、それぞれ専用の食器とトイレを用意できます。"),
     ],
   },
   {
     userId: "tester-2-adopter", petId: "tester-pet-1", status: "closed", createdAt: "2026-09-29T12:20:00.000Z", reviewedAt: "2026-09-29T12:27:00.000Z",
-    message: "test のみの相談です。申込みを開始せず、会話だけを確認します。", messages: [
-      followUp("tester-1-rehomer", "2026-09-29T12:23:00.000Z", "test 返信：申込み前でも日々のお世話について相談できます。"),
-      followUp("tester-2-adopter", "2026-09-29T12:25:00.000Z", "ありがとうございます。今日は相談の流れだけを確認します。"),
+    message: "Archieの定期的なトリミングは、どのくらいの頻度で必要ですか。", messages: [
+      followUp("tester-1-rehomer", "2026-09-29T12:23:00.000Z", "6～8週間ごとのトリミングと、週に数回のブラッシングが必要です。"),
+      followUp("tester-2-adopter", "2026-09-29T12:25:00.000Z", "費用と通える店舗を家族で検討するため、今回は申込みには進みません。"),
       followUp("tester-2-reviewer", "2026-09-29T12:27:00.000Z", "相談のみで終了し、審査ケースは作成しませんでした。"),
     ],
   },
