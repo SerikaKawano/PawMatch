@@ -28,6 +28,8 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
   const submitted = filters.filtered === "1";
   const hideDeclined = !submitted || filters.hideDeclined === "1";
   const hideAdopted = !submitted || filters.hideAdopted === "1";
+  const declinedCount = allApplications.filter(application => application.review?.decisionRecorded && application.review.decision === "decline").length;
+  const adoptedCount = allApplications.filter(application => application.review?.decisionRecorded && application.review.decision === "approve").length;
   const applications = allApplications.filter(application => {
     const pet = pets.find(item => item.id === application.petId);
     if (selectedPet && application.petId !== selectedPet.id) return false;
@@ -46,12 +48,12 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
       <label htmlFor="progress-pet">対象のペット<select id="progress-pet" name="pet" defaultValue={selectedPet?.id ?? ""}><option value="">すべてのペット</option>{pets.map(pet => <option key={pet.id} value={pet.id}>{pet.name}</option>)}</select></label>
       <label htmlFor="progress-stage">フェーズ<select id="progress-stage" name="stage" defaultValue={selectedStage?.id ?? ""}><option value="">すべてのフェーズ</option>{stages.map(stage => <option key={stage.id} value={stage.id}>{stage.short}</option>)}</select></label>
       <div className="pipeline-filter-checks">
-        <label><input type="checkbox" name="hideDeclined" value="1" defaultChecked={hideDeclined} />見送り済を非表示</label>
-        <label><input type="checkbox" name="hideAdopted" value="1" defaultChecked={hideAdopted} />譲渡済を非表示</label>
+        <label><input type="checkbox" name="hideDeclined" value="1" defaultChecked={hideDeclined} />見送り済を非表示（{declinedCount}件）</label>
+        <label><input type="checkbox" name="hideAdopted" value="1" defaultChecked={hideAdopted} />譲渡済を非表示（{adoptedCount}件）</label>
       </div>
       <button type="submit" className="task-secondary">この条件で表示</button>
     </form>
-    <div className="pipeline-legend"><span><i className="complete" />完了</span><span><i className="current" />現在地</span><span><i className="stopped" />見送り</span><span><i className="upcoming" />未着手</span><p>各行を選択すると審査ワークフローを開きます。</p></div>
+    <div className="pipeline-legend"><span><i className="complete" />完了</span><span><i className="current" />現在地</span><span><i className="stopped" />見送り</span><span><i className="adopted" />譲渡済</span><span><i className="upcoming" />未着手</span><p>各行を選択すると審査ワークフローを開きます。</p></div>
     <details className="pipeline-help"><summary>各工程で確認すること</summary><div className="pipeline-help-grid">
       {stages.map(stage => <p key={stage.id}><strong>{stage.short}</strong>{reviewStageDescriptions[stage.id]}</p>)}
     </div></details>
@@ -70,7 +72,7 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
           <span className="pipeline-owner"><strong>{owner?.kind === "organization" ? owner.organization : owner?.name ?? "未登録"}</strong><small>{owner?.kind === "organization" ? owner.name : "個人譲渡者"}</small></span>
           <span className="pipeline-pet">{pet?.name}</span>
           <span className="pipeline-applicant"><strong>{application.name}</strong><small>{application.submittedAt}</small></span>
-          {stages.map((stage, index) => <span key={stage.id} className={`pipeline-stage ${index < current ? "complete" : index === current ? declined ? "stopped" : "current" : "upcoming"}`}><i>{index < current ? <CheckCircle2 /> : index === current && declined ? <XCircle /> : index + 1}</i><b>{index < current ? "完了" : index === current ? declined ? "見送り" : adopted ? "譲渡済" : "現在" : "—"}</b>{index < stages.length - 1 && <ArrowRight className="pipeline-arrow" />}</span>)}
+          {stages.map((stage, index) => <span key={stage.id} className={`pipeline-stage ${index < current ? "complete" : index === current ? declined ? "stopped" : adopted ? "adopted" : "current" : "upcoming"}`}><i>{index < current || index === current && adopted ? <CheckCircle2 /> : index === current && declined ? <XCircle /> : index + 1}</i><b>{index < current ? "完了" : index === current ? declined ? "見送り" : adopted ? "譲渡済" : "現在" : "—"}</b>{index < stages.length - 1 && <ArrowRight className="pipeline-arrow" />}</span>)}
           <span className={`pipeline-alert ${needsAttention ? "has-alert" : ""}`} role="img" aria-label={automatedCheckLabel} title={automatedCheckLabel}>
             {needsAttention ? <AlertTriangle aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />}
           </span>

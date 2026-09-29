@@ -82,21 +82,35 @@ test("proposal research invariants and persistence", async t => {
     const issuedPair = await Promise.all([store.createSession({source:"simulation",group:"other",order:"alternate"}),store.createSession({source:"simulation",group:"other",order:"alternate"})]);
     assert.notEqual(issuedPair[0].order,issuedPair[1].order);
   });
-  await t.test("prepared decline cases cover a clear mismatch and a borderline trial outcome", async () => {
-    const declined=(await getApplicants()).filter(application=>application.review?.decisionRecorded&&application.review.decision==="decline");
-    assert.equal(declined.length,2);
-    const clear=declined.find(application=>application.id==="app-indoor-b");
-    assert.equal(clear.stage,"risk_review");
-    assert.match(clear.review.note,/ペット飼育不可/);
-    assert.ok(clear.stageTimeline.risk_review.completedAt);
-    const borderline=declined.find(application=>application.id==="app-active-c");
-    assert.equal(borderline.stage,"trial");
-    assert.equal(borderline.review.trial.result,"ng");
-    assert.deepEqual(borderline.review.trial.criteria,{housing:"ok",compatibility:"ng",dailyCare:"ok",contingency:"ok"});
-    assert.ok(borderline.review.signoffs.trial.reviewer);
-    assert.ok(borderline.review.signoffs.trial.rehomer);
-    assert.match(borderline.review.note,/日々のお世話は実施/);
-    assert.ok(borderline.stageTimeline.trial.completedAt>`${borderline.review.trial.periodTo}T00:00:00.000Z`);
+  await t.test("every rehomer has suitability decline, trial decline, and adopted cases", async () => {
+    const applications=await getApplicants();
+    const ownerIds=[...new Set(pets.map(pet=>pet.ownerId))];
+    assert.equal(ownerIds.length,5);
+    for(const ownerId of ownerIds){
+      const petIds=pets.filter(pet=>pet.ownerId===ownerId).map(pet=>pet.id);
+      const cases=applications.filter(application=>petIds.includes(application.petId));
+      const suitabilityDecline=cases.find(application=>application.stage==="risk_review"&&application.review?.decisionRecorded&&application.review.decision==="decline");
+      const trialDecline=cases.find(application=>application.stage==="trial"&&application.review?.decisionRecorded&&application.review.decision==="decline");
+      const adopted=cases.find(application=>application.stage==="final_review"&&application.review?.decisionRecorded&&application.review.decision==="approve");
+      assert.ok(suitabilityDecline,`${ownerId} should have a suitability decline`);
+      assert.ok(suitabilityDecline.stageTimeline.risk_review.completedAt);
+      assert.ok(suitabilityDecline.review.note.length>=30);
+      assert.ok(trialDecline,`${ownerId} should have a trial decline`);
+      assert.equal(trialDecline.review.trial.result,"ng");
+      assert.equal(Object.values(trialDecline.review.trial.criteria).filter(value=>value==="ng").length,1);
+      assert.ok(trialDecline.review.signoffs.trial.reviewer);
+      assert.equal(trialDecline.review.signoffs.trial.rehomer.userId,ownerId);
+      assert.ok(trialDecline.stageTimeline.trial.completedAt>`${trialDecline.review.trial.periodTo}T00:00:00.000Z`);
+      assert.ok(adopted,`${ownerId} should have an adopted case`);
+      assert.deepEqual(Object.values(adopted.review.verification),["verified","verified","verified","verified","verified"]);
+      assert.ok(adopted.review.meetingChecks.every(Boolean));
+      assert.equal(adopted.review.trial.result,"ok");
+      assert.ok(adopted.review.signoffs.final_review.reviewer);
+      assert.equal(adopted.review.signoffs.final_review.rehomer.userId,ownerId);
+      assert.ok(adopted.stageTimeline.final_review.completedAt);
+    }
+    assert.equal(applications.filter(application=>application.review?.decision==="decline").length,10);
+    assert.equal(applications.filter(application=>application.review?.decision==="approve").length,5);
   });
   await t.test("final-review cases with attention flags include an actionable initial comment", async () => {
     const finalCases=(await getApplicants()).filter(application=>application.stage==="final_review"&&!application.review?.decisionRecorded);
