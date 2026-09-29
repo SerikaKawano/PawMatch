@@ -389,6 +389,8 @@ body[data-role="rehomer"] .role-nav-links a.current:not(.role-nav-primary) { bac
 .pipeline-legend i.adopted { background: #217a58; }
 .pipeline-legend i.stopped { background: #e00000; }
 .pipeline-alert.declined { background: #ffe0e0; color: #e00000; }
+.pipeline-alert.adopted { background: #f9e0e8; color: #c52f61; }
+.pipeline-alert.adopted svg { fill: currentColor; }
 body[data-role="rehomer"] .progress-board-page .pipeline-open, .progress-board-page .pipeline-open { background: #087080; border-color: #087080; color: #fff; }
 body[data-role="rehomer"] .progress-board-page .pipeline-open:hover, .progress-board-page .pipeline-open:hover { background: #075866; border-color: #075866; }
 .review-case-heading { padding: 24px 28px; border: 1px solid #cbdfe4; border-radius: 12px; background: #f1f8f9; }

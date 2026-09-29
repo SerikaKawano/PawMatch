@@ -1,6 +1,6 @@
 import { requirePageAccess } from "@/lib/access-control";
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardList, XCircle } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardList, Heart, XCircle } from "lucide-react";
 import { getApplicants, getPets } from "@/lib/repository";
 import { visibleApplications, visiblePets } from "@/lib/ownership";
 import type { ReviewStage } from "@/lib/types";
@@ -65,7 +65,7 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
         const needsAttention = pending > 0 || application.risks.length > 0;
         const declined = application.review?.decisionRecorded && application.review.decision === "decline";
         const adopted = application.review?.decisionRecorded && application.review.decision === "approve";
-        const automatedCheckLabel = declined ? "状況：見送り" : needsAttention ? "状況：要確認" : "状況：OK";
+        const automatedCheckLabel = declined ? "状況：見送り" : adopted ? "状況：譲渡済" : needsAttention ? "状況：要確認" : "状況：OK";
         const pet = pets.find(item => item.id === application.petId);
         const owner = demoUsers.find(person => person.id === pet?.ownerId);
         return <Link href={`/reviews/${application.id}`} className="pipeline-row" key={application.id}>
@@ -73,8 +73,8 @@ export default async function ReviewProgressPage({ searchParams }: { searchParam
           <span className="pipeline-pet">{pet?.name}</span>
           <span className="pipeline-applicant"><strong>{application.name}</strong><small>{application.submittedAt}</small></span>
           {stages.map((stage, index) => <span key={stage.id} className={`pipeline-stage ${index < current ? "complete" : index === current ? declined ? "stopped" : adopted ? "adopted" : "current" : "upcoming"}`}><i>{index < current || index === current && adopted ? <CheckCircle2 /> : index === current && declined ? <XCircle /> : index + 1}</i><b>{index < current ? "完了" : index === current ? declined ? "見送り" : adopted ? "譲渡済" : "現在" : "—"}</b>{index < stages.length - 1 && <ArrowRight className="pipeline-arrow" />}</span>)}
-          <span className={`pipeline-alert ${declined ? "declined" : needsAttention ? "has-alert" : ""}`} role="img" aria-label={automatedCheckLabel} title={automatedCheckLabel}>
-            {declined ? <XCircle aria-hidden="true" /> : needsAttention ? <AlertTriangle aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />}
+          <span className={`pipeline-alert ${declined ? "declined" : adopted ? "adopted" : needsAttention ? "has-alert" : ""}`} role="img" aria-label={automatedCheckLabel} title={automatedCheckLabel}>
+            {declined ? <XCircle aria-hidden="true" /> : adopted ? <Heart aria-hidden="true" /> : needsAttention ? <AlertTriangle aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />}
           </span>
           <span className="pipeline-open">開く <ArrowRight size={18} /></span>
         </Link>;
