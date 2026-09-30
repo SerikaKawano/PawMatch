@@ -148,6 +148,10 @@ test("review case participant icons follow the role colour system", () => {
   assert.match(theme, /review-person\.rehomer \{ --participant-accent: #a83f68; --participant-avatar: #f5d5e1; \}/);
   assert.match(theme, /review-person\.adopter \{ --participant-accent: #7c5d08; --participant-avatar: #f4e6a9; \}/);
   assert.match(theme, /review-person\.reviewer \{ --participant-accent: #2f7958; --participant-avatar: #d5ecde; \}/);
+  assert.ok(process.includes("ownerProfileHref?<Link href={ownerProfileHref}>{ownerName}</Link>"));
+  const page = readFileSync(path.join(__dirname, "../app/reviews/[id]/page.tsx"), "utf8");
+  assert.ok(page.includes('`/reviews/rehomers/${owner.id}`'));
+  assert.ok(page.includes('user.role==="reviewer"||user.role==="admin"'));
 });
 
 test("important review count points to matching red item panels", () => {

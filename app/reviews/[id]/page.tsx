@@ -21,5 +21,6 @@ export default async function ApplicationReviewPage({ params }: { params: Promis
   const adopter=application.userId?demoUsers.find(person=>person.id===application.userId&&person.role==="adopter"):undefined;
   const [documents, requests, adopterProfile] = await Promise.all([listApplicationDocuments(application), requestsForApplication(id), adopter ? getAdopterProfile(adopter) : undefined]);
   const owner=demoUsers.find(person=>person.id===pet.ownerId);
-  return <div className="page-wrap review-process-page"><ApplicationReviewProcess application={application} pet={pet} role={user.role} ownerName={owner?.name??"未登録"} canInspectAdopter={Boolean(application.userId)} adopterProfile={adopterProfile} initialDocuments={documents} initialRequests={requests} /></div>;
+  const ownerProfileHref=(user.role==="reviewer"||user.role==="admin")&&owner?`/reviews/rehomers/${owner.id}`:undefined;
+  return <div className="page-wrap review-process-page"><ApplicationReviewProcess application={application} pet={pet} role={user.role} ownerName={owner?.name??"未登録"} ownerProfileHref={ownerProfileHref} canInspectAdopter={Boolean(application.userId)} adopterProfile={adopterProfile} initialDocuments={documents} initialRequests={requests} /></div>;
 }

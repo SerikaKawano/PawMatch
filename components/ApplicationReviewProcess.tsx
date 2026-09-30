@@ -26,7 +26,7 @@ const trialCriteriaLabels = [
 const basicProfileFields:{key:keyof AdopterProfileFields;label:string}[]=[{key:"fullName",label:"氏名"},{key:"gender",label:"性別"},{key:"ageRange",label:"年代"},{key:"employment",label:"仕事の状況"},{key:"contact",label:"連絡先"},{key:"region",label:"お住まいの地域"}];
 const detailProfileFields:{key:keyof AdopterProfileFields;label:string}[]=[{key:"household",label:"一緒に暮らす人"},{key:"householdConsent",label:"同居者の同意"},{key:"allergies",label:"家族のアレルギー"},{key:"existingPets",label:"先住動物"},{key:"housing",label:"住まいと飼育環境"},{key:"housingPermission",label:"住居の飼育許可"},{key:"timeAway",label:"留守にする時間"},{key:"primaryCarer",label:"主なお世話の担当"},{key:"careExperience",label:"飼育経験"},{key:"dailyCare",label:"日々のお世話"},{key:"veterinaryPlan",label:"通院・健康管理の計画"},{key:"careBudget",label:"飼育費・医療費への備え"},{key:"adoptionReason",label:"お迎えを希望する理由"},{key:"emergencyPlan",label:"緊急時の対応"}];
 type SharedReviewEntry={at?:string;stage:ReviewStage;action:string;note:string;actorName:string;actorRole?:"reviewer"|"rehomer"};
-export function ApplicationReviewProcess({application,pet,role,ownerName,canInspectAdopter=false,adopterProfile,initialDocuments=[],initialRequests=[]}:{application:Applicant;pet:Pet;role:DemoRole;ownerName:string;canInspectAdopter?:boolean;adopterProfile?:AdopterProfile;initialDocuments?:AdopterDocumentSummary[];initialRequests?:DocumentRequest[]}){
+export function ApplicationReviewProcess({application,pet,role,ownerName,ownerProfileHref,canInspectAdopter=false,adopterProfile,initialDocuments=[],initialRequests=[]}:{application:Applicant;pet:Pet;role:DemoRole;ownerName:string;ownerProfileHref?:string;canInspectAdopter?:boolean;adopterProfile?:AdopterProfile;initialDocuments?:AdopterDocumentSummary[];initialRequests?:DocumentRequest[]}){
   const actorRole=role==="rehomer"?"rehomer":"reviewer";
   const [record,setRecord]=useState(application);
   const [draft,setDraft]=useState<ReviewRecord>(application.review!);
@@ -121,7 +121,7 @@ export function ApplicationReviewProcess({application,pet,role,ownerName,canInsp
       </div>}
       <div className="review-case-participants" aria-label="審査対象と担当者">
         <span className="review-person pet"><PawPrint aria-hidden="true"/><span><small>ペット</small><Link href={petPath(pet)}>{pet.name}</Link></span></span>
-        <span className="review-person rehomer"><HeartHandshake aria-hidden="true"/><span><small>譲渡者</small><strong>{ownerName}</strong></span></span>
+        <span className="review-person rehomer"><HeartHandshake aria-hidden="true"/><span><small>譲渡者</small>{ownerProfileHref?<Link href={ownerProfileHref}>{ownerName}</Link>:<strong>{ownerName}</strong>}</span></span>
         <span className="review-person adopter"><UserRound aria-hidden="true"/><span><small>申込者</small><Link href={adopterHref}>{record.name}</Link></span></span>
         <span className="review-person reviewer"><ClipboardCheck aria-hidden="true"/><span><small>審査担当者</small><strong>{reviewerName}</strong></span></span>
       </div>
