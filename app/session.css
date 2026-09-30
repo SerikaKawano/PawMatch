@@ -70,6 +70,26 @@
 .consultation-role-policy li.rehomer { border-left-color: #d69b16; background: #fff8e8; }
 .consultation-role-policy li.operations { border-left-color: #087080; background: #eef7f8; }
 .consultation-role-policy li strong, .consultation-role-policy li span { font-size: 17px; }
+.consultation-profile-overview { margin: 0 0 24px; padding: 22px; border: 1px solid #c8dce1; border-radius: 10px; background: #fff; }
+.consultation-profile-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 18px; margin-bottom: 16px; }
+.consultation-profile-heading h2 { margin: 0; font-size: 24px; }
+.consultation-profile-heading p { margin: 0; color: #506671; font-size: 17px; }
+.consultation-profile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.consultation-profile-grid > article { display: grid; align-content: start; gap: 14px; padding: 18px; border: 1px solid #dfcebc; border-top: 6px solid #e4ad2f; border-radius: 10px; background: #fffaf0; }
+.consultation-profile-grid > article.adopter { border-top-color: #d8a91f; background: #fffbeb; }
+.consultation-profile-grid > article.rehomer { border-top-color: #bb3e68; background: #fff5f7; }
+.consultation-profile-role { display: flex; align-items: center; gap: 12px; }
+.consultation-profile-role > span { flex: 0 0 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: #fff0bd; color: #795b00; }
+.consultation-profile-grid article.rehomer .consultation-profile-role > span { background: #f8dce6; color: #9b3155; }
+.consultation-profile-role svg { width: 23px; height: 23px; }
+.consultation-profile-role small { color: #506671; font-size: 17px; font-weight: 800; }
+.consultation-profile-role h3 { margin: 2px 0 0; font-size: 22px; }
+.consultation-profile-grid dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.consultation-profile-grid dl > div { min-width: 0; padding: 10px 11px; border-radius: 7px; background: #fff; }
+.consultation-profile-grid dt { display: flex; align-items: center; gap: 5px; color: #516a75; font-size: 17px; font-weight: 800; }
+.consultation-profile-grid dt svg { width: 16px; height: 16px; }
+.consultation-profile-grid dd { margin: 4px 0 0; font-size: 17px; font-weight: 750; overflow-wrap: anywhere; }
+.consultation-profile-grid .task-secondary { align-self: end; justify-self: start; }
 .journey-summary { padding: 18px 22px; border: 2px solid #bed9df; border-radius: 10px; background: #edf7f8; color: #174f5d; font-size: 20px; font-weight: 800; line-height: 1.65; }
 .journey-summary.waiting { border-color: #e2c987; background: #fff8e7; color: #6d4d16; }
 .journey-summary.stopped { border-color: #dfabb5; background: #fff0f1; color: #872c3e; }
@@ -112,7 +132,7 @@
 .consultation-reply-form.adopter button { background: #bb3e68; }
 .consultation-reply-form button:disabled { opacity: .55; cursor: not-allowed; }
 .consultation-closed-note { margin: 22px 0 0; padding: 14px 16px; border-left: 5px solid #a94232; background: #fff2ef; color: #7d2c20; font-weight: 800; }
-@media (max-width: 760px) { .consultation-role-policy { grid-template-columns: 1fr; } .consultation-role-policy li { grid-template-columns: 1fr; gap: 2px; } }
+@media (max-width: 760px) { .consultation-role-policy, .consultation-profile-grid { grid-template-columns: 1fr; } .consultation-role-policy li { grid-template-columns: 1fr; gap: 2px; } }
 @media (max-width: 640px) { .journey-facts { grid-template-columns: 1fr; } .journey-panel { padding: 20px 16px; } }
 .consultation-triage-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 25px 0; padding: 18px; border-radius: 10px; background: #edf5f7; }
 .consultation-triage-summary strong { font-size: 20px; }
@@ -209,6 +229,35 @@
 .adopter-review-list > a:hover { border-color: #b77669; box-shadow: 0 8px 22px #513a2420; }
 .adopter-review-list > a > strong { font-size: 20px; }
 .adopter-review-list > a > b { color: #a74758; }
+.rehomer-review-page { max-width: 1180px; }
+.rehomer-review-list { display: grid; gap: 12px; margin-top: 28px; }
+.rehomer-review-list > a { display: grid; grid-template-columns: auto 1.3fr .5fr 1fr auto; gap: 14px; align-items: center; min-height: 82px; padding: 16px 20px; border: 1px solid #dfcebc; border-radius: 12px; background: #fff; color: #493e38; text-decoration: none; font-size: 17px; }
+.rehomer-review-list > a:hover { border-color: #bb3e68; box-shadow: 0 8px 22px #513a2420; }
+.rehomer-review-list > a > span { display: flex; align-items: center; gap: 7px; }
+.rehomer-review-list > a > span:nth-child(2) { display: grid; gap: 3px; }
+.rehomer-review-list strong { font-size: 20px; }
+.rehomer-review-list small { color: #506671; font-size: 17px; }
+.rehomer-review-list b { color: #a74758; }
+.rehomer-review-icon { width: 44px; height: 44px; justify-content: center; border-radius: 50%; background: #f8dce6; color: #9b3155; }
+.rehomer-review-heading { display: flex; align-items: center; gap: 16px; margin: 12px 0 22px; }
+.rehomer-review-heading > span { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: #f8dce6; color: #9b3155; }
+.rehomer-review-heading h2 { margin: 2px 0; font-size: 34px; }
+.rehomer-review-heading small { font-size: 17px; font-weight: 850; color: #9b3155; }
+.rehomer-review-heading p { margin: 0; font-size: 18px; }
+.rehomer-review-surface { display: grid; gap: 18px; }
+.rehomer-review-surface > section { padding: 24px; border: 1px solid #d7e2e7; border-radius: 11px; background: #fff; box-shadow: 0 12px 32px rgba(20, 57, 70, .08); }
+.rehomer-review-surface h3 { margin: 0 0 12px; font-size: 24px; }
+.rehomer-review-surface a { color: #075f6c; text-decoration: underline; text-underline-offset: 3px; }
+.rehomer-review-surface dd a { display: inline-flex; align-items: center; gap: 5px; }
+.rehomer-review-surface dd svg { width: 17px; }
+.rehomer-pet-list { margin: 14px 0 0; padding: 0; list-style: none; }
+.rehomer-pet-list li { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center; padding: 15px 0; border-top: 1px solid #e5edf0; font-size: 17px; }
+.rehomer-pet-list li > div { display: flex; align-items: center; gap: 10px; }
+.rehomer-pet-list li > div > span { display: grid; }
+.rehomer-pet-list li small { color: #506671; }
+@media (max-width: 900px) { .rehomer-review-list > a { grid-template-columns: auto 1fr 1fr; } .rehomer-review-list > a > b { grid-column: 2; } }
+@media (max-width: 700px) { .consultation-profile-grid dl { grid-template-columns: 1fr; } .rehomer-pet-list li { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .rehomer-review-list > a { grid-template-columns: auto 1fr; } .rehomer-review-list > a > b { grid-column: 2; } }
 @media (max-width: 900px) { .adopter-review-list > a { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .adopter-review-list > a { grid-template-columns: 1fr; } }
 .identity-review-queue { margin-top: 30px; }

@@ -9,6 +9,9 @@ import { ConsultationReplyForm } from "@/components/ConsultationReplyForm";
 import { petPath } from "@/lib/pet-routes";
 import { groupConsultations } from "@/lib/consultation-groups";
 import { ConsultationWorkflowActions } from "@/components/ConsultationWorkflowActions";
+import { getAdopterProfile } from "@/lib/adopter-profile";
+import { listAdopterDocuments } from "@/lib/adopter-documents";
+import { Building2, FileText, PawPrint, UserRound } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +34,13 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
   const consultation = group.representative;
   const application = group.application;
   const messages = group.records.flatMap(consultationThread).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  const adopter = demoUsers.find(item => item.id === consultation.userId && item.role === "adopter");
   const rehomer = demoUsers.find(item => item.id === pet?.ownerId);
+  const mayInspectProfiles = user.role === "reviewer" || user.role === "admin";
+  const [adopterProfile, adopterDocuments] = mayInspectProfiles && adopter
+    ? await Promise.all([getAdopterProfile(adopter), listAdopterDocuments(adopter.id)])
+    : [null, []];
+  const rehomerPets = mayInspectProfiles && rehomer ? pets.filter(item => item.ownerId === rehomer.id) : [];
   const outcome = application?.review?.decisionRecorded
     ? application.review.decision === "approve" ? "譲渡済" : application.review.decision === "decline" ? "今回は見送り" : "追加確認・保留"
     : group.status === "closed" ? "審査前に終了" : "未判定";
@@ -46,6 +55,21 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
         <li className="operations"><strong>PawMatch運営</strong><span>審査担当者・管理者</span></li>
       </ul>
     </section>
+    {mayInspectProfiles && adopter && rehomer && adopterProfile ? <section className="consultation-profile-overview" aria-labelledby="consultation-profile-title">
+      <div className="consultation-profile-heading"><h2 id="consultation-profile-title">関係者のプロファイル</h2><p>審査・書類確認に必要な登録情報を確認できます。</p></div>
+      <div className="consultation-profile-grid">
+        <article className="adopter">
+          <div className="consultation-profile-role"><span><UserRound aria-hidden="true" /></span><div><small>里親希望者</small><h3>{adopterProfile.fullName}</h3></div></div>
+          <dl><div><dt>連絡先</dt><dd>{adopterProfile.contact || adopter.email}</dd></div><div><dt>お住まい</dt><dd>{adopterProfile.region || "未入力"}</dd></div><div><dt>本人確認</dt><dd>{adopterProfile.identityStatus === "verified" ? "本人確認済み" : adopterProfile.identityStatus === "pending" ? "本人確認待ち" : "本人確認未申請"}</dd></div><div><dt><FileText aria-hidden="true" /> 登録書類</dt><dd>{adopterDocuments.length}件</dd></div></dl>
+          <Link className="task-secondary" href={`/reviews/adopters/${adopter.id}`}>里親希望者の詳細・書類を見る →</Link>
+        </article>
+        <article className="rehomer">
+          <div className="consultation-profile-role"><span><Building2 aria-hidden="true" /></span><div><small>譲渡者</small><h3>{rehomer.name}</h3></div></div>
+          <dl><div><dt>区分</dt><dd>{rehomer.kind === "organization" ? "団体" : "個人"}</dd></div><div><dt>所属・活動名</dt><dd>{rehomer.organization}</dd></div><div><dt>連絡先</dt><dd>{rehomer.email}</dd></div><div><dt><PawPrint aria-hidden="true" /> 掲載ペット</dt><dd>{rehomerPets.length}頭</dd></div></dl>
+          <Link className="task-secondary" href={`/reviews/rehomers/${rehomer.id}`}>譲渡者の詳細を見る →</Link>
+        </article>
+      </div>
+    </section> : null}
     <p className={`journey-summary ${group.status === "closed" || outcome === "今回は見送り" ? "stopped" : application ? "active" : "waiting"}`}>{journeySummary(consultation, application)}</p>
     {group.status==="profile_requested"&&<ConsultationWorkflowActions consultationId={consultation.id} applicationId={application?.id} role={user.role}/>} 
     <dl className="journey-facts">

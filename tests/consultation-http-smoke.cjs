@@ -63,6 +63,10 @@ async function cookieFor(userId) {
   assert.ok(adopterHandoff.includes('/adopter/profile#adopter-documents'));
   const reviewerHandoff = await (await fetch(base + `/consultations/${consultation.id}`, { headers: { Cookie: reviewer } })).text();
   assert.ok(reviewerHandoff.includes("申込みを受け付けて審査へ進める"));
+  assert.ok(reviewerHandoff.includes(`/reviews/adopters/adopter`));
+  assert.ok(reviewerHandoff.includes(`/reviews/rehomers/rehomer`));
+  assert.equal((await fetch(base + "/reviews/adopters/adopter", { headers: { Cookie: reviewer } })).status, 200);
+  assert.equal((await fetch(base + "/reviews/rehomers/rehomer", { headers: { Cookie: reviewer } })).status, 200);
   const waitingQueue = await (await fetch(base + "/reviews/consultations", { headers: { Cookie: reviewer } })).text();
   assert.ok(waitingQueue.includes("書類・プロファイル提出待ち"));
   assert.ok(waitingQueue.includes("通院とお世話の条件を確認したいです。") || waitingQueue.includes("Bellaへの相談"));

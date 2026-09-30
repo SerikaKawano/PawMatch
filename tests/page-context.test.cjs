@@ -5,7 +5,7 @@ const { pageContext } = load("lib/page-context.ts");
 const { translateText } = load("lib/i18n.ts");
 
 test("every app page except home has a title and a predictable parent link", () => {
-  const pages = ["/login", "/guide", "/pets", "/pets/Q8N4V2K7", "/pets/Q8N4V2K7/consult", "/dashboard", "/rehoming", "/rehoming/new", "/rehoming/pet-id/edit", "/rehoming/consultations", "/reviews/progress", "/reviews/app-aiko", "/reviews/consultations", "/reviews/adopters", "/reviews/adopters/adopter", "/reviews/applicants/app-aiko", "/consultations/sample-consultation-1", "/admin/records", "/admin/analytics", "/admin/users", "/research", "/research/setup", "/research/results", "/research/session/example", "/terms", "/privacy", "/docs", "/access-denied"];
+  const pages = ["/login", "/guide", "/pets", "/pets/Q8N4V2K7", "/pets/Q8N4V2K7/consult", "/dashboard", "/rehoming", "/rehoming/new", "/rehoming/pet-id/edit", "/rehoming/consultations", "/reviews/progress", "/reviews/app-aiko", "/reviews/consultations", "/reviews/adopters", "/reviews/adopters/adopter", "/reviews/rehomers", "/reviews/rehomers/rehomer", "/reviews/applicants/app-aiko", "/consultations/sample-consultation-1", "/admin/records", "/admin/analytics", "/admin/users", "/research", "/research/setup", "/research/results", "/research/session/example", "/terms", "/privacy", "/docs", "/access-denied"];
   assert.equal(pageContext("/", null), null);
   for (const page of pages) {
     const context = pageContext(page, "admin");
@@ -29,5 +29,6 @@ test("every app page except home has a title and a predictable parent link", () 
   assert.equal(pageContext("/consultations/example", "rehomer").backHref, "/rehoming/consultations");
   assert.equal(pageContext("/reviews/adopters/adopter", "rehomer").backHref, "/reviews/progress");
   assert.equal(pageContext("/reviews/adopters/adopter", "reviewer").backHref, "/reviews/adopters");
+  assert.equal(pageContext("/reviews/rehomers/rehomer", "reviewer").backHref, "/reviews/rehomers");
   assert.equal(pageContext("/reviews/app-aiko", "adopter").backHref, "/adopter/history");
 });

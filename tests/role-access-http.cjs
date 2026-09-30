@@ -12,6 +12,8 @@ const matrix=[
  ["/reviews/consultations",["reviewer","admin"]],
  ["/reviews/adopters",["reviewer","admin"]],
  ["/reviews/adopters/adopter",["rehomer","reviewer","admin"]],
+ ["/reviews/rehomers",["reviewer","admin"]],
+ ["/reviews/rehomers/rehomer",["reviewer","admin"]],
  ["/reviews/applicants/app-ren",["rehomer","reviewer","admin"]],
  ["/reviews/app-aiko",["adopter","rehomer","reviewer","admin"]],
  ["/pets/Q8N4V2K7/consult",["adopter","admin"]],

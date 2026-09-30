@@ -16,5 +16,5 @@ export default async function ConsultationQueuePage() {
   if (user.role !== "reviewer" && user.role !== "admin") redirect("/access-denied");
   const [records, pets, applications, pendingIdentities] = await Promise.all([getAllConsultations(), getPets(), getApplicants(), getPendingIdentityProfiles()]);
   const groups = groupConsultations(records, applications);
-  return <div className="page-wrap consultation-queue-page"><div className="role-page-actions"><Link href="/reviews/adopters" className="task-secondary">里親希望者のプロファイル・書類を見る →</Link></div><ConsultationTriage initialGroups={groups} names={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} applicants={Object.fromEntries(demoUsers.map(item => [item.id, item.name]))} /><IdentityReviewQueue initialProfiles={pendingIdentities} /></div>;
+  return <div className="page-wrap consultation-queue-page"><div className="role-page-actions"><Link href="/reviews/adopters" className="task-secondary">里親希望者のプロファイル・書類を見る →</Link><Link href="/reviews/rehomers" className="task-secondary">譲渡者のプロファイルを見る →</Link></div><ConsultationTriage initialGroups={groups} names={Object.fromEntries(pets.map(pet => [pet.id, pet.name]))} applicants={Object.fromEntries(demoUsers.map(item => [item.id, item.name]))} /><IdentityReviewQueue initialProfiles={pendingIdentities} /></div>;
 }
