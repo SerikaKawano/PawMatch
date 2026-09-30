@@ -48,6 +48,8 @@
 .consultation-history li .consultation-status, .consultation-status { display: inline-flex; align-items: center; min-height: 34px; padding: 4px 11px; border-radius: 6px; font-size: 17px; font-weight: 850; }
 .consultation-history li .consultation-status.received, .consultation-status.received { background: #fff0ce; color: #704d11; }
 .consultation-history li .consultation-status.profile_requested, .consultation-status.profile_requested { background: #ddf2e8; color: #14583c; }
+.consultation-status.profile-requested { background: #fff0ce; color: #704d11; }
+.consultation-status.in-review { background: #ddf2e8; color: #14583c; }
 .consultation-history li .consultation-status.closed, .consultation-status.closed { background: #fbe6e8; color: #9c2d3e; }
 .consultation-mini-progress { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 8px; margin: 15px 0; padding: 0; list-style: none; }
 .consultation-mini-progress li { min-height: 58px; padding: 9px 11px; border: 1px solid #c9d8dd; border-radius: 9px; color: #506671; background: #f5f7f8; display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 750; }
@@ -131,6 +133,20 @@
 .consultation-handled-list a { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid #d8e3e7; border-radius: 7px; background: #f7fafb; }
 .consultation-handled-list a:hover { border-color: #87b7c0; background: #edf6f7; }
 .consultation-handled-list strong { flex: none; color: #075f6c; }
+.consultation-workflow-action { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; margin: 18px 0; padding: 20px 22px; border: 2px solid #dfc47b; border-radius: 12px; background: #fff8e5; }
+.consultation-workflow-action.active { border-color: #8bc7ae; background: #edf8f2; }
+.consultation-workflow-action h2 { margin: 0 0 5px; font-size: 22px; }
+.consultation-workflow-action p { margin: 0; max-width: 720px; font-size: 17px; line-height: 1.65; }
+.consultation-workflow-action .task-primary { flex: none; }
+.consultation-workflow-action .consultation-workflow-notice { flex-basis: 100%; color: #8a2a3a; font-weight: 750; }
+.consultation-workflow-list { margin-top: 28px; }
+.consultation-workflow-list > h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 23px; }
+.consultation-workflow-list > h2 span { padding: 3px 9px; border-radius: 999px; background: #e2eff1; color: #075f6c; font-size: 17px; }
+.consultation-triage-card.workflow { margin: 10px 0; border-left: 5px solid #d1a33e; }
+.consultation-triage-card.workflow.active { border-left-color: #268161; }
+.consultation-triage-heading h3 { margin: 0; font-size: 21px; }
+.consultation-triage-heading h3 a { color: #075f6c; text-decoration: underline; text-underline-offset: 4px; }
+.adopter-documents-card { scroll-margin-top: 110px; }
 .adopter-home { max-width: 1280px; margin: 0 auto; }
 .adopter-home-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; margin-bottom: 16px; }
 .adopter-home-header h2 { margin: 4px 0 0; font-size: clamp(38px, 4.5vw, 54px); line-height: 1.2; }

@@ -8,6 +8,7 @@ import type { DemoUser } from "./demoUsers";
 import { assess } from "./research/scoring";
 import { getResearch } from "./research/store";
 import { applyPetListingOverrides, getPetListings } from "./pet-listings";
+import { getApplicationIntakes } from "./application-intakes";
 
 function withoutMongoFields<T>(record: Record<string, unknown>): T {
   const result = { ...record }; delete result._id; delete result.__v;
@@ -28,11 +29,11 @@ export async function getPets(): Promise<Pet[]> {
   return applyPetListingOverrides(merged);
 }
 export async function getApplicants(petId?: string): Promise<Applicant[]> {
-  let base=applicants;
+  let base=mergeById(await getApplicationIntakes(),applicants);
   if(isDatabaseConfigured()){
     await connectDatabase();
     const records=await ApplicationModel.find({}).lean();
-    base=mergeById(records.map(record=>withoutMongoFields<Applicant>(record)),applicants);
+    base=mergeById(records.map(record=>withoutMongoFields<Applicant>(record)),base);
   }
   const [reviews, research] = await Promise.all([getReviewRecords(), getResearch()]);
   return base.filter(app=>!petId||app.petId===petId).map(app=>{

@@ -25,12 +25,12 @@ async function cookieFor(userId) {
   assert.ok(!page.includes("相談者："));
 
   const requestId = crypto.randomUUID();
-  const create = await fetch(base + "/api/consultations", { method: "POST", headers: { Cookie: adopter, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ petId: "momo", message: "通院とお世話の条件を確認したいです。", contactEmail: "noah@pawmatch.test", requestId }) });
+  const create = await fetch(base + "/api/consultations", { method: "POST", headers: { Cookie: adopter, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ petId: "yuki", message: "通院とお世話の条件を確認したいです。", contactEmail: "noah@pawmatch.test", requestId }) });
   assert.equal(create.status, 201);
   const { consultation } = await create.json();
   assert.equal(consultation.status, "received");
   assert.equal(consultation.contactEmail, "noah@pawmatch.test");
-  const ownerReply = await fetch(base + `/api/consultations/${consultation.id}`, { method: "POST", headers: { Cookie: rehomer, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ message: "Bellaは朝夕の投薬に慣れています。薬はフードと分けて与えています。" }) });
+  const ownerReply = await fetch(base + `/api/consultations/${consultation.id}`, { method: "POST", headers: { Cookie: rehomer, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ message: "Snowは朝夕のお世話に慣れています。食事は落ち着ける場所で与えています。" }) });
   assert.equal(ownerReply.status, 201);
   assert.equal((await ownerReply.json()).consultation.messages.at(-1).authorId, "rehomer");
   const unrelatedReply = await fetch(base + `/api/consultations/${consultation.id}`, { method: "POST", headers: { Cookie: unrelatedRehomer, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ message: "この相談には参加できません。" }) });
@@ -43,7 +43,7 @@ async function cookieFor(userId) {
   assert.ok(thread.includes("この相談に参加する人"));
   assert.ok(thread.includes("PawMatch運営"));
   assert.ok(thread.includes("メッセージを送る"));
-  assert.ok(thread.includes("Bellaは朝夕の投薬に慣れています"));
+  assert.ok(thread.includes("Snowは朝夕のお世話に慣れています"));
   const phoneCreate = await fetch(base + "/api/consultations", { method: "POST", headers: { Cookie: adopter, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ petId: "yuki", message: "電話での連絡も可能です。", contactEmail: "+44 7700 900123", requestId: crypto.randomUUID() }) });
   assert.equal(phoneCreate.status, 201);
   assert.equal((await phoneCreate.json()).consultation.contactEmail, "+44 7700 900123");
@@ -58,6 +58,24 @@ async function cookieFor(userId) {
   const update = await fetch(base + `/api/consultations/${consultation.id}`, { method: "PATCH", headers: { Cookie: reviewer, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ status: "profile_requested" }) });
   assert.equal(update.status, 200);
   assert.equal((await update.json()).consultation.status, "profile_requested");
+  const adopterHandoff = await (await fetch(base + `/consultations/${consultation.id}`, { headers: { Cookie: adopter } })).text();
+  assert.ok(adopterHandoff.includes("書類をアップロードする"));
+  assert.ok(adopterHandoff.includes('/adopter/profile#adopter-documents'));
+  const reviewerHandoff = await (await fetch(base + `/consultations/${consultation.id}`, { headers: { Cookie: reviewer } })).text();
+  assert.ok(reviewerHandoff.includes("申込みを受け付けて審査へ進める"));
+  const waitingQueue = await (await fetch(base + "/reviews/consultations", { headers: { Cookie: reviewer } })).text();
+  assert.ok(waitingQueue.includes("書類・プロファイル提出待ち"));
+  assert.ok(waitingQueue.includes("通院とお世話の条件を確認したいです。") || waitingQueue.includes("Bellaへの相談"));
+  const startReview = await fetch(base + `/api/consultations/${consultation.id}`, { method: "PATCH", headers: { Cookie: reviewer, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ action: "start_review" }) });
+  assert.equal(startReview.status, 201);
+  const startedApplication = (await startReview.json()).application;
+  assert.equal(startedApplication.userId, "adopter");
+  assert.equal(startedApplication.petId, "yuki");
+  assert.equal(startedApplication.stage, "risk_review");
+  assert.equal((await fetch(base + `/reviews/${startedApplication.id}`, { headers: { Cookie: reviewer } })).status, 200);
+  const activeQueue = await (await fetch(base + "/reviews/consultations", { headers: { Cookie: reviewer } })).text();
+  assert.ok(activeQueue.includes("審査へ進んだ相談"));
+  assert.ok(activeQueue.includes(`/reviews/${startedApplication.id}`));
   const duplicate = await fetch(base + `/api/consultations/${consultation.id}`, { method: "PATCH", headers: { Cookie: reviewer, Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ status: "closed" }) });
   assert.equal(duplicate.status, 409);
   const history = await (await fetch(base + "/adopter/history", { headers: { Cookie: adopter } })).text();

@@ -8,6 +8,7 @@ import { demoUsers } from "@/lib/demoUsers";
 import { ConsultationReplyForm } from "@/components/ConsultationReplyForm";
 import { petPath } from "@/lib/pet-routes";
 import { groupConsultations } from "@/lib/consultation-groups";
+import { ConsultationWorkflowActions } from "@/components/ConsultationWorkflowActions";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +47,7 @@ export default async function ConsultationDetailPage({ params }: { params: Promi
       </ul>
     </section>
     <p className={`journey-summary ${group.status === "closed" || outcome === "今回は見送り" ? "stopped" : application ? "active" : "waiting"}`}>{journeySummary(consultation, application)}</p>
+    {group.status==="profile_requested"&&<ConsultationWorkflowActions consultationId={consultation.id} applicationId={application?.id} role={user.role}/>} 
     <dl className="journey-facts">
       <div><dt>相談受付</dt><dd>{displayDate(group.firstAt)}</dd></div>
       <div><dt>審査担当者の確認</dt><dd>{consultation.reviewedAt ? displayDate(consultation.reviewedAt) : "確認待ち"}</dd></div>
