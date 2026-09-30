@@ -149,3 +149,16 @@ test("review case participant icons follow the role colour system", () => {
   assert.match(theme, /review-person\.adopter \{ --participant-accent: #7c5d08; --participant-avatar: #f4e6a9; \}/);
   assert.match(theme, /review-person\.reviewer \{ --participant-accent: #2f7958; --participant-avatar: #d5ecde; \}/);
 });
+
+test("important review count points to matching red item panels", () => {
+  const process = readFileSync(path.join(__dirname, "../components/ApplicationReviewProcess.tsx"), "utf8");
+  const assessment = readFileSync(path.join(__dirname, "../components/research/AssessmentPanel.tsx"), "utf8");
+  const theme = readFileSync(path.join(__dirname, "../app/global-theme.css"), "utf8");
+  assert.ok(process.includes("対象項目を見る"));
+  assert.ok(process.includes('setView("risk_review")'));
+  assert.ok(assessment.includes('highRiskIds.has(row.criterion)'));
+  assert.ok(assessment.includes('className={`evidence-card ${important ? "important" : tone}`}'));
+  assert.ok(assessment.includes('className={risk.severity === "high" ? "high" : "medium"}'));
+  assert.match(theme, /\.evidence-card\.important \{[^}]*border: 2px solid #e00000;/);
+  assert.match(theme, /\.assessment-checks li\.high \{[^}]*border: 2px solid #e00000;/);
+});

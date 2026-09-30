@@ -884,6 +884,8 @@ const english: Record<string, string> = {
   "面談・住環境確認": "Meeting and home check",
   "最終確認": "Final check",
   "重要な確認": "Important check",
+  "赤色で表示された対象項目を確認してください。": "Review the affected items highlighted in red.",
+  "対象項目を見る": "View affected items",
   "重要な未確認なし": "No critical unknowns",
   "申込み内容": "Application details",
   "のケア条件に照らして確認": " — checked against this pet's care needs",
@@ -1145,6 +1147,8 @@ export function translateText(value: string): string {
   if ((match = source.match(/^相談者：(.+) · 最終更新 (.+?)(?: · (\d+)件を統合)?$/))) return left + `Applicant: ${match[1]} · Last updated ${match[2]}${match[3] ? ` · ${match[3]} enquiries combined` : ""}` + right;
   if ((match = source.match(/^相談者：(.+) · (.+)$/))) return left + `Applicant: ${match[1]} · ${match[2]}` + right;
   if ((match = source.match(/^重要な確認 (\d+)件。詳細を確認の上、進行可否を判断してください。$/))) return left + `${match[1]} important item(s) to check. Review the details before deciding whether to proceed.` + right;
+  if ((match = source.match(/^重要な確認 (\d+)件。赤色で表示された対象項目を確認してください。$/))) return left + `${match[1]} important item(s) to check. Review the affected items highlighted in red.` + right;
+  if ((match = source.match(/^重要な確認 (\d+)件$/))) return left + `${match[1]} important item(s)` + right;
   if ((match = source.match(/^(.+) (\d+)件の内容を見る$/))) return left + `View ${match[2]} ${translateText(match[1]).toLowerCase()}` + right;
   if ((match = source.match(/^重み (\d+)点 · (\d+)点取得$/))) return left + `Weight ${match[1]} points · Earned ${match[2]} points` + right;
   if ((match = source.match(/^保存して「(.+)」へ進む$/))) return left + `Save and move to ${translateText(match[1])}` + right;

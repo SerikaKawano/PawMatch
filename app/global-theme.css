@@ -410,6 +410,10 @@ body[data-role="rehomer"] .progress-board-page .pipeline-open:hover, .progress-b
 .assessment-heading .research-score.score-high, .evidence-card.score-high { border-color: #8dcbab; background: #e6f6eb; color: #15593d; }
 .assessment-heading .research-score.score-mid, .evidence-card.score-mid { border-color: #ddbe6d; background: #fff3d3; color: #6d4e0d; }
 .assessment-heading .research-score.score-low, .evidence-card.score-low { border-color: #dc9ca6; background: #fee9eb; color: #85293a; }
+.evidence-card.important { border: 2px solid #e00000; background: #fff1f1; color: #8f0000; box-shadow: 0 0 0 3px rgba(224,0,0,.08); }
+.evidence-important-badge, .assessment-risk-badge, .assessment-important-count { display: inline-flex; align-items: center; width: max-content; gap: 6px; padding: 4px 9px; border-radius: 999px; background: #e00000; color: #fff; font-size: 17px; font-weight: 850; }
+.evidence-important-badge { margin: 10px 0 2px; }
+.evidence-important-badge svg, .assessment-risk-badge svg { width: 18px; height: 18px; }
 .assessment-heading .research-score.score-high strong { color: #15593d; }
 .assessment-heading .research-score.score-mid strong { color: #6d4e0d; }
 .assessment-heading .research-score.score-low strong { color: #85293a; }
@@ -418,11 +422,12 @@ body[data-role="rehomer"] .progress-board-page .pipeline-open:hover, .progress-b
 .evidence-card.score-low { border-left: 6px solid #b9344d; }
 .evidence-card .evidence-score { flex-shrink: 0; white-space: nowrap; }
 .assessment-checks { margin-top: 18px; padding: 18px 20px; border: 1px solid #cbdce2; border-radius: 9px; background: #f7fafb; }
-.assessment-checks h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 21px; }
-.assessment-checks ul { margin: 0; padding-left: 25px; }
-.assessment-checks li { padding: 10px 0; font-size: 17px; line-height: 1.6; }
-.assessment-checks li.high { color: #89283c; }
-.assessment-checks li.medium { color: #70500e; }
+.assessment-checks h4 { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; font-size: 21px; }
+.assessment-checks ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.assessment-checks li { padding: 13px 15px; border: 1px solid; border-radius: 9px; font-size: 17px; line-height: 1.6; }
+.assessment-checks li.high { border: 2px solid #e00000; background: #fff1f1; color: #8f0000; }
+.assessment-checks li.medium { border-color: #dec480; background: #fff8e7; color: #70500e; }
+.assessment-risk-badge { margin-bottom: 8px; }
 .assessment-checks li p { margin: 4px 0; }
 .assessment-checks li span { font-weight: 750; }
 .assessment-checks > p { font-size: 17px; }
@@ -620,6 +625,8 @@ small { font-size: 17px; }
 .review-state-banner .review-state-copy small { color: #536b73; }
 .review-state-banner .review-state-copy strong { font-size: clamp(23px, 2.2vw, 29px); color: #183e49; }
 .review-state-banner .review-state-message { max-width: 540px; padding: 10px 14px; border-radius: 8px; background: #f2f7f8; color: #35535b; line-height: 1.5; }
+.review-state-banner .review-state-message span { display: inline; }
+.review-state-banner .review-state-message button { display: inline-flex; margin: 8px 0 0; padding: 5px 10px; border: 1px solid currentColor; border-radius: 7px; background: #fff; color: inherit; font-size: 17px; font-weight: 850; cursor: pointer; }
 .review-state-banner.negative .review-state-message { background: #fff0f1; color: #862d3d; }
 .review-state-banner.caution .review-state-message { background: #fff6e4; color: #705012; }
 .review-state-banner .review-actor-status { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 0; padding: 0 24px 20px; }
