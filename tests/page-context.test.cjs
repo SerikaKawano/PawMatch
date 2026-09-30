@@ -29,4 +29,5 @@ test("every app page except home has a title and a predictable parent link", () 
   assert.equal(pageContext("/consultations/example", "rehomer").backHref, "/rehoming/consultations");
   assert.equal(pageContext("/reviews/adopters/adopter", "rehomer").backHref, "/reviews/progress");
   assert.equal(pageContext("/reviews/adopters/adopter", "reviewer").backHref, "/reviews/adopters");
+  assert.equal(pageContext("/reviews/app-aiko", "adopter").backHref, "/adopter/history");
 });

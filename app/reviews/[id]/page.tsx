@@ -10,8 +10,8 @@ import { getAdopterProfile } from "@/lib/adopter-profile";
 export const dynamic = "force-dynamic";
 
 export default async function ApplicationReviewPage({ params }: { params: Promise<{ id: string }> }) {
-  const user = await requirePageAccess("review", "/reviews/progress");
   const { id } = await params;
+  const user = await requirePageAccess("reviewCase", `/reviews/${id}`);
   const [allApplications, pets] = await Promise.all([getApplicants(), getPets()]);
   const applications = visibleApplications(user, allApplications, pets);
   const application = applications.find(item => item.id === id);

@@ -13,7 +13,7 @@ const matrix=[
  ["/reviews/adopters",["reviewer","admin"]],
  ["/reviews/adopters/adopter",["rehomer","reviewer","admin"]],
  ["/reviews/applicants/app-ren",["rehomer","reviewer","admin"]],
- ["/reviews/app-aiko",["rehomer","reviewer","admin"]],
+ ["/reviews/app-aiko",["adopter","rehomer","reviewer","admin"]],
  ["/pets/Q8N4V2K7/consult",["adopter","admin"]],
  ...["/admin/records","/admin/analytics","/admin/users","/research","/research/setup","/research/results","/docs"].map(p=>[p,["admin"]])
 ];
@@ -69,6 +69,9 @@ const apis=[
  assert.equal((await fetch(base+"/reviews/adopters/adopter",{headers:{Cookie:anotherRehomerCookie}})).status,404);
  assert.equal((await fetch(base+"/consultations/sample-consultation-1",{headers:{Cookie:anotherRehomerCookie}})).status,404);
  assert.equal((await fetch(base+"/consultations/sample-consultation-5",{headers:{Cookie:anotherRehomerCookie}})).status,200);
+ const unrelatedAdopterLogin=await fetch(base+"/api/demo-session",{method:"POST",headers:{"Content-Type":"application/json",Origin:base},body:JSON.stringify({userId:"adopter-olivia"})});
+ const unrelatedAdopterCookie=unrelatedAdopterLogin.headers.get("set-cookie").split(";")[0];
+ assert.equal((await fetch(base+"/reviews/app-aiko",{headers:{Cookie:unrelatedAdopterCookie}})).status,404);
  for(const cookie of ["pawmatch-demo-user=admin","pawmatch-demo-session=admin","pawmatch-demo-session="+"0".repeat(64)])assert.equal((await fetch(base+"/api/applications",{headers:{Cookie:cookie}})).status,401);
  const guide=await(await fetch(base+"/guide")).text();assert.equal((guide.match(/class="guide-step-art"/g)||[]).length,4);
  assert.ok(!guide.includes("/guide/search.webp"));

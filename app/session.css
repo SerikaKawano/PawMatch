@@ -180,6 +180,7 @@
 .adopter-application-history li { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; padding: 16px 0; border-top: 1px solid #e5d8cc; font-size: 18px; }
 .adopter-application-history li strong { min-width: 120px; }
 .adopter-application-history li small { font-size: 17px; color: #5e6b70; }
+.adopter-application-history .application-case-link { margin-left: auto; white-space: nowrap; }
 .application-stage { padding: 6px 11px; border-radius: 7px; font-weight: 800; }
 .application-stage.active { color: #704d11; background: #fff0ce; }
 .application-stage.done { color: #14583c; background: #ddf2e8; }

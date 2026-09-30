@@ -47,10 +47,16 @@ test("a person cannot read or review another person's cases; administrators and 
   const aichi = demoUsers.find(user => user.id === "rehomer-riku");
   const admin = demoUsers.find(user => user.id === "admin");
   const reviewer = demoUsers.find(user => user.id === "reviewer");
+  const adopter = demoUsers.find(user => user.id === "adopter");
+  const otherAdopter = demoUsers.find(user => user.id === "adopter-olivia");
   assert.deepEqual(visiblePets(miyagi, pets).map(pet => pet.id), ["hana"]);
   assert.deepEqual(visiblePets(aichi, pets).map(pet => pet.id), ["riku"]);
   assert.equal(mayReviewPet(miyagi, pets.find(pet => pet.id === "riku")), false);
   assert.equal(mayReviewPet(miyagi, pets.find(pet => pet.id === "hana")), true);
   assert.equal(visibleApplications(admin, applicants, pets).length, 37);
   assert.equal(visibleApplications(reviewer, applicants, pets).length, 37);
+  assert.ok(visibleApplications(adopter, applicants, pets).length > 0);
+  assert.ok(visibleApplications(adopter, applicants, pets).every(application => application.userId === adopter.id));
+  assert.ok(visibleApplications(otherAdopter, applicants, pets).every(application => application.userId === otherAdopter.id));
+  assert.ok(!visibleApplications(otherAdopter, applicants, pets).some(application => visibleApplications(adopter, applicants, pets).some(own => own.id === application.id)));
 });

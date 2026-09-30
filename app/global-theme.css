@@ -648,6 +648,22 @@ small { font-size: 17px; }
 .review-stage-heading { align-items: center; margin: -24px -24px 24px; padding: 18px 24px; border: 0; border-radius: 10px 10px 0 0; background: #086b78; color: #fff; }
 .review-stage-heading span, .review-stage-heading h2, .review-stage-heading p { color: #fff !important; }
 .review-stage-heading .task-secondary { background: #fff; color: #075d69; }
+.review-shared-records { margin: 28px 0 22px; padding: 20px; border: 1px solid #c9dce0; border-radius: 12px; background: #f7fafb; }
+.review-shared-records-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 14px; }
+.review-shared-records-heading h3 { margin: 0; color: #173f4b; font-size: 21px; }
+.review-shared-records-heading p { margin: 5px 0 0; color: #536b73; }
+.review-shared-records-heading > span { flex: none; padding: 4px 10px; border-radius: 999px; background: #dceef0; color: #075d69; font-weight: 800; }
+.review-shared-records ol { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.review-shared-records li { padding: 14px 16px; border: 1px solid #d8e3e6; border-left: 5px solid #7c96a0; border-radius: 9px; background: #fff; }
+.review-shared-records li.reviewer { border-left-color: #2f7958; background: #f4faf6; }
+.review-shared-records li.rehomer { border-left-color: #a83f68; background: #fff7fa; }
+.review-shared-record-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; }
+.review-shared-record-meta strong { color: #173f4b; }
+.review-shared-record-meta span { padding: 2px 8px; border-radius: 999px; background: #e8f0f2; color: #3f5d66; font-size: 17px; font-weight: 750; }
+.review-shared-record-meta time { margin-left: auto; color: #63777e; font-size: 17px; }
+.review-shared-records li > small { display: block; margin-top: 6px; color: #60757d; }
+.review-shared-records li > p { margin: 8px 0 0; color: #213f48; line-height: 1.65; white-space: pre-wrap; }
+.review-shared-records-empty { margin: 0; padding: 13px 15px; border-radius: 8px; background: #fff; color: #5c7178; }
 .review-trial-form { display: grid; gap: 0; margin: 18px 0; border: 1px solid #bfd7d8; border-radius: 12px; background: #f0f7f6; overflow: hidden; }
 .review-trial-form .trial-section { padding: 22px; border-top: 1px solid #c9dddc; }
 .review-trial-form .trial-section:first-child { border-top: 0; }
@@ -682,6 +698,7 @@ small { font-size: 17px; }
 .adopter-review-detail .adopter-review-surface p { font-size: 17px; }
 @media (max-width: 900px) { .review-state-banner .review-case-participants { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 760px) { .review-state-banner > .review-state-top, .review-trial-form .trial-criterion { align-items: flex-start; flex-direction: column; } .review-state-banner .review-actor-status, .review-state-banner .review-case-participants { grid-template-columns: 1fr; } .review-trial-form .trial-fields { grid-template-columns: 1fr; } .review-trial-form .trial-fields label:last-child:nth-child(3) { grid-column: auto; } }
+@media (max-width: 620px) { .review-shared-records-heading { flex-direction: column; } .review-shared-record-meta time { width: 100%; margin-left: 0; } }
 
 /* New listings use the same white cards, blue-green accents and section order as pet details. */
 .rehoming-create-action { display: flex; justify-content: flex-end; margin: 0 0 22px; }
